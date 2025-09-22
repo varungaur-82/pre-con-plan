@@ -10,29 +10,14 @@ import { Calendar, BarChart3, FileText, Users } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
 import constructionHero from "@/assets/construction-hero.jpg";
 
-const Index = () => {
-  const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
+const DashboardContent = () => {
+  const { openTab } = useTabContext();
 
   const handleNewProject = () => {
     const newProjectId = `project-${Date.now()}`;
     openTab(newProjectId, "New Project", `/project/${newProjectId}`);
   };
 
-  // If there's an active tab, show the project detail
-  if (activeTabId) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <ProjectTabs 
-          tabs={tabs}
-          onTabChange={setActiveTab}
-          onTabClose={closeTab}
-          onNewProject={handleNewProject}
-        />
-        <ProjectDetail projectId={activeTabId} />
-      </div>
-    );
-  }
   const mockProjects = [
     {
       id: "1",
@@ -76,16 +61,9 @@ const Index = () => {
     { icon: Users, label: "Team Management", color: "text-construction-warning" },
   ];
 
-  // Dashboard view
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <ProjectTabs 
-        tabs={tabs}
-        onTabChange={setActiveTab}
-        onTabClose={closeTab}
-        onNewProject={handleNewProject}
-      />
       
       {/* Hero Section */}
       <section className="relative py-16 px-6 overflow-hidden">
@@ -197,6 +175,34 @@ const Index = () => {
       </div>
     </div>
   );
+};
+
+const Index = () => {
+  const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
+
+  const handleNewProject = () => {
+    const newProjectId = `project-${Date.now()}`;
+    openTab(newProjectId, "New Project", `/project/${newProjectId}`);
+  };
+
+  // If there's an active tab, show the project detail
+  if (activeTabId) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <ProjectTabs 
+          tabs={tabs}
+          onTabChange={setActiveTab}
+          onTabClose={closeTab}
+          onNewProject={handleNewProject}
+        />
+        <ProjectDetail projectId={activeTabId} />
+      </div>
+    );
+  }
+
+  // Dashboard view
+  return <DashboardContent />;
 };
 
 export default Index;

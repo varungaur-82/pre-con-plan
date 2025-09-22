@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Bell, Plus, Search, Settings } from "lucide-react";
 
 export function Header() {
@@ -7,12 +8,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-card/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-construction-primary to-construction-secondary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CP</span>
-            </div>
-            <h1 className="text-xl font-bold text-foreground">ConstructPlan</h1>
-          </div>
+          <SidebarTrigger className="text-muted-foreground hover:text-construction-primary" />
           
           <div className="relative w-96 max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
