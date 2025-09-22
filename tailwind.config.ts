@@ -47,6 +47,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        construction: {
+          primary: "hsl(var(--construction-primary))",
+          secondary: "hsl(var(--construction-secondary))",
+          accent: "hsl(var(--construction-accent))",
+          warning: "hsl(var(--construction-warning))",
+          success: "hsl(var(--construction-success))",
+          surface: "hsl(var(--construction-surface))",
+          grid: "hsl(var(--construction-grid))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
