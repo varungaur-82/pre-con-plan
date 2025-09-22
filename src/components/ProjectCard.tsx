@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, DollarSign, MapPin, Users } from "lucide-react";
+import { useTabContext } from "@/contexts/TabContext";
 
 interface ProjectCardProps {
   project: {
@@ -25,6 +26,11 @@ const statusColors = {
 };
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const { openTab } = useTabContext();
+
+  const handleViewDetails = () => {
+    openTab(project.id, project.name, `/project/${project.id}`);
+  };
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 border-border/60 hover:border-construction-primary/30">
       <CardHeader className="pb-3">
@@ -71,7 +77,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <span>{project.startDate} - {project.endDate}</span>
         </div>
 
-        <Button className="w-full mt-4 bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity">
+        <Button 
+          className="w-full mt-4 bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity"
+          onClick={handleViewDetails}
+        >
           View Details
         </Button>
       </CardContent>

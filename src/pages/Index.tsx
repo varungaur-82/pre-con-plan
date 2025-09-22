@@ -1,13 +1,38 @@
 import { Header } from "@/components/Header";
+import { ProjectTabs } from "@/components/ProjectTabs";
+import { ProjectDetail } from "@/components/ProjectDetail";
 import { DashboardStats } from "@/components/DashboardStats";
 import { ProjectCard } from "@/components/ProjectCard";
 import { RecentActivity } from "@/components/RecentActivity";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, BarChart3, FileText, Users } from "lucide-react";
+import { useTabContext } from "@/contexts/TabContext";
 import constructionHero from "@/assets/construction-hero.jpg";
 
 const Index = () => {
+  const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
+
+  const handleNewProject = () => {
+    const newProjectId = `project-${Date.now()}`;
+    openTab(newProjectId, "New Project", `/project/${newProjectId}`);
+  };
+
+  // If there's an active tab, show the project detail
+  if (activeTabId) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <ProjectTabs 
+          tabs={tabs}
+          onTabChange={setActiveTab}
+          onTabClose={closeTab}
+          onNewProject={handleNewProject}
+        />
+        <ProjectDetail projectId={activeTabId} />
+      </div>
+    );
+  }
   const mockProjects = [
     {
       id: "1",
@@ -51,9 +76,16 @@ const Index = () => {
     { icon: Users, label: "Team Management", color: "text-construction-warning" },
   ];
 
+  // Dashboard view
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <ProjectTabs 
+        tabs={tabs}
+        onTabChange={setActiveTab}
+        onTabClose={closeTab}
+        onNewProject={handleNewProject}
+      />
       
       {/* Hero Section */}
       <section className="relative py-16 px-6 overflow-hidden">
@@ -73,7 +105,11 @@ const Index = () => {
               all in one comprehensive platform designed for construction professionals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity"
+                onClick={handleNewProject}
+              >
                 Start New Project
               </Button>
               <Button variant="outline" size="lg" className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white">
