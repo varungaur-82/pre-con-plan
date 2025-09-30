@@ -2,17 +2,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building2, Plus, Calendar } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
+import { NewProjectModal } from "@/components/NewProjectModal";
+import { useState } from "react";
 
 export function ProjectsPage() {
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+
   return (
     <PageLayout>
+      <NewProjectModal open={showNewProjectModal} onOpenChange={setShowNewProjectModal} />
       <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Projects</h1>
           <p className="text-muted-foreground">Manage all your construction projects</p>
         </div>
-        <Button className="gap-2 bg-gradient-to-r from-construction-primary to-construction-secondary">
+        <Button 
+          className="gap-2 bg-gradient-to-r from-construction-primary to-construction-secondary"
+          onClick={() => setShowNewProjectModal(true)}
+        >
           <Plus className="h-4 w-4" />
           New Project
         </Button>

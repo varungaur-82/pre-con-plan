@@ -4,18 +4,20 @@ import { ProjectDetail } from "@/components/ProjectDetail";
 import { DashboardStats } from "@/components/DashboardStats";
 import { ProjectCard } from "@/components/ProjectCard";
 import { RecentActivity } from "@/components/RecentActivity";
+import { NewProjectModal } from "@/components/NewProjectModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, BarChart3, FileText, Users } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
+import { useState } from "react";
 import constructionHero from "@/assets/construction-hero.jpg";
 
 const DashboardContent = () => {
   const { openTab } = useTabContext();
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
   const handleNewProject = () => {
-    const newProjectId = `project-${Date.now()}`;
-    openTab(newProjectId, "New Project", `/project/${newProjectId}`);
+    setShowNewProjectModal(true);
   };
 
   const mockProjects = [
@@ -63,6 +65,7 @@ const DashboardContent = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <NewProjectModal open={showNewProjectModal} onOpenChange={setShowNewProjectModal} />
       <Header />
       
       {/* Hero Section */}
@@ -179,16 +182,17 @@ const DashboardContent = () => {
 
 const Index = () => {
   const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
   const handleNewProject = () => {
-    const newProjectId = `project-${Date.now()}`;
-    openTab(newProjectId, "New Project", `/project/${newProjectId}`);
+    setShowNewProjectModal(true);
   };
 
   // If there's an active tab, show the project detail
   if (activeTabId) {
     return (
       <div className="min-h-screen bg-background">
+        <NewProjectModal open={showNewProjectModal} onOpenChange={setShowNewProjectModal} />
         <Header />
         <ProjectTabs 
           tabs={tabs}
