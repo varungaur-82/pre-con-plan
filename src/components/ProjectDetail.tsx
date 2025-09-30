@@ -78,54 +78,74 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
           </div>
         </div>
 
+        {/* AI Assistant - Full Width */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-base">AI Assistant</CardTitle>
+            <p className="text-xs text-muted-foreground">Ask about KPIs, risks, schedules, or generate a report.</p>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2 mb-3">
+              <Button variant="outline" size="sm" className="text-xs">SPI/CPI</Button>
+              <Button variant="outline" size="sm" className="text-xs">Budget</Button>
+              <Button variant="outline" size="sm" className="text-xs">Schedule</Button>
+            </div>
+            <div className="flex gap-2">
+              <Input 
+                placeholder="e.g., Summarize risks and suggest mitigations" 
+                className="text-sm"
+              />
+              <Button size="sm" className="bg-construction-primary shrink-0">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left Column */}
-          <div className="space-y-6">
-            {/* Project Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-primary">
+          {/* Left Column - Project Overview */}
+          <Card>
+            <CardContent className="pt-6 space-y-6">
+              {/* Project Details Section */}
+              <div>
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                   <FileText className="h-4 w-4" />
                   Project Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name</span>
-                  <span className="font-medium">{projectName}</span>
+                </h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Name</span>
+                    <span className="font-medium">{projectName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">ID</span>
+                    <span className="font-medium">P-NYC-2025</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Type</span>
+                    <span className="font-medium">Healthcare</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Size</span>
+                    <span className="font-medium">120,000 sq ft</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Approved Budget</span>
+                    <span className="font-medium">$2.5M</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Target Completion</span>
+                    <span className="font-medium">Q4 2025</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">ID</span>
-                  <span className="font-medium">P-NYC-2025</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Type</span>
-                  <span className="font-medium">Healthcare</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Size</span>
-                  <span className="font-medium">120,000 sq ft</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Approved Budget</span>
-                  <span className="font-medium">$2.5M</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Target Completion</span>
-                  <span className="font-medium">Q4 2025</span>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Project Phase */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-primary">
+              {/* Project Phase Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                   <Target className="h-4 w-4" />
                   Project Phase
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between text-xs text-muted-foreground mb-2">
                     <span>Conceptual Design</span>
@@ -137,18 +157,14 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <span className="text-muted-foreground">Current: Schematic</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Upcoming Milestones */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-primary">
+              {/* Upcoming Milestones Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                   <Calendar className="h-4 w-4" />
                   Upcoming Milestones
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h3>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <span className="text-foreground">•</span>
@@ -159,60 +175,30 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <span>ZEB study draft (Mon)</span>
                   </li>
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* AI Assistant */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">AI Assistant</CardTitle>
-                <p className="text-xs text-muted-foreground">Ask about KPIs, risks, schedules, or generate a report.</p>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-2 mb-3">
-                  <Button variant="outline" size="sm" className="text-xs">SPI/CPI</Button>
-                  <Button variant="outline" size="sm" className="text-xs">Budget</Button>
-                  <Button variant="outline" size="sm" className="text-xs">Schedule</Button>
-                </div>
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="e.g., Summarize risks and suggest mitigations" 
-                    className="text-sm"
-                  />
-                  <Button size="sm" className="bg-construction-primary shrink-0">
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Center Column */}
-          <div className="space-y-6">
-            {/* Signals */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-warning">
+          {/* Center Column - Performance Metrics */}
+          <Card>
+            <CardContent className="pt-6 space-y-6">
+              {/* Signals Section */}
+              <div>
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-3">
                   <AlertTriangle className="h-4 w-4" />
                   Signals
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Key KPIs */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-primary">
+              {/* Key KPIs Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                   <BarChart3 className="h-4 w-4" />
                   Key KPIs
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Metric</span>
@@ -239,85 +225,71 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <span className="text-sm font-bold">2</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Previous Completed Milestone */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-construction-success">
+              {/* Previous Milestone Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold flex items-center gap-2 text-construction-success mb-3">
                   <CheckCircle2 className="h-4 w-4" />
                   Previous Completed Milestone
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h3>
                 <p className="text-sm">Schematic approved</p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Right Sidebar */}
-          <div className="space-y-6">
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* Right Column - Project Information */}
+          <Card>
+            <CardContent className="pt-6 space-y-6">
+              {/* Recent Activity Section */}
+              <div>
+                <h3 className="text-base font-semibold mb-3">Recent Activity</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>Alice replied to RH-102 (2h ago)</li>
                   <li>Bob uploaded Design v12 (4h ago)</li>
                   <li>Chen drafted PO: Steel (1d ago)</li>
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Project Charter & Vision */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Project Charter & Vision</CardTitle>
-              </CardHeader>
-              <CardContent>
+              {/* Project Charter Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold mb-3">Project Charter & Vision</h3>
                 <p className="text-sm text-muted-foreground mb-3">
                   Access the project's guiding principles, scope, and long-term vision.
                 </p>
                 <Button className="w-full bg-construction-primary">Open Charter</Button>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Required Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Required Information & Working version of files</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Budget:</span>
-                  <span>$2.5M</span>
+              {/* Required Information Section */}
+              <div className="pt-4 border-t">
+                <h3 className="text-base font-semibold mb-3">Required Information & Working version of files</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Budget:</span>
+                    <span>$2.5M</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Design File:</span>
+                    <span>v12.dwg</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Schedule Target:</span>
+                    <span>Q4 2025</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Design File:</span>
-                  <span>v12.dwg</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Schedule Target:</span>
-                  <span>Q4 2025</span>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* File Upload */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                  <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">
+              {/* File Upload Section */}
+              <div className="pt-4 border-t">
+                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                  <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground">
                     Drag & drop files here or click to upload
                   </p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Bottom Charts Row */}
