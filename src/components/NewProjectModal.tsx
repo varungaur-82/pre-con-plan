@@ -1036,29 +1036,29 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     </h3>
                     <div className="space-y-2 text-xs">
                       <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <span className="text-muted-foreground font-medium">Project ID</span>
-                          <p className="font-semibold">{formData.projectId || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Project ID</span>
+                          <p className="font-semibold text-sm">{formData.projectId || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Project Name</span>
-                          <p className="font-semibold">{formData.projectName || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Project Name</span>
+                          <p className="font-semibold text-sm">{formData.projectName || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Client</span>
-                          <p className="font-semibold">{formData.client || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Client</span>
+                          <p className="font-semibold text-sm">{formData.client || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Location</span>
-                          <p className="font-semibold">{formData.location || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Location</span>
+                          <p className="font-semibold text-sm">{formData.location || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Project Type</span>
-                          <p className="font-semibold">{formData.projectType || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Project Type</span>
+                          <p className="font-semibold text-sm">{formData.projectType || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Design Stage</span>
-                          <p className="font-semibold">{formData.designStage || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Design Stage</span>
+                          <p className="font-semibold text-sm">{formData.designStage || "Not set"}</p>
                         </div>
                       </div>
                     </div>
@@ -1067,25 +1067,31 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   {/* Vision Statement */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Vision Statement</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed">
-                      {formData.visionStatement || "No vision statement provided"}
-                    </p>
+                    <div className="bg-white p-3 rounded border">
+                      <p className="text-xs text-gray-800 leading-relaxed">
+                        {formData.visionStatement || <span className="text-muted-foreground italic">No vision statement provided</span>}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Objectives */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Objectives</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                      {formData.objectives || "No objectives provided"}
-                    </p>
+                    <div className="bg-white p-3 rounded border max-h-32 overflow-y-auto">
+                      <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-line">
+                        {formData.objectives || <span className="text-muted-foreground italic">No objectives provided</span>}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Key Metrics */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Key Metrics</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                      {formData.keyMetrics || "No key metrics provided"}
-                    </p>
+                    <div className="bg-white p-3 rounded border max-h-32 overflow-y-auto">
+                      <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-line">
+                        {formData.keyMetrics || <span className="text-muted-foreground italic">No key metrics provided</span>}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -1099,13 +1105,13 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     </h3>
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                          <span className="text-muted-foreground font-medium">Budget</span>
-                          <p className="font-semibold">{formData.budget || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Budget</span>
+                          <p className="font-semibold text-sm">{formData.budget || "Not set"}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground font-medium">Completion</span>
-                          <p className="font-semibold">{formData.completion || "Not set"}</p>
+                        <div className="bg-white/50 p-2 rounded">
+                          <span className="text-muted-foreground font-medium block mb-1">Completion</span>
+                          <p className="font-semibold text-sm">{formData.completion || "Not set"}</p>
                         </div>
                       </div>
                     </div>
@@ -1114,25 +1120,31 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   {/* Stakeholders */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Stakeholders</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                      {formData.stakeholders || "No stakeholders defined"}
-                    </p>
+                    <div className="bg-white p-3 rounded border max-h-32 overflow-y-auto">
+                      <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-line">
+                        {formData.stakeholders || <span className="text-muted-foreground italic">No stakeholders defined</span>}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Risks */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Risks</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                      {formData.risks || "No risks identified"}
-                    </p>
+                    <div className="bg-white p-3 rounded border max-h-32 overflow-y-auto">
+                      <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-line">
+                        {formData.risks || <span className="text-muted-foreground italic">No risks identified</span>}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Success Criteria */}
                   <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
                     <h4 className="text-xs font-bold text-gray-700">Success Criteria</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                      {formData.successCriteria || "No success criteria defined"}
-                    </p>
+                    <div className="bg-white p-3 rounded border max-h-32 overflow-y-auto">
+                      <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-line">
+                        {formData.successCriteria || <span className="text-muted-foreground italic">No success criteria defined</span>}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Repository Structure */}
