@@ -229,8 +229,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl h-[85vh] flex flex-col p-0">
-          <div className="flex-1 overflow-y-auto p-6">
+        <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] flex flex-col p-0 bg-white">
+          <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-white to-gray-50/30">
           <DialogHeader>
             {/* Stepper */}
             <div className="flex items-center justify-between mb-4">
@@ -519,7 +519,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                 <div className="bg-muted/30 rounded-lg p-4 space-y-3">
                   <Textarea
                     placeholder="Type your message..."
-                    className="min-h-[80px] text-xs resize-none"
+                    className="min-h-[80px] text-xs"
                   />
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -600,7 +600,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       placeholder="Enter vision statement"
                       value={formData.visionStatement}
                       onChange={(e) => setFormData({ ...formData, visionStatement: e.target.value })}
-                      className="min-h-[60px] text-xs resize-none bg-white"
+                      className="min-h-[60px] text-xs bg-white"
                     />
                   </div>
 
@@ -613,7 +613,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       placeholder="Enter objectives"
                       value={formData.objectives}
                       onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
-                      className="min-h-[60px] text-xs resize-none bg-white"
+                      className="min-h-[60px] text-xs bg-white"
                     />
                   </div>
 
@@ -626,7 +626,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       placeholder="Enter key metrics"
                       value={formData.keyMetrics}
                       onChange={(e) => setFormData({ ...formData, keyMetrics: e.target.value })}
-                      className="min-h-[60px] text-xs resize-none bg-white"
+                      className="min-h-[60px] text-xs bg-white"
                     />
                   </div>
                 </div>
