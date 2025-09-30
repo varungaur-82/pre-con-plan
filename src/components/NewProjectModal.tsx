@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTabContext } from "@/contexts/TabContext";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +32,8 @@ const steps = [
 
 
 export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
+  const navigate = useNavigate();
+  const { openTab } = useTabContext();
   const [currentStep, setCurrentStep] = useState(1);
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
@@ -247,6 +251,29 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         description: `${newFiles.length} file(s) uploaded successfully.`,
       });
     }
+  };
+
+  const handleCreateProject = () => {
+    // Trigger confetti
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+
+    // Show success toast
+    toast({
+      title: "Project Created Successfully!",
+      description: `${formData.projectName} has been created and is ready to use.`,
+    });
+
+    // Close modal
+    onOpenChange(false);
+
+    // Open the new project tab
+    setTimeout(() => {
+      openTab(formData.projectId, formData.projectName, `/project/${formData.projectId}`);
+    }, 300);
   };
 
   return (
@@ -1216,7 +1243,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   Save & Continue
                 </Button>
               ) : (
-                <Button onClick={() => onOpenChange(false)} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
+                <Button onClick={handleCreateProject} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
                   Create Project
                 </Button>
               )}
