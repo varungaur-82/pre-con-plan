@@ -70,12 +70,12 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     location: "New York City, NY",
     budget: "$2.5M",
     completion: "Q4 2025",
-    visionStatement: "",
-    objectives: "",
-    keyMetrics: "",
-    stakeholders: "",
-    risks: "",
-    successCriteria: "",
+    visionStatement: "To create a state-of-the-art healthcare facility that sets new standards in patient care and medical innovation for New York City. The NYC Tower will integrate cutting-edge medical technology with sustainable design principles, providing a healing environment that serves the community while supporting the healthcare professionals who work within its walls.",
+    objectives: "1. Complete construction by Q4 2025 within the $2.5M budget\n2. Achieve LEED Gold certification for sustainable healthcare design\n3. Deliver 120,000 sq ft of modern medical infrastructure across 18 floors\n4. Ensure compliance with all NYC DOB and Health Department regulations\n5. Create flexible spaces that can adapt to evolving medical technologies\n6. Maximize natural light and optimize patient room layouts for improved healing outcomes",
+    keyMetrics: "• Budget Performance: Track actual vs. planned spend weekly, maintain variance within ±3%\n• Schedule Adherence: Monitor milestone completion rates, target 100% on-time delivery\n• Quality Metrics: Zero safety incidents, 98% first-time quality acceptance rate\n• Sustainability: Energy efficiency targets (30% below baseline), LEED points tracking\n• Stakeholder Satisfaction: Monthly surveys with client, design team, and contractors (target >4.5/5)",
+    stakeholders: "• Owner/Developer: NYC Health - Primary decision-maker and financier\n• Project Management Team: Overall coordination and delivery\n• Architect & Design Team: Building design and technical specifications\n• General Contractor: Main construction execution\n• Specialized Subcontractors: MEP, structural, facade, interior fit-out specialists\n• Local Authorities: NYC DOB, Health Department, Fire Marshal",
+    risks: "• Regulatory Delays: Permit approval timeline uncertainty\n• Budget Overruns: Material cost fluctuations in current market\n• Schedule Constraints: Weather-related delays during construction\n• Supply Chain Issues: Long lead times for specialized medical equipment\n• Stakeholder Coordination: Multiple approval layers may slow decision-making",
+    successCriteria: "• Project completed on time and within budget\n• All regulatory approvals obtained without major delays\n• LEED Gold certification achieved\n• Client satisfaction score above 4.5/5\n• Zero major safety incidents during construction\n• Successful commissioning of all medical systems\n• Smooth handover and operational readiness",
   });
 
 
