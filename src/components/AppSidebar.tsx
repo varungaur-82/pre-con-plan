@@ -63,8 +63,6 @@ export function AppSidebar() {
       ? "bg-construction-primary/10 text-construction-primary border-r-2 border-construction-primary font-medium" 
       : "text-muted-foreground hover:bg-construction-surface/50 hover:text-foreground";
 
-  const inactiveItemCls = "text-muted-foreground/50 cursor-not-allowed opacity-50";
-
   return (
     <Sidebar
       className={collapsed ? "w-14" : "w-60"}
@@ -97,22 +95,15 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild={item.title === "Dashboard"}>
-                    {item.title === "Dashboard" ? (
-                      <NavLink 
-                        to={item.url} 
-                        end 
-                        className={({ isActive }) => getNavCls({ isActive })}
-                      >
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
-                      </NavLink>
-                    ) : (
-                      <div className={inactiveItemCls}>
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
-                      </div>
-                    )}
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      end 
+                      className={({ isActive }) => getNavCls({ isActive })}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -129,11 +120,14 @@ export function AppSidebar() {
             <SidebarMenu>
               {planningItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <div className={inactiveItemCls}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      className={({ isActive }) => getNavCls({ isActive })}
+                    >
                       <item.icon className="h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
-                    </div>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -150,11 +144,14 @@ export function AppSidebar() {
             <SidebarMenu>
               {systemItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <div className={inactiveItemCls}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      className={({ isActive }) => getNavCls({ isActive })}
+                    >
                       <item.icon className="h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
-                    </div>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
