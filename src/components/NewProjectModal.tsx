@@ -45,14 +45,14 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    projectId: "",
-    projectName: "",
-    designStage: "",
-    client: "",
-    projectType: "",
-    location: "",
-    budget: "",
-    completion: "",
+    projectId: "PRJ-2025-001",
+    projectName: "NYC Tower",
+    designStage: "Schematic Design",
+    client: "NYC Health",
+    projectType: "Healthcare",
+    location: "New York City, NY",
+    budget: "$2.5M",
+    completion: "Q4 2025",
     visionStatement: "",
     objectives: "",
     keyMetrics: "",
