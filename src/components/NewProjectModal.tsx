@@ -8,9 +8,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Upload, Check, CheckCircle2 } from "lucide-react";
+import { Upload, Check, CheckCircle2, Send, Paperclip } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useToast } from "@/hooks/use-toast";
 
@@ -33,7 +34,12 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [extractionProgress, setExtractionProgress] = useState(0);
   const [visibleFields, setVisibleFields] = useState<number[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [activePrompt, setActivePrompt] = useState<number | null>(null);
+  const [promptResponses, setPromptResponses] = useState<{ [key: number]: string }>({});
+  const [hoveredPrompt, setHoveredPrompt] = useState<number | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const step2FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -43,7 +49,21 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     client: "",
     projectType: "",
     location: "",
+    budget: "",
+    completion: "",
+    visionStatement: "",
+    objectives: "",
+    keyMetrics: "",
   });
+
+
+  const quickPrompts = [
+    { id: 1, text: "Help me define the vision", field: "visionStatement" },
+    { id: 2, text: "Help me define the objective", field: "objectives" },
+    { id: 3, text: "Suggest Key metrics", field: "keyMetrics" },
+    { id: 4, text: "Help me define project objectives for a residential development", field: "objectives" },
+    { id: 5, text: "What stakeholders should I include for a commercial build?", field: "objectives" },
+  ];
 
   const extractedData = [
     { label: "Project Title / Name", value: "NYC Tower", field: "projectName" },
@@ -126,6 +146,11 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         client: "NYC Health",
         projectType: "Healthcare",
         location: "New York City, NY",
+        budget: "$2.5M",
+        completion: "Q4 2025",
+        visionStatement: "",
+        objectives: "",
+        keyMetrics: "",
       });
 
       // Show success message
@@ -140,6 +165,40 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         setShowSuccessMessage(false);
       }, 5000);
     }, 5000);
+  };
+
+  const handlePromptClick = (promptId: number) => {
+    setActivePrompt(promptId);
+  };
+
+  const handlePromptResponse = (promptId: number, value: string) => {
+    setPromptResponses({ ...promptResponses, [promptId]: value });
+  };
+
+  const handlePopulate = (promptId: number) => {
+    const prompt = quickPrompts.find(p => p.id === promptId);
+    const response = promptResponses[promptId];
+    
+    if (prompt && response && prompt.field) {
+      setFormData({ ...formData, [prompt.field]: response });
+      toast({
+        title: "Field Populated",
+        description: "Your response has been added to the form.",
+      });
+      setPromptResponses({ ...promptResponses, [promptId]: "" });
+      setActivePrompt(null);
+    }
+  };
+
+  const handleStep2FileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setUploadedFiles([...uploadedFiles, ...newFiles]);
+      toast({
+        title: "Files Uploaded",
+        description: `${newFiles.length} file(s) uploaded successfully.`,
+      });
+    }
   };
 
   return (
@@ -362,8 +421,177 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           )}
 
           {currentStep === 2 && (
-            <div className="py-8 text-center text-muted-foreground text-xs">
-              Project Charter & Vision step content goes here
+            <div className="grid grid-cols-2 gap-6">
+              {/* Left Column - AI Assistant */}
+              <div className="space-y-4">
+                <div className="bg-muted/30 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-blue-600 font-bold text-lg">AI</span>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold">AI Vision Assistant</h3>
+                      <p className="text-xs text-muted-foreground">Smart project charter generation</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground mb-3">Quick prompts:</p>
+                    {quickPrompts.map((prompt) => (
+                      <div 
+                        key={prompt.id}
+                        className="relative"
+                        onMouseEnter={() => setHoveredPrompt(prompt.id)}
+                        onMouseLeave={() => setHoveredPrompt(null)}
+                      >
+                        {activePrompt === prompt.id ? (
+                          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-md p-2">
+                            <Input
+                              value={promptResponses[prompt.id] || ""}
+                              onChange={(e) => handlePromptResponse(prompt.id, e.target.value)}
+                              placeholder="Type your response..."
+                              className="h-7 text-xs flex-1"
+                              autoFocus
+                            />
+                            {promptResponses[prompt.id] && hoveredPrompt === prompt.id && (
+                              <Button
+                                size="sm"
+                                onClick={() => handlePopulate(prompt.id)}
+                                className="h-7 px-2 text-xs bg-blue-600 hover:bg-blue-700"
+                              >
+                                Populate
+                              </Button>
+                            )}
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handlePromptClick(prompt.id)}
+                            className="w-full text-left text-xs text-blue-600 hover:bg-blue-50 rounded-md px-3 py-2 transition-colors"
+                          >
+                            {prompt.text}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message Input */}
+                <div className="bg-muted/30 rounded-lg p-4 space-y-3">
+                  <Textarea
+                    placeholder="Type your message..."
+                    className="min-h-[80px] text-xs resize-none"
+                  />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <input
+                        ref={step2FileInputRef}
+                        type="file"
+                        className="hidden"
+                        onChange={handleStep2FileSelect}
+                        multiple
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-xs"
+                        onClick={() => step2FileInputRef.current?.click()}
+                      >
+                        <Paperclip className="h-3 w-3 mr-1" />
+                        Upload File
+                      </Button>
+                      {uploadedFiles.length > 0 && (
+                        <span className="text-xs text-muted-foreground">
+                          {uploadedFiles.length} file(s) uploaded
+                        </span>
+                      )}
+                    </div>
+                    <Button size="sm" className="h-7 bg-blue-600 hover:bg-blue-700">
+                      <Send className="h-3 w-3" />
+                    </Button>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    Contracts, SOWs (PDF, DOCX). NewCon AI can make mistakes. Verify important information.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column - Project Charter Form */}
+              <div className="bg-blue-50/50 rounded-lg p-5 space-y-4">
+                <h3 className="text-base font-bold text-blue-600 mb-4">Project Charter</h3>
+
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Project Name</span>
+                    <p className="font-medium">{formData.projectName || "—"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Project ID</span>
+                    <p className="font-medium">{formData.projectId || "—"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Client</span>
+                    <p className="font-medium">{formData.client || "—"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Location</span>
+                    <p className="font-medium">{formData.location || "—"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Type</span>
+                    <p className="font-medium">{formData.projectType || "—"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Budget</span>
+                    <p className="font-medium">{formData.budget || "—"}</p>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-muted-foreground">Completion</span>
+                    <p className="font-medium">{formData.completion || "—"}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="visionStatement" className="text-xs font-semibold">
+                      Vision Statement
+                    </Label>
+                    <Textarea
+                      id="visionStatement"
+                      placeholder="Enter vision statement"
+                      value={formData.visionStatement}
+                      onChange={(e) => setFormData({ ...formData, visionStatement: e.target.value })}
+                      className="min-h-[60px] text-xs resize-none bg-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="objectives" className="text-xs font-semibold">
+                      Objectives
+                    </Label>
+                    <Textarea
+                      id="objectives"
+                      placeholder="Enter objectives"
+                      value={formData.objectives}
+                      onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
+                      className="min-h-[60px] text-xs resize-none bg-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="keyMetrics" className="text-xs font-semibold">
+                      Key Metrics
+                    </Label>
+                    <Textarea
+                      id="keyMetrics"
+                      placeholder="Enter key metrics"
+                      value={formData.keyMetrics}
+                      onChange={(e) => setFormData({ ...formData, keyMetrics: e.target.value })}
+                      className="min-h-[60px] text-xs resize-none bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
