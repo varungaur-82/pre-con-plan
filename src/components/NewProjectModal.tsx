@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Upload, Check } from "lucide-react";
+import { Upload, Check, CheckCircle2 } from "lucide-react";
+import confetti from "canvas-confetti";
+import { useToast } from "@/hooks/use-toast";
 
 interface NewProjectModalProps {
   open: boolean;
@@ -24,35 +26,37 @@ const steps = [
   { id: 4, name: "Review & Confirm" },
 ];
 
-const sourceLinks = [
-  "OneDrive",
-  "Box",
-  "Google Drive",
-  "Local Folder",
-  "Autodesk Construction Cloud",
-  "Procore",
-  "PlanGrid",
-];
 
 export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
   const [visibleFields, setVisibleFields] = useState<number[]>([]);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    projectId: "",
+    projectName: "",
+    designStage: "",
+    client: "",
+    projectType: "",
+    location: "",
+  });
 
   const extractedData = [
-    { label: "Project Title / Name", value: "NYC Tower" },
-    { label: "Client / Owner Details", value: "NYC Health" },
-    { label: "Project Location & Site Address", value: "New York City, NY" },
-    { label: "Plot Size / Area Statement", value: "120,000 sq ft" },
-    { label: "Zoning / Land Use Classification", value: "Healthcare" },
-    { label: "Building Type & Usage", value: "Healthcare Facility" },
-    { label: "Number of Floors / Storeys", value: "18" },
-    { label: "Key Dates", value: "Start: 2025-01-01, Completion: 2025-12-31" },
-    { label: "Permits & Approvals Required", value: "NYC DOB, Health Dept" },
-    { label: "Estimated Project Cost / Budget", value: "$2.5M" },
-    { label: "Stakeholders", value: "Architect, Contractor, Consultants, PMC" },
+    { label: "Project Title / Name", value: "NYC Tower", field: "projectName" },
+    { label: "Client / Owner Details", value: "NYC Health", field: "client" },
+    { label: "Project Location & Site Address", value: "New York City, NY", field: "location" },
+    { label: "Plot Size / Area Statement", value: "120,000 sq ft", field: null },
+    { label: "Zoning / Land Use Classification", value: "Healthcare", field: "projectType" },
+    { label: "Building Type & Usage", value: "Healthcare Facility", field: null },
+    { label: "Number of Floors / Storeys", value: "18", field: null },
+    { label: "Key Dates", value: "Start: 2025-01-01, Completion: 2025-12-31", field: null },
+    { label: "Permits & Approvals Required", value: "NYC DOB, Health Dept", field: null },
+    { label: "Estimated Project Cost / Budget", value: "$2.5M", field: null },
+    { label: "Stakeholders", value: "Architect, Contractor, Consultants, PMC", field: null },
   ];
 
   const handleNext = () => {
@@ -81,6 +85,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     setIsExtracting(true);
     setExtractionProgress(0);
     setVisibleFields([]);
+    setShowSuccessMessage(false);
 
     // Progress bar animation
     const progressInterval = setInterval(() => {
@@ -100,18 +105,48 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       }, 500 + index * 400);
     });
 
-    // Close dialog after 5 seconds
+    // Close dialog after 5 seconds and trigger confetti
     setTimeout(() => {
       setIsExtracting(false);
       setExtractionProgress(0);
       setVisibleFields([]);
+      
+      // Trigger confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Populate form fields
+      setFormData({
+        projectId: "PRJ-2025-001",
+        projectName: "NYC Tower",
+        designStage: "Schematic Design",
+        client: "NYC Health",
+        projectType: "Healthcare",
+        location: "New York City, NY",
+      });
+
+      // Show success message
+      setShowSuccessMessage(true);
+      toast({
+        title: "Fields Updated Successfully!",
+        description: "AI has extracted and populated the project information from your documents.",
+      });
+
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 5000);
     }, 5000);
   };
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl h-[85vh] flex flex-col p-0">
+          <div className="flex-1 overflow-y-auto p-6">
           <DialogHeader>
             {/* Stepper */}
             <div className="flex items-center justify-between mb-4">
@@ -154,30 +189,30 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
             </div>
           </DialogHeader>
 
-        {currentStep === 1 && (
-          <div className="space-y-4">
-            {/* AI Head Start Section */}
-            <div className="space-y-2">
-              <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 flex-shrink-0" />
-                <div className="space-y-1">
-                  <h3 className="text-base font-semibold">Let AI give you a head start</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Connect a source or drop files. I'll extract the project name, client, location, and current stage. You'll review before saving.
+          {currentStep === 1 && (
+            <div className="space-y-4">
+              {/* Success Message */}
+              {showSuccessMessage && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                  <p className="text-xs text-green-800 font-medium">
+                    Fields have been updated with extracted information from your documents!
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {sourceLinks.map((source) => (
-                      <button
-                        key={source}
-                        className="text-xs text-blue-600 hover:underline"
-                      >
-                        {source}
-                      </button>
-                    ))}
+                </div>
+              )}
+
+              {/* AI Head Start Section */}
+              <div className="space-y-2">
+                <div className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 flex-shrink-0" />
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold">Let AI give you a head start</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Drop files and I'll extract the project name, client, location, and current stage. You'll review before saving.
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
 
             {/* Drop Zone */}
             <input
@@ -191,7 +226,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Drag & drop files here</p>
                 <p className="text-xs text-muted-foreground">
-                  Contracts, drawings (PDF/DWG/IFC), schedules, spreadsheets
+                  Contracts, SOWs (PDF/DOCX)
                 </p>
               </div>
               <Button 
@@ -216,11 +251,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="projectId"
                     placeholder="Project ID"
+                    value={formData.projectId}
+                    onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.projectId && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
 
                 {/* Project Name */}
@@ -231,11 +270,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="projectName"
                     placeholder="Project Name"
+                    value={formData.projectName}
+                    onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.projectName && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
 
                 {/* Design Stage */}
@@ -244,11 +287,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="designStage"
                     placeholder="Design Stage"
+                    value={formData.designStage}
+                    onChange={(e) => setFormData({ ...formData, designStage: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.designStage && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
 
                 {/* Client */}
@@ -259,11 +306,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="client"
                     placeholder="Client"
+                    value={formData.client}
+                    onChange={(e) => setFormData({ ...formData, client: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.client && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
 
                 {/* Project Type */}
@@ -272,11 +323,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="projectType"
                     placeholder="Healthcare"
+                    value={formData.projectType}
+                    onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.projectType && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
 
                 {/* Location */}
@@ -287,11 +342,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   <Input
                     id="location"
                     placeholder="Location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="bg-muted/30 h-8 text-xs"
                   />
-                  <p className="text-[10px] text-muted-foreground">
-                    Extracted from uploaded docs source: contract.pdf
-                  </p>
+                  {formData.location && (
+                    <p className="text-[10px] text-muted-foreground">
+                      Extracted from uploaded docs source: contract.pdf
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -299,44 +358,47 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                 AI suggestions are based on your imported files. You can adjust anytime.
               </p>
             </div>
-          </div>
-        )}
-
-        {currentStep === 2 && (
-          <div className="py-8 text-center text-muted-foreground text-xs">
-            Project Charter & Vision step content goes here
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          <div className="py-8 text-center text-muted-foreground text-xs">
-            Project Repo step content goes here
-          </div>
-        )}
-
-        {currentStep === 4 && (
-          <div className="py-8 text-center text-muted-foreground text-xs">
-            Review & Confirm step content goes here
-          </div>
-        )}
-
-        {/* Footer Buttons */}
-        <div className="flex justify-end gap-2 pt-3 border-t">
-          {currentStep > 1 && (
-            <Button variant="outline" onClick={handleBack} className="h-8 text-xs">
-              Back
-            </Button>
+            </div>
           )}
-          {currentStep < steps.length ? (
-            <Button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
-              Save & Continue
-            </Button>
-          ) : (
-            <Button onClick={() => onOpenChange(false)} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
-              Create Project
-            </Button>
+
+          {currentStep === 2 && (
+            <div className="py-8 text-center text-muted-foreground text-xs">
+              Project Charter & Vision step content goes here
+            </div>
           )}
-        </div>
+
+          {currentStep === 3 && (
+            <div className="py-8 text-center text-muted-foreground text-xs">
+              Project Repo step content goes here
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="py-8 text-center text-muted-foreground text-xs">
+              Review & Confirm step content goes here
+            </div>
+          )}
+          </div>
+
+          {/* Sticky Footer */}
+          <div className="border-t bg-background p-4">
+            <div className="flex justify-end gap-2">
+              {currentStep > 1 && (
+                <Button variant="outline" onClick={handleBack} className="h-8 text-xs">
+                  Back
+                </Button>
+              )}
+              {currentStep < steps.length ? (
+                <Button onClick={handleNext} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
+                  Save & Continue
+                </Button>
+              ) : (
+                <Button onClick={() => onOpenChange(false)} className="bg-blue-600 hover:bg-blue-700 h-8 text-xs">
+                  Create Project
+                </Button>
+              )}
+            </div>
+          </div>
       </DialogContent>
     </Dialog>
 
