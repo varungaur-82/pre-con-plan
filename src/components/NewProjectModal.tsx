@@ -67,7 +67,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     { id: 2, text: "Help me define the objective", field: "objectives" },
     { id: 3, text: "Suggest Key metrics", field: "keyMetrics" },
     { id: 4, text: "Help me define project objectives for a residential development", field: "objectives" },
-    { id: 5, text: "What stakeholders should I include for a commercial build?", field: "objectives" },
+    { id: 5, text: "What stakeholders should I include for a commercial build?", field: "stakeholders" },
   ];
 
   const extractedData = [
@@ -454,7 +454,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           {currentStep === 2 && (
             <div className="grid grid-cols-2 gap-6 h-full">
               {/* Left Column - AI Assistant with Separate Scroll */}
-              <div className="flex flex-col h-full space-y-4">
+              <div className="flex flex-col h-full">
                 <div className="flex-1 flex flex-col bg-muted/30 rounded-lg overflow-hidden">
                   {/* Compact Header */}
                   <div className="flex items-center gap-2 p-3 border-b bg-white/50">
@@ -465,7 +465,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   </div>
 
                   {/* Scrollable Chat Area */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  <div className="flex-1 overflow-y-auto p-3 space-y-2">
                     <p className="text-xs font-medium text-muted-foreground mb-2">Quick prompts:</p>
                     {quickPrompts.map((prompt) => (
                       <div 
