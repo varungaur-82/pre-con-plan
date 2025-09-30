@@ -23,9 +23,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'mr-96' : ''}`}>
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        {/* Main Content */}
+        <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'mr-96' : ''}`}>
         {/* Top Navigation Tabs */}
         <div className="bg-card border-b">
           <div className="container px-6">
@@ -461,49 +462,110 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
     </div>
   </div>
 
-      {/* AI Assistant Right Sidebar */}
-      <div 
-        className={`fixed right-0 top-0 h-screen w-96 bg-card border-l shadow-lg transition-transform duration-300 ${
-          isAiSidebarOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="h-full flex flex-col">
-          <div className="p-4 border-b flex items-center justify-between">
-            <h2 className="text-lg font-semibold">AI Assistant</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsAiSidebarOpen(false)}
-            >
-              <PanelRightClose className="h-4 w-4" />
-            </Button>
+    {/* AI Assistant Right Sidebar */}
+    <div 
+      className={`fixed right-0 top-0 h-screen w-96 bg-background border-l shadow-lg transition-transform duration-300 flex flex-col ${
+        isAiSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}
+    >
+      {/* Header */}
+      <div className="p-4 border-b bg-card flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center">
+            <span className="text-white text-sm font-bold">AI</span>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-4">
-            <Card>
-              <CardHeader>
-                <p className="text-xs text-muted-foreground">Ask about KPIs, risks, schedules, or generate a report.</p>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-2 mb-3 flex-wrap">
-                  <Button variant="outline" size="sm" className="text-xs">SPI/CPI</Button>
-                  <Button variant="outline" size="sm" className="text-xs">Budget</Button>
-                  <Button variant="outline" size="sm" className="text-xs">Schedule</Button>
-                </div>
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="e.g., Summarize risks and suggest mitigations" 
-                    className="text-sm"
-                  />
-                  <Button size="sm" className="bg-construction-primary shrink-0">
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          <div>
+            <h2 className="text-sm font-semibold">AI Assistant</h2>
+            <p className="text-xs text-muted-foreground">Always here to help</p>
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsAiSidebarOpen(false)}
+        >
+          <PanelRightClose className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {/* Chat Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Welcome Message */}
+        <div className="flex gap-3">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center shrink-0">
+            <span className="text-white text-xs font-bold">AI</span>
+          </div>
+          <div className="flex-1">
+            <div className="bg-muted rounded-2xl rounded-tl-sm p-3">
+              <p className="text-sm">Hello! I'm your AI project assistant. I can help you with:</p>
+              <ul className="text-sm mt-2 space-y-1 text-muted-foreground">
+                <li>• Analyzing KPIs and performance metrics</li>
+                <li>• Reviewing project risks and schedules</li>
+                <li>• Generating reports and summaries</li>
+                <li>• Answering questions about your project</li>
+              </ul>
+            </div>
+            <span className="text-xs text-muted-foreground mt-1 block">Just now</span>
+          </div>
+        </div>
+
+        {/* Suggested Prompts */}
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground px-2">Suggested prompts:</p>
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+            >
+              What's my current SPI/CPI?
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+            >
+              Show budget summary
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+            >
+              List critical risks
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+            >
+              Schedule status
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Input Area */}
+      <div className="border-t bg-card p-4">
+        <div className="flex gap-2 items-end">
+          <Textarea 
+            placeholder="Ask me anything about your project..."
+            className="min-h-[44px] max-h-[120px] resize-none rounded-xl"
+            rows={1}
+          />
+          <Button 
+            size="icon" 
+            className="h-11 w-11 rounded-xl bg-construction-primary hover:bg-construction-primary/90 shrink-0"
+          >
+            <Send className="h-5 w-5" />
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          Press Enter to send, Shift + Enter for new line
+        </p>
+      </div>
     </div>
+  </div>
+</div>
   );
 }
