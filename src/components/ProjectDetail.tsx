@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
-  FileText, BarChart3, Clock, Users
+  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
 } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
 
@@ -17,56 +18,82 @@ interface ProjectDetailProps {
 }
 
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
+  const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(true);
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top Navigation Tabs */}
-      <div className="bg-card border-b">
-        <div className="container px-6">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="bg-transparent border-b-0 h-auto p-0 space-x-1">
-              <TabsTrigger 
-                value="overview" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                Overview
-              </TabsTrigger>
-              <TabsTrigger 
-                value="design-studio" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                Design Studio
-              </TabsTrigger>
-              <TabsTrigger 
-                value="5d" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                5D
-              </TabsTrigger>
-              <TabsTrigger 
-                value="automation" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                Automation Hub
-              </TabsTrigger>
-              <TabsTrigger 
-                value="procurement" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                Procurement
-              </TabsTrigger>
-              <TabsTrigger 
-                value="data" 
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
-              >
-                Data Engine
-              </TabsTrigger>
-            </TabsList>
+    <div className="min-h-screen bg-background flex">
+      {/* Main Content */}
+      <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'mr-96' : ''}`}>
+        {/* Top Navigation Tabs */}
+        <div className="bg-card border-b">
+          <div className="container px-6">
+            <div className="flex items-center justify-between">
+              <Tabs defaultValue="overview" className="flex-1">
+                <div className="flex items-center justify-between">
+                  <TabsList className="bg-transparent border-b-0 h-auto p-0 space-x-1">
+                    <TabsTrigger 
+                      value="overview" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      Overview
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="design-studio" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      Design Studio
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="5d" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      5D
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="automation" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      Automation Hub
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="procurement" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      Procurement
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="data" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      Data Engine
+                    </TabsTrigger>
+                  </TabsList>
 
-            {/* Overview Tab Content */}
-            <TabsContent value="overview" className="mt-0">
+                  {/* Toggle AI Assistant Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsAiSidebarOpen(!isAiSidebarOpen)}
+                    className="ml-4"
+                  >
+                    {isAiSidebarOpen ? (
+                      <>
+                        <PanelRightClose className="h-4 w-4 mr-2" />
+                        Hide AI
+                      </>
+                    ) : (
+                      <>
+                        <PanelRightOpen className="h-4 w-4 mr-2" />
+                        Show AI
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Overview Tab Content */}
+                <TabsContent value="overview" className="mt-0">
               <div className="container px-6 py-8">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
@@ -82,30 +109,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <Button variant="outline" size="sm">Collapse</Button>
                   </div>
                 </div>
-
-                {/* AI Assistant - Full Width */}
-                <Card className="mb-6">
-                  <CardHeader>
-                    <CardTitle className="text-base">AI Assistant</CardTitle>
-                    <p className="text-xs text-muted-foreground">Ask about KPIs, risks, schedules, or generate a report.</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex gap-2 mb-3">
-                      <Button variant="outline" size="sm" className="text-xs">SPI/CPI</Button>
-                      <Button variant="outline" size="sm" className="text-xs">Budget</Button>
-                      <Button variant="outline" size="sm" className="text-xs">Schedule</Button>
-                    </div>
-                    <div className="flex gap-2">
-                      <Input 
-                        placeholder="e.g., Summarize risks and suggest mitigations" 
-                        className="text-sm"
-                      />
-                      <Button size="sm" className="bg-construction-primary shrink-0">
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
 
                 <div className="grid lg:grid-cols-3 gap-6">
                   {/* Left Column - Project Overview */}
@@ -453,6 +456,52 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      {/* AI Assistant Right Sidebar */}
+      <div 
+        className={`fixed right-0 top-0 h-screen w-96 bg-card border-l shadow-lg transition-transform duration-300 ${
+          isAiSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="h-full flex flex-col">
+          <div className="p-4 border-b flex items-center justify-between">
+            <h2 className="text-lg font-semibold">AI Assistant</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAiSidebarOpen(false)}
+            >
+              <PanelRightClose className="h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-4">
+            <Card>
+              <CardHeader>
+                <p className="text-xs text-muted-foreground">Ask about KPIs, risks, schedules, or generate a report.</p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-2 mb-3 flex-wrap">
+                  <Button variant="outline" size="sm" className="text-xs">SPI/CPI</Button>
+                  <Button variant="outline" size="sm" className="text-xs">Budget</Button>
+                  <Button variant="outline" size="sm" className="text-xs">Schedule</Button>
+                </div>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="e.g., Summarize risks and suggest mitigations" 
+                    className="text-sm"
+                  />
+                  <Button size="sm" className="bg-construction-primary shrink-0">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
