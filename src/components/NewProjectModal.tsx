@@ -57,6 +57,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [expandedFolders, setExpandedFolders] = useState<{ [key: string]: boolean }>({
     Design: true,
   });
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [creationStep, setCreationStep] = useState<string>("");
+  const [creationProgress, setCreationProgress] = useState(0);
 
   const toggleFolder = (folderName: string) => {
     setExpandedFolders((prev) => ({
@@ -254,26 +257,50 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   };
 
   const handleCreateProject = () => {
-    // Trigger confetti
-    confetti({
-      particleCount: 150,
-      spread: 100,
-      origin: { y: 0.6 }
+    setIsCreatingProject(true);
+    setCreationProgress(0);
+
+    const steps = [
+      { text: "Extracting information from documents...", duration: 1000 },
+      { text: "Setting up project context...", duration: 1200 },
+      { text: "Fetching information from AI models...", duration: 1300 },
+      { text: "Finalizing project setup...", duration: 500 }
+    ];
+
+    let totalDuration = 0;
+    steps.forEach((step, index) => {
+      setTimeout(() => {
+        setCreationStep(step.text);
+        setCreationProgress(((index + 1) / steps.length) * 100);
+      }, totalDuration);
+      totalDuration += step.duration;
     });
 
-    // Show success toast
-    toast({
-      title: "Project Created Successfully!",
-      description: `${formData.projectName} has been created and is ready to use.`,
-    });
-
-    // Close modal
-    onOpenChange(false);
-
-    // Open the new project tab
+    // Complete the process after all steps
     setTimeout(() => {
-      openTab(formData.projectId, formData.projectName, `/project/${formData.projectId}`);
-    }, 300);
+      setIsCreatingProject(false);
+      
+      // Trigger confetti
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      // Show success toast
+      toast({
+        title: "Project Created Successfully!",
+        description: `${formData.projectName} has been created and is ready to use.`,
+      });
+
+      // Close modal
+      onOpenChange(false);
+
+      // Open the new project tab
+      setTimeout(() => {
+        openTab(formData.projectId, formData.projectName, `/project/${formData.projectId}`);
+      }, 300);
+    }, totalDuration);
   };
 
   return (
@@ -1283,6 +1310,26 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    {/* Project Creation Progress Dialog */}
+    <Dialog open={isCreatingProject} onOpenChange={() => {}}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold text-center">
+            Creating Project
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6 py-4">
+          <Progress value={creationProgress} className="h-2" />
+          
+          <div className="flex items-center gap-3 py-3">
+            <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+            <p className="text-sm text-muted-foreground">{creationStep}</p>
           </div>
         </div>
       </DialogContent>
