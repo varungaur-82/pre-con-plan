@@ -1016,8 +1016,177 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           )}
 
           {currentStep === 4 && (
-            <div className="py-8 text-center text-muted-foreground text-xs">
-              Review & Confirm step content goes here
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="text-center space-y-2">
+                <h2 className="text-2xl font-bold">Review & Confirm</h2>
+                <p className="text-sm text-muted-foreground">
+                  Please review all project details before creating your project
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="space-y-4">
+                  {/* Project Information */}
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-3">
+                    <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">1</div>
+                      Project Information
+                    </h3>
+                    <div className="space-y-2 text-xs">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <span className="text-muted-foreground font-medium">Project ID</span>
+                          <p className="font-semibold">{formData.projectId || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Project Name</span>
+                          <p className="font-semibold">{formData.projectName || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Client</span>
+                          <p className="font-semibold">{formData.client || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Location</span>
+                          <p className="font-semibold">{formData.location || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Project Type</span>
+                          <p className="font-semibold">{formData.projectType || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Design Stage</span>
+                          <p className="font-semibold">{formData.designStage || "Not set"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Vision Statement */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Vision Statement</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      {formData.visionStatement || "No vision statement provided"}
+                    </p>
+                  </div>
+
+                  {/* Objectives */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Objectives</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                      {formData.objectives || "No objectives provided"}
+                    </p>
+                  </div>
+
+                  {/* Key Metrics */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Key Metrics</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                      {formData.keyMetrics || "No key metrics provided"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-4">
+                  {/* Project Charter */}
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-4 space-y-3">
+                    <h3 className="text-sm font-bold text-green-600 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">2</div>
+                      Project Charter & Vision
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <span className="text-muted-foreground font-medium">Budget</span>
+                          <p className="font-semibold">{formData.budget || "Not set"}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground font-medium">Completion</span>
+                          <p className="font-semibold">{formData.completion || "Not set"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stakeholders */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Stakeholders</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                      {formData.stakeholders || "No stakeholders defined"}
+                    </p>
+                  </div>
+
+                  {/* Risks */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Risks</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                      {formData.risks || "No risks identified"}
+                    </p>
+                  </div>
+
+                  {/* Success Criteria */}
+                  <div className="bg-gray-50 border rounded-lg p-4 space-y-2">
+                    <h4 className="text-xs font-bold text-gray-700">Success Criteria</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                      {formData.successCriteria || "No success criteria defined"}
+                    </p>
+                  </div>
+
+                  {/* Repository Structure */}
+                  <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 space-y-3">
+                    <h3 className="text-sm font-bold text-purple-600 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">3</div>
+                      Project Repository
+                    </h3>
+                    <div className="space-y-1 text-xs">
+                      <p className="text-muted-foreground">Enterprise folders created:</p>
+                      <ul className="space-y-1 pl-4">
+                        <li className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                          Contracts
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                          Drawings
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                          Schedules
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                          Permits
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                          Correspondence
+                        </li>
+                      </ul>
+                      <p className="text-muted-foreground pt-2">Custom folder structure: Design, Procurement, Admin</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Confirmation Checkbox */}
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="confirm"
+                    className="mt-1 h-4 w-4 rounded border-gray-300"
+                  />
+                  <label htmlFor="confirm" className="text-xs text-gray-700">
+                    <span className="font-semibold">I confirm that all information is correct</span>
+                    <span className="block mt-1 text-muted-foreground">
+                      By checking this box, you acknowledge that you have reviewed all project details and are ready to create the project. This will initialize the project repository and set up your workspace.
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
           )}
           </div>
