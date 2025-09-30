@@ -56,6 +56,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     visionStatement: "",
     objectives: "",
     keyMetrics: "",
+    stakeholders: "",
+    risks: "",
+    successCriteria: "",
   });
 
 
@@ -153,6 +156,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         visionStatement: "",
         objectives: "",
         keyMetrics: "",
+        stakeholders: "",
+        risks: "",
+        successCriteria: "",
       });
 
       // Show success message
@@ -577,17 +583,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     <span className="text-muted-foreground">Location</span>
                     <p className="font-medium">{formData.location || "—"}</p>
                   </div>
-                  <div>
+                  <div className="col-span-2">
                     <span className="text-muted-foreground">Type</span>
                     <p className="font-medium">{formData.projectType || "—"}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Budget</span>
-                    <p className="font-medium">{formData.budget || "—"}</p>
-                  </div>
-                  <div className="col-span-2">
-                    <span className="text-muted-foreground">Completion</span>
-                    <p className="font-medium">{formData.completion || "—"}</p>
                   </div>
                 </div>
 
@@ -629,6 +627,73 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       onChange={(e) => setFormData({ ...formData, keyMetrics: e.target.value })}
                       className="min-h-[60px] text-xs bg-white"
                     />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="stakeholders" className="text-xs font-semibold">
+                      Stakeholders
+                    </Label>
+                    <Textarea
+                      id="stakeholders"
+                      placeholder="Enter stakeholders"
+                      value={formData.stakeholders}
+                      onChange={(e) => setFormData({ ...formData, stakeholders: e.target.value })}
+                      className="min-h-[60px] text-xs bg-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="risks" className="text-xs font-semibold">
+                      Risks
+                    </Label>
+                    <Textarea
+                      id="risks"
+                      placeholder="Enter risks"
+                      value={formData.risks}
+                      onChange={(e) => setFormData({ ...formData, risks: e.target.value })}
+                      className="min-h-[60px] text-xs bg-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor="successCriteria" className="text-xs font-semibold">
+                      Success Criteria
+                    </Label>
+                    <Textarea
+                      id="successCriteria"
+                      placeholder="Enter success criteria"
+                      value={formData.successCriteria}
+                      onChange={(e) => setFormData({ ...formData, successCriteria: e.target.value })}
+                      className="min-h-[60px] text-xs bg-white"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="budget" className="text-xs font-semibold">
+                        Budget
+                      </Label>
+                      <Input
+                        id="budget"
+                        placeholder="Enter budget"
+                        value={formData.budget}
+                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                        className="h-8 text-xs bg-white"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label htmlFor="completion" className="text-xs font-semibold">
+                        Completion
+                      </Label>
+                      <Input
+                        id="completion"
+                        placeholder="Enter completion date"
+                        value={formData.completion}
+                        onChange={(e) => setFormData({ ...formData, completion: e.target.value })}
+                        className="h-8 text-xs bg-white"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
