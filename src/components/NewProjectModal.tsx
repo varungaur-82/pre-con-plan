@@ -36,6 +36,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [activePrompt, setActivePrompt] = useState<number | null>(null);
   const [promptResponses, setPromptResponses] = useState<{ [key: number]: string }>({});
+  const [aiResponses, setAiResponses] = useState<{ [key: number]: string }>({});
+  const [isGenerating, setIsGenerating] = useState<{ [key: number]: boolean }>({});
   const [hoveredPrompt, setHoveredPrompt] = useState<number | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -167,8 +169,32 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     }, 5000);
   };
 
+  const aiResponseTemplates: { [key: number]: string } = {
+    1: "Based on your NYC Tower project, here's a recommended vision statement:\n\n'To create a state-of-the-art healthcare facility that sets new standards in patient care and medical innovation for New York City. The NYC Tower will integrate cutting-edge medical technology with sustainable design principles, providing a healing environment that serves the community while supporting the healthcare professionals who work within its walls. This facility will become a beacon of excellence in healthcare infrastructure, demonstrating how thoughtful design and advanced medical capabilities can come together to improve patient outcomes and operational efficiency.'",
+    2: "For the NYC Tower healthcare facility, here are key objectives:\n\n1. Complete construction by Q4 2025 within the $2.5M budget\n2. Achieve LEED Gold certification for sustainable healthcare design\n3. Deliver 120,000 sq ft of modern medical infrastructure across 18 floors\n4. Ensure compliance with all NYC DOB and Health Department regulations\n5. Create flexible spaces that can adapt to evolving medical technologies\n6. Maximize natural light and optimize patient room layouts for improved healing outcomes\n7. Implement smart building systems for energy efficiency and operational cost reduction",
+    3: "Key performance metrics for tracking project success:\n\n• Budget Performance: Track actual vs. planned spend weekly, maintain variance within ±3%\n• Schedule Adherence: Monitor milestone completion rates, target 100% on-time delivery\n• Quality Metrics: Zero safety incidents, 98% first-time quality acceptance rate\n• Sustainability: Energy efficiency targets (30% below baseline), LEED points tracking\n• Stakeholder Satisfaction: Monthly surveys with client, design team, and contractors (target >4.5/5)\n• Compliance: 100% permit approval rate, zero regulatory violations\n• Change Orders: Limit to <5% of total project value\n• RFI Response Time: Average response within 48 hours",
+    4: "For a residential development project, key objectives typically include:\n\n1. Deliver high-quality, market-appropriate housing units that meet target demographic needs\n2. Achieve project completion within approved timeline and budget constraints\n3. Maximize livable space efficiency while maintaining aesthetic appeal\n4. Ensure compliance with local zoning, building codes, and residential standards\n5. Implement sustainable building practices (energy efficiency, water conservation)\n6. Create attractive common areas and amenities that enhance resident lifestyle\n7. Maintain strong relationships with local community and address neighborhood concerns\n8. Optimize unit mix based on market research and pre-sales data\n9. Achieve target sales velocity and pricing objectives",
+    5: "Essential stakeholders for a commercial construction project:\n\n• Owner/Developer: Primary decision-maker and financier\n• Project Management Team: Overall coordination and delivery\n• Architect & Design Team: Building design and technical specifications\n• General Contractor: Main construction execution\n• Specialized Subcontractors: MEP, structural, facade, interior fit-out specialists\n• Civil Engineers: Site work, utilities, grading\n• Local Authorities: Building department, fire marshal, zoning board\n• Landlord/Property Manager: If on leased land or existing property\n• Tenants/End Users: Input on space requirements and functionality\n• Lenders/Financial Partners: Funding and budget oversight\n• Legal Counsel: Contract review and regulatory compliance\n• Insurance Providers: Risk management and coverage\n• Utility Companies: Power, water, gas, telecommunications connections"
+  };
+
   const handlePromptClick = (promptId: number) => {
+    if (activePrompt === promptId) {
+      setActivePrompt(null);
+      return;
+    }
+    
     setActivePrompt(promptId);
+    
+    // Only generate if we don't have a response yet
+    if (!aiResponses[promptId]) {
+      setIsGenerating({ ...isGenerating, [promptId]: true });
+      
+      // Simulate AI generation delay
+      setTimeout(() => {
+        setAiResponses({ ...aiResponses, [promptId]: aiResponseTemplates[promptId] || "AI response generated successfully." });
+        setIsGenerating({ ...isGenerating, [promptId]: false });
+      }, 1500);
+    }
   };
 
   const handlePromptResponse = (promptId: number, value: string) => {
@@ -177,15 +203,14 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
   const handlePopulate = (promptId: number) => {
     const prompt = quickPrompts.find(p => p.id === promptId);
-    const response = promptResponses[promptId];
+    const response = aiResponses[promptId];
     
     if (prompt && response && prompt.field) {
       setFormData({ ...formData, [prompt.field]: response });
       toast({
         title: "Field Populated",
-        description: "Your response has been added to the form.",
+        description: "AI response has been added to the form field.",
       });
-      setPromptResponses({ ...promptResponses, [promptId]: "" });
       setActivePrompt(null);
     }
   };
@@ -435,41 +460,55 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <p className="text-xs font-medium text-muted-foreground mb-3">Quick prompts:</p>
                     {quickPrompts.map((prompt) => (
                       <div 
                         key={prompt.id}
-                        className="relative"
-                        onMouseEnter={() => setHoveredPrompt(prompt.id)}
-                        onMouseLeave={() => setHoveredPrompt(null)}
+                        className="space-y-2"
                       >
-                        {activePrompt === prompt.id ? (
-                          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-md p-2">
-                            <Input
-                              value={promptResponses[prompt.id] || ""}
-                              onChange={(e) => handlePromptResponse(prompt.id, e.target.value)}
-                              placeholder="Type your response..."
-                              className="h-7 text-xs flex-1"
-                              autoFocus
-                            />
-                            {promptResponses[prompt.id] && hoveredPrompt === prompt.id && (
-                              <Button
-                                size="sm"
-                                onClick={() => handlePopulate(prompt.id)}
-                                className="h-7 px-2 text-xs bg-blue-600 hover:bg-blue-700"
-                              >
-                                Populate
-                              </Button>
+                        <button
+                          onClick={() => handlePromptClick(prompt.id)}
+                          className={cn(
+                            "w-full text-left text-xs rounded-md px-3 py-2 transition-colors",
+                            activePrompt === prompt.id 
+                              ? "bg-blue-600 text-white" 
+                              : "text-blue-600 hover:bg-blue-50"
+                          )}
+                        >
+                          {prompt.text}
+                        </button>
+                        
+                        {/* AI Response */}
+                        {activePrompt === prompt.id && (
+                          <div className="bg-white border border-gray-200 rounded-lg p-3 space-y-3 animate-in fade-in slide-in-from-top-2">
+                            {isGenerating[prompt.id] ? (
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <div className="animate-spin rounded-full h-3 w-3 border-2 border-blue-600 border-t-transparent" />
+                                <span>Generating response...</span>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="flex items-start gap-2">
+                                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <span className="text-blue-600 font-bold text-[10px]">AI</span>
+                                  </div>
+                                  <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line">
+                                    {aiResponses[prompt.id]}
+                                  </p>
+                                </div>
+                                <div className="flex justify-end">
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handlePopulate(prompt.id)}
+                                    className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+                                  >
+                                    Populate
+                                  </Button>
+                                </div>
+                              </>
                             )}
                           </div>
-                        ) : (
-                          <button
-                            onClick={() => handlePromptClick(prompt.id)}
-                            className="w-full text-left text-xs text-blue-600 hover:bg-blue-50 rounded-md px-3 py-2 transition-colors"
-                          >
-                            {prompt.text}
-                          </button>
                         )}
                       </div>
                     ))}
