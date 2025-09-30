@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Upload, Check, CheckCircle2, Send, Paperclip } from "lucide-react";
+import { Upload, Check, CheckCircle2, Send, Paperclip, FolderOpen, Search, Download, Save, X } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import confetti from "canvas-confetti";
 import { useToast } from "@/hooks/use-toast";
 
@@ -42,7 +43,13 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const step2FileInputRef = useRef<HTMLInputElement>(null);
+  const step3FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  
+  const [transparentConfirmation, setTransparentConfirmation] = useState(true);
+  const [suggestionAccepted, setSuggestionAccepted] = useState<boolean | null>(null);
+  const [placementAccepted, setPlacementAccepted] = useState<boolean | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [formData, setFormData] = useState({
     projectId: "PRJ-2025-001",
@@ -701,8 +708,228 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           )}
 
           {currentStep === 3 && (
-            <div className="py-8 text-center text-muted-foreground text-xs">
-              Project Repo step content goes here
+            <div className="space-y-4">
+              {/* Header */}
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-xl font-bold">Welcome to Project Repository</h2>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Enterprise baseline is ready. I'll classify files and propose folders. You control confirmations.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium">Transparent Confirmation</span>
+                  <Switch
+                    checked={transparentConfirmation}
+                    onCheckedChange={setTransparentConfirmation}
+                  />
+                </div>
+              </div>
+
+              {/* Main Content - Two Columns */}
+              <div className="grid grid-cols-2 gap-6">
+                {/* Left Column - Repository Assistant */}
+                <div className="space-y-4">
+                  <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                        <FolderOpen className="h-4 w-4 text-white" />
+                      </div>
+                      <h3 className="text-sm font-semibold">Repository Assistant</h3>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Welcome to your Project Repository. I'll classify files and suggest folders. Transparent confirmation is ON by default.
+                    </p>
+
+                    {/* Suggestion Message */}
+                    <div className="bg-blue-100/50 rounded-md p-3 space-y-2">
+                      <p className="text-xs font-medium">I suggest locations for 4 file(s). Accept to place them.</p>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs bg-blue-600 hover:bg-blue-700"
+                          onClick={() => setSuggestionAccepted(true)}
+                          disabled={suggestionAccepted !== null}
+                        >
+                          {suggestionAccepted === true && <Check className="mr-1 h-3 w-3" />}
+                          Accept
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => setSuggestionAccepted(false)}
+                          disabled={suggestionAccepted !== null}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Placement Message */}
+                    <div className="bg-blue-100/50 rounded-md p-3 space-y-2">
+                      <p className="text-xs font-medium">Proposed placements for 4 file(s).</p>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs bg-blue-600 hover:bg-blue-700"
+                          onClick={() => setPlacementAccepted(true)}
+                          disabled={placementAccepted !== null}
+                        >
+                          {placementAccepted === true && <Check className="mr-1 h-3 w-3" />}
+                          Accept
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => setPlacementAccepted(false)}
+                          disabled={placementAccepted !== null}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* File Upload Area */}
+                  <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center space-y-3">
+                    <Upload className="h-8 w-8 text-muted-foreground mx-auto" />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Drag & drop files here</p>
+                      <p className="text-xs text-muted-foreground">
+                        Contracts, drawings, schedules, spreadsheets
+                      </p>
+                    </div>
+                    <input
+                      ref={step3FileInputRef}
+                      type="file"
+                      className="hidden"
+                      multiple
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          toast({
+                            title: "Files Uploaded",
+                            description: `${e.target.files.length} file(s) ready for classification.`,
+                          });
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs"
+                      onClick={() => step3FileInputRef.current?.click()}
+                    >
+                      <Upload className="mr-2 h-3 w-3" />
+                      Choose files
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Right Column - Repository Structure */}
+                <div className="space-y-4">
+                  <div className="bg-gray-50 border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold">Repository Structure</h3>
+                      <div className="relative">
+                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                        <Input
+                          placeholder="Search folders/files"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="h-7 text-xs pl-7 w-48 bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Folder List */}
+                    <div className="space-y-2">
+                      {[
+                        { name: "Contracts", tag: "enterprise" },
+                        { name: "Drawings", tag: "enterprise" },
+                        { name: "Schedules", tag: "enterprise" },
+                        { name: "Permits", tag: "enterprise" },
+                        { name: "Correspondence", tag: "enterprise" },
+                      ].map((folder) => (
+                        <div
+                          key={folder.name}
+                          className="flex items-center justify-between py-2 px-3 bg-white border rounded-md hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-xs font-medium">{folder.name}</span>
+                          </div>
+                          <span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+                            {folder.tag}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-xs"
+                        onClick={() => {
+                          setSuggestionAccepted(null);
+                          setPlacementAccepted(null);
+                        }}
+                      >
+                        <X className="mr-1 h-3 w-3" />
+                        Dismiss placements
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="h-7 text-xs bg-black hover:bg-gray-800"
+                        onClick={() => {
+                          setSuggestionAccepted(true);
+                          setPlacementAccepted(true);
+                          toast({
+                            title: "All Placements Accepted",
+                            description: "Files have been organized into folders.",
+                          });
+                        }}
+                      >
+                        Accept all placements
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Bottom Action Buttons */}
+                  <div className="flex items-center justify-between pt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs"
+                      onClick={handleBack}
+                    >
+                      Back
+                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs"
+                      >
+                        <Save className="mr-1 h-3 w-3" />
+                        Save
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs"
+                      >
+                        <Download className="mr-1 h-3 w-3" />
+                        Export
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
