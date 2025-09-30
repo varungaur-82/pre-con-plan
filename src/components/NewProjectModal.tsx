@@ -230,16 +230,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] flex flex-col p-0 bg-white">
-          <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-white to-gray-50/30">
-          <DialogHeader>
-            {/* Stepper */}
-            <div className="flex items-center justify-between mb-4">
+          <DialogHeader className="px-6 pt-4 pb-2 border-b">
+            {/* Minimal Stepper */}
+            <div className="flex items-center gap-2">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center flex-1">
-                  <div className="flex flex-col items-center flex-1">
+                  <div className="flex items-center gap-2 flex-1">
                     <div
                       className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors",
+                        "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold transition-colors",
                         currentStep > step.id
                           ? "bg-blue-600 text-white"
                           : currentStep === step.id
@@ -247,11 +246,11 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                           : "bg-muted text-muted-foreground"
                       )}
                     >
-                      {currentStep > step.id ? <Check className="w-4 h-4" /> : step.id}
+                      {currentStep > step.id ? <Check className="w-3 h-3" /> : step.id}
                     </div>
                     <span
                       className={cn(
-                        "text-xs mt-1 text-center",
+                        "text-[10px] whitespace-nowrap",
                         currentStep >= step.id
                           ? "text-foreground font-medium"
                           : "text-muted-foreground"
@@ -273,6 +272,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
             </div>
           </DialogHeader>
 
+          <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-white to-gray-50/30">
           {currentStep === 1 && (
             <div className="space-y-4">
               {/* Success Message */}
@@ -446,22 +446,21 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           )}
 
           {currentStep === 2 && (
-            <div className="grid grid-cols-2 gap-6">
-              {/* Left Column - AI Assistant */}
-              <div className="space-y-4">
-                <div className="bg-muted/30 rounded-lg p-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-blue-600 font-bold text-lg">AI</span>
-                    </div>
+            <div className="grid grid-cols-2 gap-6 h-full">
+              {/* Left Column - AI Assistant with Separate Scroll */}
+              <div className="flex flex-col h-full space-y-4">
+                <div className="flex-1 flex flex-col bg-muted/30 rounded-lg overflow-hidden">
+                  {/* Compact Header */}
+                  <div className="flex items-center gap-2 p-3 border-b bg-white/50">
                     <div>
-                      <h3 className="text-base font-semibold">AI Vision Assistant</h3>
-                      <p className="text-xs text-muted-foreground">Smart project charter generation</p>
+                      <h3 className="text-sm font-semibold">AI Vision Assistant</h3>
+                      <p className="text-[10px] text-muted-foreground">Smart project charter generation</p>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground mb-3">Quick prompts:</p>
+                  {/* Scrollable Chat Area */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Quick prompts:</p>
                     {quickPrompts.map((prompt) => (
                       <div 
                         key={prompt.id}
@@ -513,45 +512,47 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       </div>
                     ))}
                   </div>
-                </div>
 
-                {/* Message Input */}
-                <div className="bg-muted/30 rounded-lg p-4 space-y-3">
-                  <Textarea
-                    placeholder="Type your message..."
-                    className="min-h-[80px] text-xs"
-                  />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <input
-                        ref={step2FileInputRef}
-                        type="file"
-                        className="hidden"
-                        onChange={handleStep2FileSelect}
-                        multiple
+                  {/* Fixed Message Input at Bottom */}
+                  <div className="p-3 border-t bg-white/80">
+                    <div className="space-y-2">
+                      <Textarea
+                        placeholder="Type your message..."
+                        className="min-h-[60px] text-xs"
                       />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-7 text-xs"
-                        onClick={() => step2FileInputRef.current?.click()}
-                      >
-                        <Paperclip className="h-3 w-3 mr-1" />
-                        Upload File
-                      </Button>
-                      {uploadedFiles.length > 0 && (
-                        <span className="text-xs text-muted-foreground">
-                          {uploadedFiles.length} file(s) uploaded
-                        </span>
-                      )}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <input
+                            ref={step2FileInputRef}
+                            type="file"
+                            className="hidden"
+                            onChange={handleStep2FileSelect}
+                            multiple
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs"
+                            onClick={() => step2FileInputRef.current?.click()}
+                          >
+                            <Paperclip className="h-3 w-3 mr-1" />
+                            Upload
+                          </Button>
+                          {uploadedFiles.length > 0 && (
+                            <span className="text-xs text-muted-foreground">
+                              {uploadedFiles.length} file(s)
+                            </span>
+                          )}
+                        </div>
+                        <Button size="sm" className="h-7 bg-blue-600 hover:bg-blue-700">
+                          <Send className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground">
+                        Contracts, SOWs (PDF, DOCX). AI can make mistakes.
+                      </p>
                     </div>
-                    <Button size="sm" className="h-7 bg-blue-600 hover:bg-blue-700">
-                      <Send className="h-3 w-3" />
-                    </Button>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">
-                    Contracts, SOWs (PDF, DOCX). NewCon AI can make mistakes. Verify important information.
-                  </p>
                 </div>
               </div>
 
