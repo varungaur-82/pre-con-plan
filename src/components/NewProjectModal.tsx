@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Upload, Check, CheckCircle2, Send, Paperclip, FolderOpen, Search, Download, Save, X } from "lucide-react";
+import { Upload, Check, CheckCircle2, Send, Paperclip, FolderOpen, Search, Download, Save, X, ChevronRight, ChevronDown, Folder } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import confetti from "canvas-confetti";
 import { useToast } from "@/hooks/use-toast";
@@ -50,6 +50,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [suggestionAccepted, setSuggestionAccepted] = useState<boolean | null>(null);
   const [placementAccepted, setPlacementAccepted] = useState<boolean | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedFolders, setExpandedFolders] = useState<{ [key: string]: boolean }>({
+    Design: true,
+  });
+
+  const toggleFolder = (folderName: string) => {
+    setExpandedFolders((prev) => ({
+      ...prev,
+      [folderName]: !prev[folderName],
+    }));
+  };
 
   const [formData, setFormData] = useState({
     projectId: "PRJ-2025-001",
@@ -900,33 +910,105 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   </div>
 
                   {/* Bottom Action Buttons */}
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="flex items-center justify-end gap-2 pt-2">
                     <Button
                       variant="outline"
                       size="sm"
                       className="h-8 text-xs"
-                      onClick={handleBack}
                     >
-                      Back
+                      <Save className="mr-1 h-3 w-3" />
+                      Save
                     </Button>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs"
-                      >
-                        <Save className="mr-1 h-3 w-3" />
-                        Save
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs"
-                      >
-                        <Download className="mr-1 h-3 w-3" />
-                        Export
-                      </Button>
-                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs"
+                    >
+                      <Download className="mr-1 h-3 w-3" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Folder Tree Structure at Bottom */}
+              <div className="mt-6 border-t pt-4">
+                <div className="space-y-1">
+                  {/* Design Folder */}
+                  <div>
+                    <button
+                      onClick={() => toggleFolder("Design")}
+                      className="flex items-center gap-2 hover:bg-gray-50 px-2 py-1 rounded w-full text-left"
+                    >
+                      {expandedFolders.Design ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <Folder className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">Design</span>
+                    </button>
+                    {expandedFolders.Design && (
+                      <div className="ml-6 space-y-1 mt-1">
+                        <div className="flex items-center gap-2 px-2 py-1">
+                          <Folder className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">Feasibility Studies</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2 py-1">
+                          <Folder className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">Compliance Reports</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2 py-1">
+                          <Folder className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">Test Fits</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Procurement Folder */}
+                  <div>
+                    <button
+                      onClick={() => toggleFolder("Procurement")}
+                      className="flex items-center gap-2 hover:bg-gray-50 px-2 py-1 rounded w-full text-left"
+                    >
+                      {expandedFolders.Procurement ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <Folder className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">Procurement</span>
+                    </button>
+                    {expandedFolders.Procurement && (
+                      <div className="ml-6 space-y-1 mt-1">
+                        <div className="flex items-center gap-2 px-2 py-1">
+                          <Folder className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">Contracts</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Admin Folder */}
+                  <div>
+                    <button
+                      onClick={() => toggleFolder("Admin")}
+                      className="flex items-center gap-2 hover:bg-gray-50 px-2 py-1 rounded w-full text-left"
+                    >
+                      {expandedFolders.Admin ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <Folder className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">Admin</span>
+                    </button>
+                    {expandedFolders.Admin && (
+                      <div className="ml-6 space-y-1 mt-1">
+                        {/* Add subfolders here if needed */}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
