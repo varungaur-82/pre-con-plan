@@ -75,8 +75,8 @@ const DashboardContent = () => {
         
         <div className="container relative z-10">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Streamline Your <span className="text-construction-primary">Pre-Construction</span> Planning
+            <h1 className="text-4xl md:text-5xl font-bold text-construction-primary mb-6">
+              Streamline Your <span className="text-construction-secondary">Pre-Construction</span> Planning
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               Manage projects, track budgets, coordinate teams, and ensure regulatory compliance 
