@@ -24,7 +24,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex">
+      <div className="flex relative">
         {/* Main Content */}
         <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'mr-96' : ''}`}>
         {/* Top Navigation Tabs */}
@@ -464,9 +464,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
     {/* AI Assistant Right Sidebar */}
     <div 
-      className={`fixed right-0 top-0 h-screen w-96 bg-background border-l shadow-lg transition-transform duration-300 flex flex-col ${
+      className={`absolute right-0 top-0 bottom-0 w-96 bg-background border-l shadow-lg transition-transform duration-300 flex flex-col ${
         isAiSidebarOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
+      style={{ height: 'calc(100vh - 4rem)' }}
     >
       {/* Header */}
       <div className="p-4 border-b bg-card flex items-center justify-between">
