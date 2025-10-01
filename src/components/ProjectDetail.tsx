@@ -23,10 +23,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex relative">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="flex h-full">
         {/* Main Content */}
-        <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'mr-96' : ''}`}>
+        <div className={`flex-1 transition-all duration-300 ${isAiSidebarOpen ? 'pr-96' : ''} overflow-y-auto`}>
         {/* Top Navigation Tabs */}
         <div className="bg-card border-b">
           <div className="container px-6">
@@ -464,10 +464,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
     {/* AI Assistant Right Sidebar */}
     <div 
-      className={`absolute right-0 top-0 bottom-0 w-96 bg-background border-l shadow-lg transition-transform duration-300 flex flex-col ${
+      className={`fixed right-0 top-0 w-96 bg-background border-l shadow-lg transition-transform duration-300 flex flex-col ${
         isAiSidebarOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
-      style={{ height: 'calc(100vh - 4rem)' }}
+      style={{ height: '100vh', maxWidth: '384px', zIndex: 40 }}
     >
       {/* Header */}
       <div className="p-4 border-b bg-card flex items-center justify-between">
