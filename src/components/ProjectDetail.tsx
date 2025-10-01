@@ -216,8 +216,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         
                         <div className="grid grid-cols-2 gap-4">
                           {/* Design Progress - Donut Chart */}
-                          <Card className="p-4 flex flex-col">
-                            <div className="flex-1 space-y-3">
+                          <Card className="flex flex-col overflow-hidden">
+                            <div className="flex-1 p-4 space-y-3">
                               <h4 className="text-sm font-medium text-muted-foreground">Design Progress</h4>
                               <div className="h-40 flex flex-col items-center justify-center">
                                 <ResponsiveContainer width="100%" height="80%">
@@ -242,14 +242,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                 <div className="text-3xl font-bold text-construction-primary -mt-24">74%</div>
                               </div>
                             </div>
-                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
-                              Open
-                            </Button>
+                            <div className="border-t bg-muted/30 px-4 py-2">
+                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
+                                Open
+                              </Button>
+                            </div>
                           </Card>
 
                           {/* Cost - Bar Chart */}
-                          <Card className="p-4 flex flex-col">
-                            <div className="flex-1 space-y-3">
+                          <Card className="flex flex-col overflow-hidden">
+                            <div className="flex-1 p-4 space-y-3">
                               <h4 className="text-sm font-medium text-muted-foreground">Cost (Budget vs Anticipated vs Committed)</h4>
                               <div className="h-40">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -267,14 +269,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                 </ResponsiveContainer>
                               </div>
                             </div>
-                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
-                              Open
-                            </Button>
+                            <div className="border-t bg-muted/30 px-4 py-2">
+                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
+                                Open
+                              </Button>
+                            </div>
                           </Card>
 
                           {/* Schedule - Line Chart */}
-                          <Card className="p-4 flex flex-col">
-                            <div className="flex-1 space-y-3">
+                          <Card className="flex flex-col overflow-hidden">
+                            <div className="flex-1 p-4 space-y-3">
                               <h4 className="text-sm font-medium text-muted-foreground">Schedule (Baseline vs Actual)</h4>
                               <div className="h-40">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -311,14 +315,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                 </ResponsiveContainer>
                               </div>
                             </div>
-                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
-                              Open
-                            </Button>
+                            <div className="border-t bg-muted/30 px-4 py-2">
+                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
+                                Open
+                              </Button>
+                            </div>
                           </Card>
 
                           {/* Reports List */}
-                          <Card className="p-4 flex flex-col">
-                            <div className="flex-1 space-y-3">
+                          <Card className="flex flex-col overflow-hidden">
+                            <div className="flex-1 p-4 space-y-3">
                               <h4 className="text-sm font-medium text-muted-foreground">Reports</h4>
                               <div className="space-y-2 pt-2">
                                 <div className="text-xs text-muted-foreground">last used</div>
@@ -332,9 +338,11 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                 </div>
                               </div>
                             </div>
-                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
-                              Open
-                            </Button>
+                            <div className="border-t bg-muted/30 px-4 py-2">
+                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
+                                Open
+                              </Button>
+                            </div>
                           </Card>
                         </div>
                       </div>
