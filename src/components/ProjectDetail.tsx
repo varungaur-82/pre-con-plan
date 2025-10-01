@@ -267,7 +267,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         <p className="text-sm text-muted-foreground mb-3">
                           Access the project's guiding principles, scope, and long-term vision.
                         </p>
-                        <Button className="w-full bg-construction-primary">Open Charter</Button>
+                        <Button className="w-full bg-construction-primary/30 hover:bg-construction-primary/40 text-construction-primary border border-construction-primary/20">Open Charter</Button>
                       </div>
 
                       {/* Required Information Section */}
