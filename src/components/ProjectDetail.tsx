@@ -88,7 +88,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     ) : (
                       <>
                         <PanelRightOpen className="h-4 w-4 mr-2" />
-                        Show AI
+                        Co-Pilot
                       </>
                     )}
                   </Button>
