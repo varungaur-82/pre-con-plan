@@ -20,8 +20,21 @@ interface ProjectDetailProps {
 
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
+
+  const getContextName = () => {
+    switch (activeTab) {
+      case "overview": return "Overview";
+      case "design-studio": return "Design Studio";
+      case "5d": return "5D";
+      case "automation": return "Automation Hub";
+      case "procurement": return "Procurement";
+      case "data": return "Data Engine";
+      default: return "Overview";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -32,7 +45,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         <div className="bg-card border-b">
           <div className="container px-6">
             <div className="flex items-center justify-between">
-              <Tabs defaultValue="overview" className="flex-1">
+              <Tabs defaultValue="overview" className="flex-1" onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between">
                   <TabsList className="bg-transparent border-b-0 h-auto p-0 space-x-1">
                     <TabsTrigger 
@@ -485,6 +498,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         >
           <PanelRightClose className="h-4 w-4" />
         </Button>
+      </div>
+      
+      {/* Context Band */}
+      <div className="px-4 py-2 border-b bg-muted/30">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-construction-primary animate-pulse" />
+          <span className="text-xs font-medium text-muted-foreground">
+            Currently in: <span className="text-foreground font-semibold">{getContextName()}</span>
+          </span>
+        </div>
       </div>
       
       {/* Chat Messages Area */}
