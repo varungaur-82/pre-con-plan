@@ -9,16 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
-  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
-  TrendingDown
+  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
 } from "lucide-react";
-import { 
-  RadialBarChart, RadialBar, 
-  BarChart, Bar, 
-  LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, Cell, PieChart, Pie
-} from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 
@@ -28,23 +20,8 @@ interface ProjectDetailProps {
 
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
-  const [isGlobalContext, setIsGlobalContext] = useState(false);
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
-
-  const getContextName = () => {
-    if (isGlobalContext) return "Global";
-    switch (activeTab) {
-      case "overview": return "Overview";
-      case "design-studio": return "Design Studio";
-      case "5d": return "5D";
-      case "automation": return "Automation Hub";
-      case "procurement": return "Procurement";
-      case "data": return "Data Engine";
-      default: return "Overview";
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -55,7 +32,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         <div className="bg-card border-b">
           <div className="container px-6">
             <div className="flex items-center justify-between">
-              <Tabs defaultValue="overview" className="flex-1" onValueChange={setActiveTab}>
+              <Tabs defaultValue="overview" className="flex-1">
                 <div className="flex items-center justify-between">
                   <TabsList className="bg-transparent border-b-0 h-auto p-0 space-x-1">
                     <TabsTrigger 
@@ -228,87 +205,34 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <CardContent className="pt-6 space-y-6">
                       {/* Key KPIs Section */}
                       <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                           <BarChart3 className="h-4 w-4" />
                           Key KPIs
                         </h3>
-                        
-                        {/* Budget Utilization Chart */}
-                        <div className="mb-6">
-                          <p className="text-xs text-muted-foreground mb-2">Budget Utilization</p>
-                          <ResponsiveContainer width="100%" height={120}>
-                            <RadialBarChart 
-                              cx="50%" 
-                              cy="50%" 
-                              innerRadius="70%" 
-                              outerRadius="100%" 
-                              data={[{ value: 107, fill: "hsl(var(--construction-warning))" }]}
-                              startAngle={180}
-                              endAngle={0}
-                            >
-                              <RadialBar
-                                background
-                                dataKey="value"
-                                cornerRadius={10}
-                              />
-                              <text
-                                x="50%"
-                                y="50%"
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                                className="fill-foreground text-2xl font-bold"
-                              >
-                                107%
-                              </text>
-                            </RadialBarChart>
-                          </ResponsiveContainer>
-                        </div>
-
-                        {/* Performance Indices Bar Chart */}
-                        <div className="mb-6">
-                          <p className="text-xs text-muted-foreground mb-2">Performance Indices</p>
-                          <ResponsiveContainer width="100%" height={140}>
-                            <BarChart data={[
-                              { name: 'SPI', value: 0.92, target: 1.0, fill: "hsl(var(--construction-primary))" },
-                              { name: 'CPI', value: 0.95, target: 1.0, fill: "hsl(var(--construction-warning))" }
-                            ]}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                              <YAxis domain={[0, 1.2]} stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                              <Tooltip 
-                                contentStyle={{ 
-                                  backgroundColor: "hsl(var(--popover))",
-                                  border: "1px solid hsl(var(--border))",
-                                  borderRadius: "6px"
-                                }}
-                              />
-                              <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                                {[
-                                  { name: 'SPI', value: 0.92, fill: "hsl(var(--construction-primary))" },
-                                  { name: 'CPI', value: 0.95, fill: "hsl(var(--construction-warning))" }
-                                ].map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                                ))}
-                              </Bar>
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-
-                        {/* Schedule Variance & Critical Risks */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="border rounded-lg p-3 bg-muted/20">
-                            <div className="flex items-center gap-2 mb-1">
-                              <TrendingDown className="h-4 w-4 text-construction-primary" />
-                              <p className="text-xs text-muted-foreground">Schedule Variance</p>
-                            </div>
-                            <p className="text-2xl font-bold text-construction-primary">+5d</p>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Metric</span>
+                            <span className="text-muted-foreground">Value</span>
                           </div>
-                          <div className="border rounded-lg p-3 bg-muted/20">
-                            <div className="flex items-center gap-2 mb-1">
-                              <AlertTriangle className="h-4 w-4 text-destructive" />
-                              <p className="text-xs text-muted-foreground">Critical Risks</p>
-                            </div>
-                            <p className="text-2xl font-bold text-destructive">2</p>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-success">Budget Utilization</span>
+                            <span className="text-sm font-bold">107%</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Variance</span>
+                            <span className="text-sm font-bold">+5 days</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Performance Index (SPI)</span>
+                            <span className="text-sm font-bold">0.92</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-warning">Cost Performance Index (CPI)</span>
+                            <span className="text-sm font-bold">0.95</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2">
+                            <span className="text-sm font-medium text-destructive">Critical Risks</span>
+                            <span className="text-sm font-bold">2</span>
                           </div>
                         </div>
                       </div>
@@ -561,25 +485,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         >
           <PanelRightClose className="h-4 w-4" />
         </Button>
-      </div>
-      
-      {/* Context Band */}
-      <div className="px-4 py-2 border-b bg-muted/30">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-construction-primary animate-pulse" />
-            <span className="text-xs font-medium text-muted-foreground">
-              Currently in:
-            </span>
-          </div>
-          <Badge 
-            variant={isGlobalContext ? "default" : "secondary"}
-            className="cursor-pointer transition-all hover:scale-105"
-            onClick={() => setIsGlobalContext(!isGlobalContext)}
-          >
-            {getContextName()}
-          </Badge>
-        </div>
       </div>
       
       {/* Chat Messages Area */}
