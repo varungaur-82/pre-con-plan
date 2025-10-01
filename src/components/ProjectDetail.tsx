@@ -97,205 +97,209 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 {/* Overview Tab Content */}
                 <TabsContent value="overview" className="mt-0">
               <div className="container px-6 py-8">
-                {/* Header with Recent Activity */}
-                <div className="flex items-start justify-between mb-8 gap-8">
-                  <div className="flex-1">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
                     <h1 className="text-3xl font-bold text-foreground mb-1">
-                      Welcome Varun to NYC
+                      Welcome Varun to {projectName}
                     </h1>
                     <p className="text-sm text-muted-foreground">Project Overview • AI summary</p>
                   </div>
-                  
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">Compliance Check</Button>
                     <Button variant="outline" size="sm">Simulate Delay</Button>
                     <Button variant="outline" size="sm">Collapse</Button>
                   </div>
-
-                  {/* Recent Activity - Top Right */}
-                  <div className="w-80 border-2 border-dashed border-muted rounded-lg p-4 bg-muted/20">
-                    <h3 className="text-sm font-semibold mb-3 text-muted-foreground">Recent Activity</h3>
-                    <ul className="space-y-2 text-xs text-muted-foreground/70">
-                      <li>Alice replied to RFI-102 (2h ago)</li>
-                      <li>Bob uploaded Design v12 (4h ago)</li>
-                      <li>Chen drafted PO-Steel (1d ago)</li>
-                    </ul>
-                  </div>
                 </div>
 
-                {/* Main Content Grid */}
-                <div className="grid grid-cols-12 gap-6">
-                  {/* Left Section - Project Details, Phase, Milestones */}
-                  <div className="col-span-3 space-y-6">
-                    {/* Project Details */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
-                        <FileText className="h-4 w-4" />
-                        Project Details
-                      </h3>
-                      <div className="space-y-3 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Name</span>
-                          <span className="font-medium">NYC Tower</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ID</span>
-                          <span className="font-medium">P-NYC-2025</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Type</span>
-                          <span className="font-medium">Healthcare</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Size</span>
-                          <span className="font-medium">120,000 sq ft</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Approved Budget</span>
-                          <span className="font-medium">$2.5M</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Target Completion</span>
-                          <span className="font-medium">Q4 2025</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Project Phase */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
-                        <Target className="h-4 w-4" />
-                        Project Phase
-                      </h3>
-                      <div className="space-y-3">
-                        <p className="text-sm text-muted-foreground">Schematic</p>
-                        <Progress value={35} className="h-2" />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>Conceptual Design</span>
-                          <span>Schematic</span>
-                          <span>Detailed Design</span>
-                          <span>Construction Documents</span>
-                          <span>Procurement</span>
+                <div className="grid lg:grid-cols-3 gap-6">
+                  {/* Left Column - Project Overview & Signals */}
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      {/* Project Details Section */}
+                      <div>
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
+                          <FileText className="h-4 w-4" />
+                          Project Details
+                        </h3>
+                        <div className="space-y-3 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Name</span>
+                            <span className="font-medium">{projectName}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ID</span>
+                            <span className="font-medium">P-NYC-2025</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Type</span>
+                            <span className="font-medium">Healthcare</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Size</span>
+                            <span className="font-medium">120,000 sq ft</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Approved Budget</span>
+                            <span className="font-medium">$2.5M</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Target Completion</span>
+                            <span className="font-medium">Q4 2025</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Upcoming Milestones */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
-                        <Calendar className="h-4 w-4" />
-                        Upcoming Milestones
-                      </h3>
-                      <ul className="space-y-2 text-sm">
-                        <li className="flex items-start gap-2">
-                          <span className="text-foreground">•</span>
-                          <span>Schematic freeze (Thu)</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-foreground">•</span>
-                          <span>ZEB study draft (Mon)</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                      {/* Signals Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-3">
+                          <AlertTriangle className="h-4 w-4" />
+                          Signals
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
+                        </p>
+                      </div>
 
-                  {/* Center Section - Signals, KPIs, Previous Milestone */}
-                  <div className="col-span-6 space-y-6">
-                    {/* Signals */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-4">
-                        <AlertTriangle className="h-4 w-4" />
-                        Signals
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
-                      </p>
-                    </div>
-
-                    {/* Key KPIs */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
-                        <TrendingUp className="h-4 w-4" />
-                        Key KPIs
-                      </h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm font-medium border-b pb-2">
-                          <span className="text-muted-foreground">Metric</span>
-                          <span className="text-muted-foreground">Value</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-sm text-construction-success">Budget Utilization</span>
-                          <span className="text-sm font-bold">107%</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-sm text-construction-primary">Schedule Variance</span>
-                          <span className="text-sm font-bold">+5 days</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-sm text-construction-primary">Schedule Performance Index (SPI)</span>
-                          <span className="text-sm font-bold">0.92</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-sm text-construction-warning">Cost Performance Index (CPI)</span>
-                          <span className="text-sm font-bold">0.95</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-sm text-destructive">Critical Risks</span>
-                          <span className="text-sm font-bold">2</span>
+                      {/* Project Phase Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
+                          <Target className="h-4 w-4" />
+                          Project Phase
+                        </h3>
+                        <div className="space-y-3">
+                          <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                            <span>Conceptual Design</span>
+                            <span>Schematic</span>
+                            <span>Detailed Design</span>
+                          </div>
+                          <Progress value={35} className="h-2" />
+                          <div className="flex justify-between text-xs">
+                            <span className="text-muted-foreground">Current: Schematic</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Previous Completed Milestone */}
-                    <div>
-                      <h3 className="text-base font-semibold flex items-center gap-2 text-construction-success mb-4">
-                        <CheckCircle2 className="h-4 w-4" />
-                        Previous Completed Milestone
-                      </h3>
-                      <p className="text-sm">Schematic approved</p>
-                    </div>
-                  </div>
+                      {/* Upcoming Milestones Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
+                          <Calendar className="h-4 w-4" />
+                          Upcoming Milestones
+                        </h3>
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-start gap-2">
+                            <span className="text-foreground">•</span>
+                            <span>Schematic freeze (Thu)</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-foreground">•</span>
+                            <span>ZEB study draft (Mon)</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
 
-                  {/* Right Section - Charter & Files */}
-                  <div className="col-span-3 space-y-6">
-                    {/* Project Charter */}
-                    <div>
-                      <h3 className="text-base font-semibold mb-4 text-construction-primary">Project Charter & Vision</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Access the project's guiding principles, scope, and long-term vision.
-                      </p>
-                      <Button className="w-full bg-construction-primary hover:bg-construction-primary/90">
-                        Open Charter
-                      </Button>
-                    </div>
-
-                    {/* Required Information */}
-                    <div>
-                      <h3 className="text-base font-semibold mb-4">Required Information & Working version of files</h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Budget:</span>
-                          <span>$2.5M</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Design File:</span>
-                          <span>v12.dwg</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Schedule Target:</span>
-                          <span>Q4 2025</span>
+                  {/* Center Column - Performance Metrics */}
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      {/* Key KPIs Section */}
+                      <div>
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
+                          <BarChart3 className="h-4 w-4" />
+                          Key KPIs
+                        </h3>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Metric</span>
+                            <span className="text-muted-foreground">Value</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-success">Budget Utilization</span>
+                            <span className="text-sm font-bold">107%</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Variance</span>
+                            <span className="text-sm font-bold">+5 days</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Performance Index (SPI)</span>
+                            <span className="text-sm font-bold">0.92</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-warning">Cost Performance Index (CPI)</span>
+                            <span className="text-sm font-bold">0.95</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2">
+                            <span className="text-sm font-medium text-destructive">Critical Risks</span>
+                            <span className="text-sm font-bold">2</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* File Upload */}
-                    <div className="border-2 border-dashed border-border rounded-lg p-6 text-center bg-muted/10">
-                      <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
-                      <p className="text-xs text-muted-foreground">
-                        Drag & drop files here or click to upload
-                      </p>
-                    </div>
-                  </div>
+                      {/* Previous Milestone Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-success mb-3">
+                          <CheckCircle2 className="h-4 w-4" />
+                          Previous Completed Milestone
+                        </h3>
+                        <p className="text-sm">Schematic approved</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Right Column - Project Information */}
+                  <Card>
+                    <CardContent className="pt-6 space-y-6">
+                      {/* Recent Activity Section - Less Prominent */}
+                      <div className="border-2 border-dashed border-muted rounded-lg p-4 bg-muted/20">
+                        <h3 className="text-sm font-medium mb-3 text-muted-foreground">Recent Activity</h3>
+                        <ul className="space-y-2 text-xs text-muted-foreground/70">
+                          <li>Alice replied to RH-102 (2h ago)</li>
+                          <li>Bob uploaded Design v12 (4h ago)</li>
+                          <li>Chen drafted PO: Steel (1d ago)</li>
+                        </ul>
+                      </div>
+
+                      {/* Project Charter Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold mb-3">Project Charter & Vision</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Access the project's guiding principles, scope, and long-term vision.
+                        </p>
+                        <Button className="w-full bg-construction-primary">Open Charter</Button>
+                      </div>
+
+                      {/* Required Information Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold mb-3">Required Information & Working version of files</h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Budget:</span>
+                            <span>$2.5M</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Design File:</span>
+                            <span>v12.dwg</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Schedule Target:</span>
+                            <span>Q4 2025</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* File Upload Section */}
+                      <div className="pt-4 border-t">
+                        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                          <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                          <p className="text-xs text-muted-foreground">
+                            Drag & drop files here or click to upload
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Bottom Charts Row */}
