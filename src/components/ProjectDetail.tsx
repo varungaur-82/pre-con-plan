@@ -21,10 +21,12 @@ interface ProjectDetailProps {
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isGlobalContext, setIsGlobalContext] = useState(false);
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
   const getContextName = () => {
+    if (isGlobalContext) return "Global";
     switch (activeTab) {
       case "overview": return "Overview";
       case "design-studio": return "Design Studio";
@@ -502,11 +504,20 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
       
       {/* Context Band */}
       <div className="px-4 py-2 border-b bg-muted/30">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-construction-primary animate-pulse" />
-          <span className="text-xs font-medium text-muted-foreground">
-            Currently in: <span className="text-foreground font-semibold">{getContextName()}</span>
-          </span>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-construction-primary animate-pulse" />
+            <span className="text-xs font-medium text-muted-foreground">
+              Currently in:
+            </span>
+          </div>
+          <Badge 
+            variant={isGlobalContext ? "default" : "secondary"}
+            className="cursor-pointer transition-all hover:scale-105"
+            onClick={() => setIsGlobalContext(!isGlobalContext)}
+          >
+            {getContextName()}
+          </Badge>
         </div>
       </div>
       
