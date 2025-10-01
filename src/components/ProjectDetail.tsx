@@ -9,8 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
-  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
+  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen, TrendingDown
 } from "lucide-react";
+import { 
+  RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, 
+  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
+} from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 
@@ -205,35 +210,105 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <CardContent className="pt-6 space-y-6">
                       {/* Key KPIs Section */}
                       <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
                           <BarChart3 className="h-4 w-4" />
                           Key KPIs
                         </h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Metric</span>
-                            <span className="text-muted-foreground">Value</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-success">Budget Utilization</span>
-                            <span className="text-sm font-bold">107%</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-primary">Schedule Variance</span>
-                            <span className="text-sm font-bold">+5 days</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-primary">Schedule Performance Index (SPI)</span>
-                            <span className="text-sm font-bold">0.92</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-warning">Cost Performance Index (CPI)</span>
-                            <span className="text-sm font-bold">0.95</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2">
-                            <span className="text-sm font-medium text-destructive">Critical Risks</span>
-                            <span className="text-sm font-bold">2</span>
-                          </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          {/* Budget Utilization Chart */}
+                          <Card className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-xs font-semibold">Budget Utilization</h4>
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
+                              </div>
+                              <div className="h-32 flex items-center justify-center">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <RadialBarChart 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    innerRadius="60%" 
+                                    outerRadius="90%" 
+                                    barSize={12}
+                                    data={[{ name: 'Budget', value: 107, fill: 'hsl(var(--construction-warning))' }]}
+                                    startAngle={90}
+                                    endAngle={-270}
+                                  >
+                                    <RadialBar dataKey="value" cornerRadius={10} />
+                                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-bold fill-foreground">
+                                      107%
+                                    </text>
+                                  </RadialBarChart>
+                                </ResponsiveContainer>
+                              </div>
+                            </div>
+                          </Card>
+
+                          {/* Performance Indices Chart */}
+                          <Card className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-xs font-semibold">Performance Indices</h4>
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
+                              </div>
+                              <div className="h-32">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <BarChart data={[
+                                    { name: 'SPI', value: 0.92 },
+                                    { name: 'CPI', value: 0.95 }
+                                  ]} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                    <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                                    <YAxis domain={[0, 1]} tick={{ fontSize: 11 }} />
+                                    <Tooltip />
+                                    <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                                      <Cell fill="hsl(var(--construction-primary))" />
+                                      <Cell fill="hsl(var(--construction-warning))" />
+                                    </Bar>
+                                  </BarChart>
+                                </ResponsiveContainer>
+                              </div>
+                            </div>
+                          </Card>
+
+                          {/* Schedule Variance Card */}
+                          <Card className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-xs font-semibold">Schedule Variance</h4>
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
+                              </div>
+                              <div className="flex items-center justify-center h-32">
+                                <div className="text-center">
+                                  <div className="flex items-center justify-center gap-2 mb-2">
+                                    <TrendingDown className="h-6 w-6 text-construction-warning" />
+                                  </div>
+                                  <div className="text-3xl font-bold text-construction-warning">+5d</div>
+                                  <div className="text-xs text-muted-foreground mt-1">Behind Schedule</div>
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
+
+                          {/* Critical Risks Card */}
+                          <Card className="p-4">
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-xs font-semibold">Critical Risks</h4>
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
+                              </div>
+                              <div className="flex items-center justify-center h-32">
+                                <div className="text-center">
+                                  <div className="flex items-center justify-center gap-2 mb-2">
+                                    <AlertTriangle className="h-6 w-6 text-destructive" />
+                                  </div>
+                                  <div className="text-3xl font-bold text-destructive">2</div>
+                                  <div className="text-xs text-muted-foreground mt-1">Active Risks</div>
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
                         </div>
                       </div>
 
