@@ -113,7 +113,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Left Column - Project Overview */}
+                  {/* Left Column - Project Overview & Signals */}
                   <Card>
                     <CardContent className="pt-6 space-y-6">
                       {/* Project Details Section */}
@@ -148,6 +148,17 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                             <span className="font-medium">Q4 2025</span>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Signals Section */}
+                      <div className="pt-4 border-t">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-3">
+                          <AlertTriangle className="h-4 w-4" />
+                          Signals
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
+                        </p>
                       </div>
 
                       {/* Project Phase Section */}
@@ -192,19 +203,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   {/* Center Column - Performance Metrics */}
                   <Card>
                     <CardContent className="pt-6 space-y-6">
-                      {/* Signals Section */}
-                      <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-3">
-                          <AlertTriangle className="h-4 w-4" />
-                          Signals
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
-                        </p>
-                      </div>
-
                       {/* Key KPIs Section */}
-                      <div className="pt-4 border-t">
+                      <div>
                         <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                           <BarChart3 className="h-4 w-4" />
                           Key KPIs
@@ -251,10 +251,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   {/* Right Column - Project Information */}
                   <Card>
                     <CardContent className="pt-6 space-y-6">
-                      {/* Recent Activity Section */}
-                      <div>
-                        <h3 className="text-base font-semibold mb-3">Recent Activity</h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
+                      {/* Recent Activity Section - Less Prominent */}
+                      <div className="border-2 border-dashed border-muted rounded-lg p-4 bg-muted/20">
+                        <h3 className="text-sm font-medium mb-3 text-muted-foreground">Recent Activity</h3>
+                        <ul className="space-y-2 text-xs text-muted-foreground/70">
                           <li>Alice replied to RH-102 (2h ago)</li>
                           <li>Bob uploaded Design v12 (4h ago)</li>
                           <li>Chen drafted PO: Steel (1d ago)</li>
