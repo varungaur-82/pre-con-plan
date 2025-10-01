@@ -11,6 +11,7 @@ import {
   Target, AlertCircle, CheckCircle2, Upload, Send,
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
 } from "lucide-react";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 
@@ -350,20 +351,33 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       <CardTitle className="text-sm">Cost (Budget vs Anticipated vs Committed)</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">
-                      <div className="h-32 flex items-end justify-around gap-2 py-4">
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-12 bg-construction-primary rounded-t" style={{ height: '80px' }}></div>
-                          <span className="text-xs text-muted-foreground">800</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-12 bg-construction-primary rounded-t" style={{ height: '100px' }}></div>
-                          <span className="text-xs text-muted-foreground">1000</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-12 bg-construction-primary rounded-t" style={{ height: '85px' }}></div>
-                          <span className="text-xs text-muted-foreground">850</span>
-                        </div>
-                      </div>
+                      <ResponsiveContainer width="100%" height={160}>
+                        <BarChart data={[
+                          { name: 'Budget', value: 800 },
+                          { name: 'Anticipated', value: 1000 },
+                          { name: 'Committed', value: 850 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis 
+                            dataKey="name" 
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                          />
+                          <YAxis 
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                          />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'hsl(var(--card))',
+                              border: '1px solid hsl(var(--border))',
+                              borderRadius: '6px'
+                            }}
+                            labelStyle={{ color: 'hsl(var(--foreground))' }}
+                          />
+                          <Bar dataKey="value" fill="hsl(var(--construction-primary))" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </CardContent>
                     <div className="border-t bg-muted/30 px-6 py-3">
                       <Button variant="outline" size="sm" className="w-full">Open</Button>
@@ -376,23 +390,53 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       <CardTitle className="text-sm">Schedule (Baseline vs Actual)</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">
-                      <div className="h-32 relative py-4">
-                        <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
-                          <polyline
-                            fill="none"
-                            stroke="hsl(var(--construction-grid))"
-                            strokeWidth="2"
+                      <ResponsiveContainer width="100%" height={160}>
+                        <LineChart data={[
+                          { month: 'Jan', baseline: 10, actual: 15 },
+                          { month: 'Feb', baseline: 30, actual: 35 },
+                          { month: 'Mar', baseline: 50, actual: 52 },
+                          { month: 'Apr', baseline: 65, actual: 68 },
+                          { month: 'May', baseline: 80, actual: 82 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis 
+                            dataKey="month" 
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                          />
+                          <YAxis 
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                          />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'hsl(var(--card))',
+                              border: '1px solid hsl(var(--border))',
+                              borderRadius: '6px'
+                            }}
+                            labelStyle={{ color: 'hsl(var(--foreground))' }}
+                          />
+                          <Legend 
+                            wrapperStyle={{ fontSize: '11px' }}
+                            iconSize={10}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="baseline" 
+                            stroke="hsl(var(--construction-grid))" 
                             strokeDasharray="4 4"
-                            points="0,90 50,70 100,50 150,35 200,20"
+                            strokeWidth={2}
+                            dot={{ fill: 'hsl(var(--construction-grid))', r: 3 }}
                           />
-                          <polyline
-                            fill="none"
-                            stroke="hsl(var(--construction-primary))"
-                            strokeWidth="2"
-                            points="0,85 50,65 100,48 150,32 200,18"
+                          <Line 
+                            type="monotone" 
+                            dataKey="actual" 
+                            stroke="hsl(var(--construction-primary))" 
+                            strokeWidth={2}
+                            dot={{ fill: 'hsl(var(--construction-primary))', r: 3 }}
                           />
-                        </svg>
-                      </div>
+                        </LineChart>
+                      </ResponsiveContainer>
                     </CardContent>
                     <div className="border-t bg-muted/30 px-6 py-3">
                       <Button variant="outline" size="sm" className="w-full">Open</Button>
