@@ -9,12 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
-  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen, TrendingDown
+  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
 } from "lucide-react";
-import { 
-  RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, 
-  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line 
-} from 'recharts';
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 
@@ -209,141 +205,35 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <CardContent className="pt-6 space-y-6">
                       {/* Key KPIs Section */}
                       <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-4">
+                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
                           <BarChart3 className="h-4 w-4" />
                           Key KPIs
                         </h3>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          {/* Design Progress - Donut Chart */}
-                          <Card className="flex flex-col overflow-hidden">
-                            <div className="flex-1 p-4 space-y-3">
-                              <h4 className="text-sm font-medium text-muted-foreground">Design Progress</h4>
-                              <div className="h-40 flex flex-col items-center justify-center">
-                                <ResponsiveContainer width="100%" height="80%">
-                                  <RadialBarChart 
-                                    cx="50%" 
-                                    cy="50%" 
-                                    innerRadius="70%" 
-                                    outerRadius="100%" 
-                                    barSize={16}
-                                    data={[{ value: 74 }]}
-                                    startAngle={90}
-                                    endAngle={-270}
-                                  >
-                                    <RadialBar 
-                                      dataKey="value" 
-                                      cornerRadius={10}
-                                      fill="hsl(var(--construction-primary))"
-                                      background={{ fill: '#f0f0f0' }}
-                                    />
-                                  </RadialBarChart>
-                                </ResponsiveContainer>
-                                <div className="text-3xl font-bold text-construction-primary -mt-24">74%</div>
-                              </div>
-                            </div>
-                            <div className="border-t bg-muted/30 px-4 py-2">
-                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
-                                Open
-                              </Button>
-                            </div>
-                          </Card>
-
-                          {/* Cost - Bar Chart */}
-                          <Card className="flex flex-col overflow-hidden">
-                            <div className="flex-1 p-4 space-y-3">
-                              <h4 className="text-sm font-medium text-muted-foreground">Cost (Budget vs Anticipated vs Committed)</h4>
-                              <div className="h-40">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <BarChart 
-                                    data={[
-                                      { name: 'Budget', value: 650 },
-                                      { name: 'Anticipated', value: 700 },
-                                      { name: 'Committed', value: 600 }
-                                    ]} 
-                                    margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
-                                  >
-                                    <YAxis domain={[0, 800]} tick={{ fontSize: 11 }} tickCount={5} />
-                                    <Bar dataKey="value" fill="hsl(var(--construction-primary))" radius={[4, 4, 0, 0]} />
-                                  </BarChart>
-                                </ResponsiveContainer>
-                              </div>
-                            </div>
-                            <div className="border-t bg-muted/30 px-4 py-2">
-                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
-                                Open
-                              </Button>
-                            </div>
-                          </Card>
-
-                          {/* Schedule - Line Chart */}
-                          <Card className="flex flex-col overflow-hidden">
-                            <div className="flex-1 p-4 space-y-3">
-                              <h4 className="text-sm font-medium text-muted-foreground">Schedule (Baseline vs Actual)</h4>
-                              <div className="h-40">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <LineChart 
-                                    data={[
-                                      { month: 1, baseline: 2, actual: 2 },
-                                      { month: 2, baseline: 4, actual: 4 },
-                                      { month: 3, baseline: 6, actual: 5.5 },
-                                      { month: 4, baseline: 8, actual: 7 },
-                                      { month: 5, baseline: 10, actual: 9 },
-                                      { month: 6, baseline: 12, actual: 10.5 },
-                                      { month: 7, baseline: 14, actual: 12 },
-                                      { month: 8, baseline: 16, actual: 14 }
-                                    ]} 
-                                    margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
-                                  >
-                                    <YAxis domain={[0, 16]} tick={{ fontSize: 11 }} />
-                                    <Line 
-                                      type="monotone" 
-                                      dataKey="baseline" 
-                                      stroke="hsl(var(--muted-foreground))" 
-                                      strokeWidth={2}
-                                      strokeDasharray="5 5"
-                                      dot={{ fill: 'hsl(var(--muted-foreground))', r: 3 }}
-                                    />
-                                    <Line 
-                                      type="monotone" 
-                                      dataKey="actual" 
-                                      stroke="hsl(var(--construction-secondary))" 
-                                      strokeWidth={2}
-                                      dot={{ fill: 'hsl(var(--construction-secondary))', r: 4 }}
-                                    />
-                                  </LineChart>
-                                </ResponsiveContainer>
-                              </div>
-                            </div>
-                            <div className="border-t bg-muted/30 px-4 py-2">
-                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
-                                Open
-                              </Button>
-                            </div>
-                          </Card>
-
-                          {/* Reports List */}
-                          <Card className="flex flex-col overflow-hidden">
-                            <div className="flex-1 p-4 space-y-3">
-                              <h4 className="text-sm font-medium text-muted-foreground">Reports</h4>
-                              <div className="space-y-2 pt-2">
-                                <div className="text-xs text-muted-foreground">last used</div>
-                                <div className="flex items-center justify-between py-2">
-                                  <span className="text-sm">Weekly Overview</span>
-                                  <span className="text-sm font-semibold">PDF</span>
-                                </div>
-                                <div className="flex items-center justify-between py-2">
-                                  <span className="text-sm">Cost Drift</span>
-                                  <span className="text-sm font-semibold">XLSX</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="border-t bg-muted/30 px-4 py-2">
-                              <Button variant="secondary" size="sm" className="w-full bg-muted hover:bg-muted/80">
-                                Open
-                              </Button>
-                            </div>
-                          </Card>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Metric</span>
+                            <span className="text-muted-foreground">Value</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-success">Budget Utilization</span>
+                            <span className="text-sm font-bold">107%</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Variance</span>
+                            <span className="text-sm font-bold">+5 days</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-primary">Schedule Performance Index (SPI)</span>
+                            <span className="text-sm font-bold">0.92</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm font-medium text-construction-warning">Cost Performance Index (CPI)</span>
+                            <span className="text-sm font-bold">0.95</span>
+                          </div>
+                          <div className="flex justify-between items-center py-2">
+                            <span className="text-sm font-medium text-destructive">Critical Risks</span>
+                            <span className="text-sm font-bold">2</span>
+                          </div>
                         </div>
                       </div>
 
