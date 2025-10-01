@@ -12,6 +12,7 @@ import {
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
 } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
+import { DesignStudio } from "./DesignStudio";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -418,11 +419,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
             </TabsContent>
 
             {/* Design Studio Tab */}
-            <TabsContent value="design-studio" className="mt-0">
-              <div className="container px-6 py-16 text-center">
-                <h2 className="text-2xl font-bold text-muted-foreground mb-4">Design Studio</h2>
-                <p className="text-muted-foreground">Content coming soon...</p>
-              </div>
+            <TabsContent value="design-studio" className="mt-0 h-full">
+              <DesignStudio />
             </TabsContent>
 
             {/* 5D Tab */}
