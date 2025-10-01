@@ -305,11 +305,11 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 {/* Bottom Charts Row */}
                 <div className="grid md:grid-cols-4 gap-6 mt-8">
                   {/* Design Progress */}
-                  <Card>
+                  <Card className="flex flex-col">
                     <CardHeader>
                       <CardTitle className="text-sm">Design Progress</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1">
                       <div className="flex flex-col items-center justify-center py-6">
                         <div className="relative w-32 h-32">
                           <svg className="transform -rotate-90 w-32 h-32">
@@ -338,16 +338,18 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </div>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" className="w-full mt-4">Open</Button>
                     </CardContent>
+                    <div className="border-t bg-muted/30 px-6 py-3">
+                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                    </div>
                   </Card>
 
                   {/* Cost Chart */}
-                  <Card>
+                  <Card className="flex flex-col">
                     <CardHeader>
                       <CardTitle className="text-sm">Cost (Budget vs Anticipated vs Committed)</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1">
                       <div className="h-32 flex items-end justify-around gap-2 py-4">
                         <div className="flex flex-col items-center gap-1">
                           <div className="w-12 bg-construction-primary rounded-t" style={{ height: '80px' }}></div>
@@ -362,16 +364,18 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           <span className="text-xs text-muted-foreground">850</span>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" className="w-full mt-4">Open</Button>
                     </CardContent>
+                    <div className="border-t bg-muted/30 px-6 py-3">
+                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                    </div>
                   </Card>
 
                   {/* Schedule Chart */}
-                  <Card>
+                  <Card className="flex flex-col">
                     <CardHeader>
                       <CardTitle className="text-sm">Schedule (Baseline vs Actual)</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1">
                       <div className="h-32 relative py-4">
                         <svg className="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
                           <polyline
@@ -389,16 +393,18 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           />
                         </svg>
                       </div>
-                      <Button variant="outline" size="sm" className="w-full mt-4">Open</Button>
                     </CardContent>
+                    <div className="border-t bg-muted/30 px-6 py-3">
+                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                    </div>
                   </Card>
 
                   {/* Reports */}
-                  <Card>
+                  <Card className="flex flex-col">
                     <CardHeader>
                       <CardTitle className="text-sm">Reports</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="flex-1 space-y-2">
                       <p className="text-xs text-muted-foreground mb-3">last used</p>
                       <Button variant="outline" size="sm" className="w-full justify-start">
                         <FileText className="h-3 w-3 mr-2" />
@@ -413,6 +419,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         Status Report
                       </Button>
                     </CardContent>
+                    <div className="border-t bg-muted/30 px-6 py-3">
+                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                    </div>
                   </Card>
                 </div>
               </div>
