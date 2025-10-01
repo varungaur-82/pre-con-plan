@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, BarChart3, FileText, Users } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import constructionHero from "@/assets/construction-hero.jpg";
 
 const DashboardContent = () => {
@@ -183,10 +184,16 @@ const DashboardContent = () => {
 const Index = () => {
   const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const location = useLocation();
 
   const handleNewProject = () => {
     setShowNewProjectModal(true);
   };
+
+  // Clear active tab when navigating to dashboard
+  if (location.pathname === "/" && activeTabId) {
+    setActiveTab("");
+  }
 
   // If there's an active tab, show the project detail
   if (activeTabId) {
