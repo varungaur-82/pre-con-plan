@@ -13,9 +13,8 @@ import {
 } from "lucide-react";
 import { 
   RadialBarChart, RadialBar, BarChart, Bar, XAxis, YAxis, 
-  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
+  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, LineChart, Line 
 } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 
@@ -216,98 +215,126 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         </h3>
                         
                         <div className="grid grid-cols-2 gap-4">
-                          {/* Budget Utilization Chart */}
-                          <Card className="p-4">
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <h4 className="text-xs font-semibold">Budget Utilization</h4>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
-                              </div>
-                              <div className="h-32 flex items-center justify-center">
-                                <ResponsiveContainer width="100%" height="100%">
+                          {/* Design Progress - Donut Chart */}
+                          <Card className="p-4 flex flex-col">
+                            <div className="flex-1 space-y-3">
+                              <h4 className="text-sm font-medium text-muted-foreground">Design Progress</h4>
+                              <div className="h-40 flex flex-col items-center justify-center">
+                                <ResponsiveContainer width="100%" height="80%">
                                   <RadialBarChart 
                                     cx="50%" 
                                     cy="50%" 
-                                    innerRadius="60%" 
-                                    outerRadius="90%" 
-                                    barSize={12}
-                                    data={[{ name: 'Budget', value: 107, fill: 'hsl(var(--construction-warning))' }]}
+                                    innerRadius="70%" 
+                                    outerRadius="100%" 
+                                    barSize={16}
+                                    data={[{ value: 74 }]}
                                     startAngle={90}
                                     endAngle={-270}
                                   >
-                                    <RadialBar dataKey="value" cornerRadius={10} />
-                                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-bold fill-foreground">
-                                      107%
-                                    </text>
+                                    <RadialBar 
+                                      dataKey="value" 
+                                      cornerRadius={10}
+                                      fill="hsl(var(--construction-primary))"
+                                      background={{ fill: '#f0f0f0' }}
+                                    />
                                   </RadialBarChart>
                                 </ResponsiveContainer>
+                                <div className="text-3xl font-bold text-construction-primary -mt-24">74%</div>
                               </div>
                             </div>
+                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
+                              Open
+                            </Button>
                           </Card>
 
-                          {/* Performance Indices Chart */}
-                          <Card className="p-4">
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <h4 className="text-xs font-semibold">Performance Indices</h4>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
-                              </div>
-                              <div className="h-32">
+                          {/* Cost - Bar Chart */}
+                          <Card className="p-4 flex flex-col">
+                            <div className="flex-1 space-y-3">
+                              <h4 className="text-sm font-medium text-muted-foreground">Cost (Budget vs Anticipated vs Committed)</h4>
+                              <div className="h-40">
                                 <ResponsiveContainer width="100%" height="100%">
-                                  <BarChart data={[
-                                    { name: 'SPI', value: 0.92 },
-                                    { name: 'CPI', value: 0.95 }
-                                  ]} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                                    <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                                    <YAxis domain={[0, 1]} tick={{ fontSize: 11 }} />
-                                    <Tooltip />
-                                    <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                                      <Cell fill="hsl(var(--construction-primary))" />
-                                      <Cell fill="hsl(var(--construction-warning))" />
-                                    </Bar>
+                                  <BarChart 
+                                    data={[
+                                      { name: 'Budget', value: 650 },
+                                      { name: 'Anticipated', value: 700 },
+                                      { name: 'Committed', value: 600 }
+                                    ]} 
+                                    margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
+                                  >
+                                    <YAxis domain={[0, 800]} tick={{ fontSize: 11 }} tickCount={5} />
+                                    <Bar dataKey="value" fill="hsl(var(--construction-primary))" radius={[4, 4, 0, 0]} />
                                   </BarChart>
                                 </ResponsiveContainer>
                               </div>
                             </div>
+                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
+                              Open
+                            </Button>
                           </Card>
 
-                          {/* Schedule Variance Card */}
-                          <Card className="p-4">
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <h4 className="text-xs font-semibold">Schedule Variance</h4>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
+                          {/* Schedule - Line Chart */}
+                          <Card className="p-4 flex flex-col">
+                            <div className="flex-1 space-y-3">
+                              <h4 className="text-sm font-medium text-muted-foreground">Schedule (Baseline vs Actual)</h4>
+                              <div className="h-40">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <LineChart 
+                                    data={[
+                                      { month: 1, baseline: 2, actual: 2 },
+                                      { month: 2, baseline: 4, actual: 4 },
+                                      { month: 3, baseline: 6, actual: 5.5 },
+                                      { month: 4, baseline: 8, actual: 7 },
+                                      { month: 5, baseline: 10, actual: 9 },
+                                      { month: 6, baseline: 12, actual: 10.5 },
+                                      { month: 7, baseline: 14, actual: 12 },
+                                      { month: 8, baseline: 16, actual: 14 }
+                                    ]} 
+                                    margin={{ top: 10, right: 10, left: -10, bottom: 5 }}
+                                  >
+                                    <YAxis domain={[0, 16]} tick={{ fontSize: 11 }} />
+                                    <Line 
+                                      type="monotone" 
+                                      dataKey="baseline" 
+                                      stroke="hsl(var(--muted-foreground))" 
+                                      strokeWidth={2}
+                                      strokeDasharray="5 5"
+                                      dot={{ fill: 'hsl(var(--muted-foreground))', r: 3 }}
+                                    />
+                                    <Line 
+                                      type="monotone" 
+                                      dataKey="actual" 
+                                      stroke="hsl(var(--construction-secondary))" 
+                                      strokeWidth={2}
+                                      dot={{ fill: 'hsl(var(--construction-secondary))', r: 4 }}
+                                    />
+                                  </LineChart>
+                                </ResponsiveContainer>
                               </div>
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-center">
-                                  <div className="flex items-center justify-center gap-2 mb-2">
-                                    <TrendingDown className="h-6 w-6 text-construction-warning" />
-                                  </div>
-                                  <div className="text-3xl font-bold text-construction-warning">+5d</div>
-                                  <div className="text-xs text-muted-foreground mt-1">Behind Schedule</div>
+                            </div>
+                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
+                              Open
+                            </Button>
+                          </Card>
+
+                          {/* Reports List */}
+                          <Card className="p-4 flex flex-col">
+                            <div className="flex-1 space-y-3">
+                              <h4 className="text-sm font-medium text-muted-foreground">Reports</h4>
+                              <div className="space-y-2 pt-2">
+                                <div className="text-xs text-muted-foreground">last used</div>
+                                <div className="flex items-center justify-between py-2">
+                                  <span className="text-sm">Weekly Overview</span>
+                                  <span className="text-sm font-semibold">PDF</span>
+                                </div>
+                                <div className="flex items-center justify-between py-2">
+                                  <span className="text-sm">Cost Drift</span>
+                                  <span className="text-sm font-semibold">XLSX</span>
                                 </div>
                               </div>
                             </div>
-                          </Card>
-
-                          {/* Critical Risks Card */}
-                          <Card className="p-4">
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <h4 className="text-xs font-semibold">Critical Risks</h4>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Open</Button>
-                              </div>
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-center">
-                                  <div className="flex items-center justify-center gap-2 mb-2">
-                                    <AlertTriangle className="h-6 w-6 text-destructive" />
-                                  </div>
-                                  <div className="text-3xl font-bold text-destructive">2</div>
-                                  <div className="text-xs text-muted-foreground mt-1">Active Risks</div>
-                                </div>
-                              </div>
-                            </div>
+                            <Button variant="secondary" size="sm" className="w-full mt-4 bg-muted hover:bg-muted/80">
+                              Open
+                            </Button>
                           </Card>
                         </div>
                       </div>
