@@ -19,7 +19,7 @@ interface ProjectDetailProps {
 }
 
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
-  const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(true);
+  const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
