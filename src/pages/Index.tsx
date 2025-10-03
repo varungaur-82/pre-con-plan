@@ -13,7 +13,8 @@ import { useState } from "react";
 import constructionHero from "@/assets/construction-hero.jpg";
 
 const Index = () => {
-  const { tabs, activeTabId, openTab, closeTab, setActiveTab } = useTabContext();
+  const { tabs, activeTabId, openTab, closeTab, setActiveTab } =
+    useTabContext();
   const { openTab: openTabFn } = useTabContext();
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
 
@@ -23,11 +24,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <NewProjectModal open={showNewProjectModal} onOpenChange={setShowNewProjectModal} />
+      <NewProjectModal
+        open={showNewProjectModal}
+        onOpenChange={setShowNewProjectModal}
+      />
       <Header />
-      
+
       {/* Tabs are always visible */}
-      <ProjectTabs 
+      <ProjectTabs
         tabs={tabs}
         onTabChange={setActiveTab}
         onTabClose={closeTab}
@@ -39,30 +43,39 @@ const Index = () => {
         <>
           {/* Hero Section */}
           <section className="relative py-16 px-6 overflow-hidden">
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
               style={{ backgroundImage: `url(${constructionHero})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-construction-primary/20 to-construction-secondary/20" />
-            
+
             <div className="container relative z-10">
               <div className="max-w-3xl">
                 <h1 className="text-4xl md:text-5xl font-bold text-construction-primary mb-6">
-                  Perfect Your <span className="text-construction-secondary">Pre-Construction</span> Planning
+                  Optimize Your{" "}
+                  <span className="text-construction-secondary">
+                    Pre-Construction
+                  </span>{" "}
+                  Planning
                 </h1>
                 <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                  Manage projects, track budgets, coordinate teams, and ensure regulatory compliance 
-                  all in one comprehensive platform designed for construction professionals.
+                  Manage projects, track budgets, coordinate teams, and ensure
+                  regulatory compliance all in one comprehensive platform
+                  designed for construction professionals.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     className="bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity"
                     onClick={handleNewProject}
                   >
                     Start New Project
                   </Button>
-                  <Button variant="outline" size="lg" className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white"
+                  >
                     View All Projects
                   </Button>
                 </div>
@@ -78,18 +91,43 @@ const Index = () => {
 
             {/* Quick Actions */}
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-foreground mb-6">Quick Actions</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-6">
+                Quick Actions
+              </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { icon: Calendar, label: "Schedule Planning", color: "text-construction-primary" },
-                  { icon: BarChart3, label: "Budget Analysis", color: "text-construction-secondary" },
-                  { icon: FileText, label: "Permit Tracking", color: "text-construction-accent" },
-                  { icon: Users, label: "Team Management", color: "text-construction-warning" },
+                  {
+                    icon: Calendar,
+                    label: "Schedule Planning",
+                    color: "text-construction-primary",
+                  },
+                  {
+                    icon: BarChart3,
+                    label: "Budget Analysis",
+                    color: "text-construction-secondary",
+                  },
+                  {
+                    icon: FileText,
+                    label: "Permit Tracking",
+                    color: "text-construction-accent",
+                  },
+                  {
+                    icon: Users,
+                    label: "Team Management",
+                    color: "text-construction-warning",
+                  },
                 ].map((action, index) => (
-                  <Card key={index} className="group cursor-pointer hover:shadow-lg transition-all duration-300 hover:border-construction-primary/30">
+                  <Card
+                    key={index}
+                    className="group cursor-pointer hover:shadow-lg transition-all duration-300 hover:border-construction-primary/30"
+                  >
                     <CardContent className="flex flex-col items-center justify-center p-6">
-                      <action.icon className={`h-8 w-8 mb-3 ${action.color} group-hover:scale-110 transition-transform`} />
-                      <span className="text-sm font-medium text-center">{action.label}</span>
+                      <action.icon
+                        className={`h-8 w-8 mb-3 ${action.color} group-hover:scale-110 transition-transform`}
+                      />
+                      <span className="text-sm font-medium text-center">
+                        {action.label}
+                      </span>
                     </CardContent>
                   </Card>
                 ))}
@@ -101,7 +139,9 @@ const Index = () => {
               {/* Projects Section */}
               <section className="lg:col-span-2">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-foreground">Active Projects</h2>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Active Projects
+                  </h2>
                   <Button variant="outline" size="sm">
                     View All
                   </Button>
@@ -120,7 +160,7 @@ const Index = () => {
                       progress: 65,
                     },
                     {
-                      id: "2", 
+                      id: "2",
                       name: "Riverside Apartments",
                       location: "Seattle, WA",
                       budget: 1800000,
@@ -132,7 +172,7 @@ const Index = () => {
                     },
                     {
                       id: "3",
-                      name: "City Mall Renovation", 
+                      name: "City Mall Renovation",
                       location: "Chicago, IL",
                       budget: 3200000,
                       status: "on-hold" as const,
@@ -150,33 +190,49 @@ const Index = () => {
               {/* Sidebar */}
               <aside className="space-y-6">
                 <RecentActivity />
-                
+
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg font-semibold">Upcoming Deadlines</CardTitle>
+                    <CardTitle className="text-lg font-semibold">
+                      Upcoming Deadlines
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
                         <div>
-                          <p className="font-medium text-sm">Permit Submission</p>
-                          <p className="text-xs text-muted-foreground">Downtown Office Complex</p>
+                          <p className="font-medium text-sm">
+                            Permit Submission
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Downtown Office Complex
+                          </p>
                         </div>
-                        <span className="text-xs text-construction-warning font-medium">2 days</span>
+                        <span className="text-xs text-construction-warning font-medium">
+                          2 days
+                        </span>
                       </div>
                       <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
                         <div>
                           <p className="font-medium text-sm">Budget Review</p>
-                          <p className="text-xs text-muted-foreground">Riverside Apartments</p>
+                          <p className="text-xs text-muted-foreground">
+                            Riverside Apartments
+                          </p>
                         </div>
-                        <span className="text-xs text-construction-primary font-medium">5 days</span>
+                        <span className="text-xs text-construction-primary font-medium">
+                          5 days
+                        </span>
                       </div>
                       <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
                         <div>
                           <p className="font-medium text-sm">Site Survey</p>
-                          <p className="text-xs text-muted-foreground">City Mall Renovation</p>
+                          <p className="text-xs text-muted-foreground">
+                            City Mall Renovation
+                          </p>
                         </div>
-                        <span className="text-xs text-construction-secondary font-medium">1 week</span>
+                        <span className="text-xs text-construction-secondary font-medium">
+                          1 week
+                        </span>
                       </div>
                     </div>
                   </CardContent>
