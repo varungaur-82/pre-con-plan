@@ -31,7 +31,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import confetti from "canvas-confetti";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 interface NewProjectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -276,6 +276,19 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const extractFromFile = async (file: File) => {
     let progressTimer: ReturnType<typeof setInterval> | null = null;
     try {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        toast({
+          title: 'Configuration Required',
+          description: 'Lovable Cloud is not fully configured. Please wait a moment and refresh the page, or contact support if this persists.',
+          variant: 'destructive',
+        });
+        console.error('Supabase environment variables are not configured:', {
+          url: import.meta.env.VITE_SUPABASE_URL,
+          hasKey: Boolean(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY),
+        });
+        return;
+      }
       setIsExtracting(true);
       setExtractionProgress(0);
       setVisibleFields([]);
