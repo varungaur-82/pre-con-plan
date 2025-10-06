@@ -98,14 +98,14 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   };
 
   const [formData, setFormData] = useState({
-    projectId: "PRJ-2025-001",
-    projectName: "NYC Tower",
-    designStage: "Schematic Design",
-    client: "NYC Health",
-    projectType: "Healthcare",
-    location: "New York City, NY",
-    budget: "$2.5M",
-    completion: "Q4 2025",
+    projectId: "",
+    projectName: "",
+    designStage: "",
+    client: "",
+    projectType: "",
+    location: "",
+    budget: "",
+    completion: "",
     visionStatement: "",
     objectives: "",
     keyMetrics: "",
