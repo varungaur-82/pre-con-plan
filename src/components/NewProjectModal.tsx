@@ -66,8 +66,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const step2FileInputRef = useRef<HTMLInputElement>(null);
   const step3FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-  const EXTRACT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/extract-document`;
+  
+  // Get Supabase URL from environment - fallback for development
+  const getExtractFunctionUrl = () => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (supabaseUrl) {
+      return `${supabaseUrl}/functions/v1/extract-document`;
+    }
+    // Fallback to current origin for deployed apps
+    return `${window.location.origin}/functions/v1/extract-document`;
+  };
 
   // Selected file and dynamic extraction preview
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -278,14 +286,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const extractFromFile = async (file: File) => {
     let progressTimer: ReturnType<typeof setInterval> | null = null;
     try {
-      if (!EXTRACT_FUNCTION_URL) {
-        toast({
-          title: "Extraction unavailable",
-          description: "Please configure Supabase URL.",
-          variant: "destructive",
-        });
-        return;
-      }
+      const extractUrl = getExtractFunctionUrl();
+      console.log('Extract function URL:', extractUrl);
 
       setIsExtracting(true);
       setExtractionProgress(0);
@@ -303,7 +305,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       uploadFormData.append("action", "upload");
       uploadFormData.append("file", file);
 
-      const uploadRes = await fetch(EXTRACT_FUNCTION_URL, {
+      console.log('Uploading to:', extractUrl);
+      const uploadRes = await fetch(extractUrl, {
         method: "POST",
         body: uploadFormData,
       });
@@ -332,7 +335,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         statusFormData.append("action", "status");
         statusFormData.append("execution_id", executionId);
 
-        const statusRes = await fetch(EXTRACT_FUNCTION_URL, {
+        const statusRes = await fetch(extractUrl, {
           method: "POST",
           body: statusFormData,
         });
