@@ -67,15 +67,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const step3FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   
-  // Get Supabase URL from environment - fallback for development
-  const getExtractFunctionUrl = () => {
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    if (supabaseUrl) {
-      return `${supabaseUrl}/functions/v1/extract-document`;
-    }
-    // Fallback to current origin for deployed apps
-    return `${window.location.origin}/functions/v1/extract-document`;
-  };
+  const EXTRACT_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/extract-document`;
 
   // Selected file and dynamic extraction preview
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -286,7 +278,11 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const extractFromFile = async (file: File) => {
     let progressTimer: ReturnType<typeof setInterval> | null = null;
     try {
-      const extractUrl = getExtractFunctionUrl();
+      const extractUrl = EXTRACT_FUNCTION_URL;
+      if (!extractUrl || extractUrl.includes('undefined')) {
+        toast({ title: 'Configuration error', description: 'Supabase URL is not configured. Please refresh and try again.', variant: 'destructive' });
+        return;
+      }
       console.log('Extract function URL:', extractUrl);
 
       setIsExtracting(true);
@@ -312,11 +308,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       });
 
       if (!uploadRes.ok) {
-        const errorData = await uploadRes.json();
-        throw new Error(errorData.error || `Upload failed: ${uploadRes.status}`);
+        const errorText = await uploadRes.text();
+        throw new Error(errorText || `Upload failed: ${uploadRes.status}`);
       }
 
-      const uploadData = await uploadRes.json();
+      const uploadText = await uploadRes.text();
+      let uploadData: any;
+      try {
+        uploadData = JSON.parse(uploadText);
+      } catch {
+        throw new Error(`Invalid response from server: ${uploadText.slice(0, 200)}`);
+      }
       const executionId = uploadData?.execution_id;
 
       if (!executionId) {
@@ -341,11 +343,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         });
 
         if (!statusRes.ok) {
-          const errorData = await statusRes.json();
-          throw new Error(errorData.error || `Status check failed: ${statusRes.status}`);
+          const errorText = await statusRes.text();
+          throw new Error(errorText || `Status check failed: ${statusRes.status}`);
         }
 
-        const statusData = await statusRes.json();
+        const statusText = await statusRes.text();
+        let statusData: any;
+        try {
+          statusData = JSON.parse(statusText);
+        } catch {
+          throw new Error(`Invalid status response: ${statusText.slice(0, 200)}`);
+        }
         const status = statusData?.status;
 
         if (status === "COMPLETED") {
