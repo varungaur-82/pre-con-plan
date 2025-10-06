@@ -61,6 +61,7 @@ serve(async (req) => {
         form.append("timeout", "300");
         form.append("include_metadata", "false");
 
+        console.log("Uploading to Unstract API:", API_URL);
         const uploadRes = await fetch(API_URL, {
           method: "POST",
           headers: { Authorization: `Bearer ${API_TOKEN}` },
@@ -68,15 +69,33 @@ serve(async (req) => {
         });
 
         const text = await uploadRes.text();
+        console.log("Unstract upload response status:", uploadRes.status);
+        console.log("Unstract upload response body:", text);
+        
         if (!uploadRes.ok) {
           console.error("Upload failed:", uploadRes.status, text);
-          return new Response(text || JSON.stringify({ error: "Upload failed" }), {
+          return new Response(JSON.stringify({ error: "Upload failed", details: text }), {
             status: uploadRes.status,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
 
-        return new Response(text, { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        // Parse and validate the response
+        let responseData;
+        try {
+          responseData = JSON.parse(text);
+          console.log("Parsed response data:", responseData);
+        } catch (e) {
+          console.error("Failed to parse response as JSON:", text);
+          return new Response(JSON.stringify({ error: "Invalid response from API", details: text }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        return new Response(JSON.stringify(responseData), { 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        });
       }
 
       if (action === "status") {
@@ -88,21 +107,38 @@ serve(async (req) => {
           );
         }
 
+        console.log("Checking status for execution_id:", executionId);
         const statusRes = await fetch(`${API_URL}?execution_id=${executionId}&include_metadata=False`, {
           method: "GET",
           headers: { Authorization: `Bearer ${API_TOKEN}` },
         });
 
         const text = await statusRes.text();
+        console.log("Status check response:", statusRes.status, text);
+        
         if (!statusRes.ok) {
           console.error("Status check failed:", statusRes.status, text);
-          return new Response(text || JSON.stringify({ error: "Status check failed" }), {
+          return new Response(JSON.stringify({ error: "Status check failed", details: text }), {
             status: statusRes.status,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
 
-        return new Response(text, { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        // Parse and return the status
+        let statusData;
+        try {
+          statusData = JSON.parse(text);
+        } catch (e) {
+          console.error("Failed to parse status response:", text);
+          return new Response(JSON.stringify({ error: "Invalid status response", details: text }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        return new Response(JSON.stringify(statusData), { 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        });
       }
 
       return new Response(
