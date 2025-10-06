@@ -31,7 +31,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import confetti from "canvas-confetti";
 import { useToast } from "@/hooks/use-toast";
-
+import { supabase } from "@/integrations/supabase/client";
 interface NewProjectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -66,8 +66,6 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const step2FileInputRef = useRef<HTMLInputElement>(null);
   const step3FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  
-  const EXTRACT_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/extract-document`;
 
   // Selected file and dynamic extraction preview
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -278,13 +276,6 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const extractFromFile = async (file: File) => {
     let progressTimer: ReturnType<typeof setInterval> | null = null;
     try {
-      const extractUrl = EXTRACT_FUNCTION_URL;
-      if (!extractUrl || extractUrl.includes('undefined')) {
-        toast({ title: 'Configuration error', description: 'Supabase URL is not configured. Please refresh and try again.', variant: 'destructive' });
-        return;
-      }
-      console.log('Extract function URL:', extractUrl);
-
       setIsExtracting(true);
       setExtractionProgress(0);
       setVisibleFields([]);
@@ -296,30 +287,26 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         setExtractionProgress((prev) => (prev >= 90 ? 90 : prev + 1));
       }, 150);
 
-      // Step 1: Upload document via Edge Function
-      const uploadFormData = new FormData();
-      uploadFormData.append("action", "upload");
-      uploadFormData.append("file", file);
-
-      console.log('Uploading to:', extractUrl);
-      const uploadRes = await fetch(extractUrl, {
-        method: "POST",
-        body: uploadFormData,
+      // Convert file to base64 (no prefix)
+      const fileBase64: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.includes(',') ? result.split(',')[1] : result);
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
       });
 
-      if (!uploadRes.ok) {
-        const errorText = await uploadRes.text();
-        throw new Error(errorText || `Upload failed: ${uploadRes.status}`);
+      // Step 1: Upload document via Edge Function (Supabase invoke)
+      const { data: uploadData, error: uploadError } = await supabase.functions.invoke('extract-document', {
+        body: { action: 'upload', file_name: file.name, file_base64: fileBase64 },
+      });
+      if (uploadError) {
+        throw new Error(uploadError.message || 'Upload failed');
       }
 
-      const uploadText = await uploadRes.text();
-      let uploadData: any;
-      try {
-        uploadData = JSON.parse(uploadText);
-      } catch {
-        throw new Error(`Invalid response from server: ${uploadText.slice(0, 200)}`);
-      }
-      const executionId = uploadData?.execution_id;
+      const executionId = (uploadData as any)?.execution_id;
 
       if (!executionId) {
         throw new Error("No execution_id returned from upload");
@@ -333,28 +320,13 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       while (attempts < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
 
-        const statusFormData = new FormData();
-        statusFormData.append("action", "status");
-        statusFormData.append("execution_id", executionId);
-
-        const statusRes = await fetch(extractUrl, {
-          method: "POST",
-          body: statusFormData,
+        const { data: statusData, error: statusError } = await supabase.functions.invoke('extract-document', {
+          body: { action: 'status', execution_id: executionId },
         });
-
-        if (!statusRes.ok) {
-          const errorText = await statusRes.text();
-          throw new Error(errorText || `Status check failed: ${statusRes.status}`);
+        if (statusError) {
+          throw new Error(statusError.message || 'Status check failed');
         }
-
-        const statusText = await statusRes.text();
-        let statusData: any;
-        try {
-          statusData = JSON.parse(statusText);
-        } catch {
-          throw new Error(`Invalid status response: ${statusText.slice(0, 200)}`);
-        }
-        const status = statusData?.status;
+        const status = (statusData as any)?.status;
 
         if (status === "COMPLETED") {
           // Extract the data from response
