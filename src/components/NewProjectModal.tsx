@@ -71,9 +71,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   // const API_TOKEN = import.meta.env.VITE_UNSTRACT_API_TOKEN as string | undefined;
 
   const API_URL =
-    "https://us-central.unstract.com/deployment/api/org_kSuAb3rXXvOxXFMJ/poc_2_wo_1759300408741/";
+    "https://us-central.unstract.com/deployment/api/org_9ZihNxEdmhEZpcme/newcon_1759208927740/";
 
-  const API_TOKEN = "1a283057-9915-47a2-bbb0-a895a8e104f9";
+  const API_TOKEN = "d1d236c2-8abe-418a-9520-c69a60c42d06";
 
   // Selected file and dynamic extraction preview
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -288,7 +288,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         toast({
           title: "Extraction unavailable",
           description:
-            "Please configure VITE_UNSTRACT_API_URL and VITE_UNSTRACT_API_TOKEN in your .env file.",
+            "Please configure API credentials.",
           variant: "destructive",
         });
         return;
@@ -300,61 +300,103 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       setShowSuccessMessage(false);
       setExtractedPreview([]);
 
-      // Smooth progress while waiting for API (cap at 95% until done)
+      // Smooth progress while waiting for API (cap at 90% until done)
       progressTimer = setInterval(() => {
-        setExtractionProgress((prev) => (prev >= 95 ? 95 : prev + 2));
-      }, 120);
+        setExtractionProgress((prev) => (prev >= 90 ? 90 : prev + 1));
+      }, 150);
 
-      const form = new FormData();
-      form.append("files", file);
-      form.append("timeout", "300");
-      form.append("include_metadata", "False");
-      form.append("include_metrics", "False");
+      // Step 1: POST document to upload
+      const formData = new FormData();
+      formData.append("files", file);
+      formData.append("timeout", "300");
+      formData.append("include_metadata", "false");
 
-      const res = await fetch(API_URL, {
+      const uploadRes = await fetch(API_URL, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${API_TOKEN}`,
-          // Do NOT set Content-Type when sending FormData; the browser will set the proper boundary
-        } as any,
-        body: form,
+        },
+        body: formData,
       });
 
-      if (!res.ok) {
-        throw new Error(`API error ${res.status}`);
+      if (!uploadRes.ok) {
+        throw new Error(`Upload failed: ${uploadRes.status}`);
       }
 
-      const data = await res.json();
-      // Support the documented structure: message.result[0].result.output.Extract
-      const extract =
-        data?.message?.result?.[0]?.result?.output?.Extract ||
-        data?.result?.[0]?.result?.output?.Extract ||
-        null;
+      const uploadData = await uploadRes.json();
+      const executionId = uploadData?.execution_id;
 
-      if (!extract || typeof extract !== "object") {
-        throw new Error("Unexpected API response shape");
+      if (!executionId) {
+        throw new Error("No execution_id returned from upload");
+      }
+
+      // Step 2: Poll GET endpoint for status and results
+      let attempts = 0;
+      const maxAttempts = 60; // 60 attempts * 2 seconds = 2 minutes max
+      let extractedData = null;
+
+      while (attempts < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
+
+        const statusRes = await fetch(
+          `${API_URL}?execution_id=${executionId}&include_metadata=False`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${API_TOKEN}`,
+            },
+          }
+        );
+
+        if (!statusRes.ok) {
+          throw new Error(`Status check failed: ${statusRes.status}`);
+        }
+
+        const statusData = await statusRes.json();
+        const status = statusData?.status;
+
+        if (status === "COMPLETED") {
+          // Extract the data from response
+          extractedData =
+            statusData?.result?.[0]?.result?.output?.Extract ||
+            statusData?.message?.result?.[0]?.result?.output?.Extract ||
+            statusData?.data ||
+            null;
+          break;
+        } else if (status === "FAILED" || status === "ERROR") {
+          throw new Error("Document processing failed");
+        }
+
+        attempts++;
+      }
+
+      if (!extractedData) {
+        throw new Error("Timeout waiting for document processing");
       }
 
       // Map API extract keys to our form fields
       const mapped = {
-        projectId: extract["Project ID"] ?? "",
-        projectName: extract["Project Name"] ?? "",
-        designStage: extract["Design Stage"] ?? "",
-        client: extract["Client Name"] ?? "",
-        projectType: extract["Project Type"] ?? "",
-        location: extract["Location"] ?? "",
-        budget: "",
-        completion: "",
-        visionStatement: "",
-        objectives: "",
-        keyMetrics: "",
-        stakeholders: "",
-        risks: "",
-        successCriteria: "",
+        projectId: extractedData["Project ID"] || extractedData["project_id"] || "",
+        projectName: extractedData["Project Name"] || extractedData["project_name"] || "",
+        designStage: extractedData["Design Stage"] || extractedData["design_stage"] || "",
+        client: extractedData["Client Name"] || extractedData["client"] || "",
+        projectType: extractedData["Project Type"] || extractedData["project_type"] || "",
+        location: extractedData["Location"] || extractedData["location"] || "",
+        budget: extractedData["Budget"] || extractedData["budget"] || "",
+        completion: extractedData["Completion Date"] || extractedData["completion"] || "",
       };
 
       // Populate form fields
-      setFormData((prev) => ({ ...prev, ...mapped }));
+      setFormData((prev) => ({ 
+        ...prev, 
+        ...mapped,
+        visionStatement: prev.visionStatement,
+        objectives: prev.objectives,
+        keyMetrics: prev.keyMetrics,
+        stakeholders: prev.stakeholders,
+        risks: prev.risks,
+        successCriteria: prev.successCriteria,
+      }));
 
       // Build dynamic preview list
       const preview: Array<{
@@ -363,24 +405,15 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         field?: string | null;
       }> = [
         { label: "Project ID", value: mapped.projectId, field: "projectId" },
-        {
-          label: "Project Name",
-          value: mapped.projectName,
-          field: "projectName",
-        },
+        { label: "Project Name", value: mapped.projectName, field: "projectName" },
         { label: "Client Name", value: mapped.client, field: "client" },
         { label: "Location", value: mapped.location, field: "location" },
-        {
-          label: "Project Type",
-          value: mapped.projectType,
-          field: "projectType",
-        },
-        {
-          label: "Design Stage",
-          value: mapped.designStage,
-          field: "designStage",
-        },
+        { label: "Project Type", value: mapped.projectType, field: "projectType" },
+        { label: "Design Stage", value: mapped.designStage, field: "designStage" },
+        { label: "Budget", value: mapped.budget, field: "budget" },
+        { label: "Completion", value: mapped.completion, field: "completion" },
       ].filter((p) => p.value);
+      
       setExtractedPreview(preview);
 
       // Animate fields appearing one by one
@@ -408,7 +441,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         setExtractionProgress(0);
         setVisibleFields([]);
         setShowSuccessMessage(false);
-      }, 1000);
+      }, 1500);
     } catch (err: any) {
       console.error(err);
       setIsExtracting(false);
