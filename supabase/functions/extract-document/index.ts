@@ -93,7 +93,16 @@ serve(async (req) => {
           });
         }
 
-        return new Response(JSON.stringify(responseData), { 
+        // Normalize: extract top-level execution_id
+        const executionId = responseData?.message?.result?.[0]?.metadata?.execution_id ??
+          (typeof responseData?.message?.status_api === "string"
+            ? (responseData.message.status_api.match(/execution_id=([^&]+)/)?.[1] || null)
+            : null);
+        if (!executionId) {
+          console.error("execution_id not found in upload response:", responseData);
+        }
+
+        return new Response(JSON.stringify({ execution_id: executionId, raw: responseData }), { 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       }
@@ -136,7 +145,15 @@ serve(async (req) => {
           });
         }
 
-        return new Response(JSON.stringify(statusData), { 
+        // Normalize shape for client
+        const normalized = {
+          status: statusData?.status ?? statusData?.message?.execution_status ?? null,
+          result: statusData?.result ?? statusData?.message?.result ?? null,
+          data: (statusData?.result ?? statusData?.message?.result)?.[0]?.result?.output ?? null,
+          raw: statusData,
+        };
+
+        return new Response(JSON.stringify(normalized), { 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       }
