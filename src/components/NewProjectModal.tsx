@@ -312,46 +312,64 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         throw new Error(errMsg);
       }
 
-      const executionId = (uploadData as any)?.execution_id;
-
-      if (!executionId) {
-        throw new Error("No execution_id returned from upload");
-      }
-
-      // Step 2: Poll status via Edge Function
-      let attempts = 0;
-      const maxAttempts = 60; // 60 attempts * 2 seconds = 2 minutes max
+      // Step 2: Check if document was processed immediately or needs polling
       let extractedData = null;
+      
+      // If upload response already contains COMPLETED status, extract data directly
+      if ((uploadData as any)?.status === 'COMPLETED') {
+        console.log('Document processed immediately on upload');
+        extractedData =
+          (uploadData as any)?.raw?.message?.result?.[0]?.result?.output?.Extract ||
+          (uploadData as any)?.result?.[0]?.result?.output?.Extract ||
+          null;
+      } else {
+        // Otherwise, poll for completion
+        const executionId = (uploadData as any)?.execution_id;
 
-      while (attempts < maxAttempts) {
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
-
-        const { data: statusData, error: statusError } = await supabase.functions.invoke('extract-document', {
-          body: { action: 'status', execution_id: executionId },
-        });
-        if (statusError) {
-          throw new Error(statusError.message || 'Status check failed');
-        }
-        const status = (statusData as any)?.status;
-
-        if (status === "COMPLETED") {
-          // Extract the data from response
-          extractedData =
-            statusData?.result?.[0]?.result?.output?.Extract ||
-            statusData?.message?.result?.[0]?.result?.output?.Extract ||
-            statusData?.data ||
-            null;
-          break;
-        } else if (status === "FAILED" || status === "ERROR") {
-          const msg = (statusData as any)?.error || (statusData as any)?.message || "Document processing failed";
-          throw new Error(msg);
+        if (!executionId) {
+          throw new Error("No execution_id returned from upload");
         }
 
-        attempts++;
+        console.log('Polling for document processing completion...');
+        let attempts = 0;
+        const maxAttempts = 30; // 30 attempts * 2 seconds = 1 minute max
+
+        while (attempts < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
+
+          const { data: statusData, error: statusError } = await supabase.functions.invoke('extract-document', {
+            body: { action: 'status', execution_id: executionId },
+          });
+          if (statusError) {
+            throw new Error(statusError.message || 'Status check failed');
+          }
+          const status = (statusData as any)?.status;
+
+          console.log(`Status check ${attempts + 1}/${maxAttempts}: ${status}`);
+
+          if (status === "COMPLETED") {
+            // Extract the data from response
+            extractedData =
+              (statusData as any)?.raw?.message?.result?.[0]?.result?.output?.Extract ||
+              (statusData as any)?.result?.[0]?.result?.output?.Extract ||
+              (statusData as any)?.data?.[0]?.result?.output?.Extract ||
+              null;
+            break;
+          } else if (status === "FAILED" || status === "ERROR") {
+            const msg = (statusData as any)?.error || (statusData as any)?.message || "Document processing failed";
+            throw new Error(msg);
+          }
+
+          attempts++;
+        }
+
+        if (attempts >= maxAttempts) {
+          throw new Error("Processing timeout - document is taking longer than expected");
+        }
       }
 
       if (!extractedData) {
-        throw new Error("Timeout waiting for document processing");
+        throw new Error("No data extracted from document");
       }
 
       // Map API extract keys to our form fields
