@@ -126,27 +126,27 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Name</span>
-                            <span className="font-medium">{projectName}</span>
+                            <span className="font-medium"></span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">ID</span>
-                            <span className="font-medium">P-NYC-2025</span>
+                            <span className="font-medium"></span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Type</span>
-                            <span className="font-medium">Healthcare</span>
+                            <span className="font-medium"></span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Size</span>
-                            <span className="font-medium">120,000 sq ft</span>
+                            <span className="font-medium"></span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Approved Budget</span>
-                            <span className="font-medium">$2.5M</span>
+                            <span className="font-medium"></span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Target Completion</span>
-                            <span className="font-medium">Q4 2025</span>
+                            <span className="font-medium"></span>
                           </div>
                         </div>
                       </div>
