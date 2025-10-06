@@ -93,7 +93,7 @@ serve(async (req) => {
           });
         }
 
-        // Normalize: extract top-level execution_id
+        // Normalize: extract top-level execution_id and status/result
         const executionId = responseData?.message?.result?.[0]?.metadata?.execution_id ??
           (typeof responseData?.message?.status_api === "string"
             ? (responseData.message.status_api.match(/execution_id=([^&]+)/)?.[1] || null)
@@ -102,7 +102,14 @@ serve(async (req) => {
           console.error("execution_id not found in upload response:", responseData);
         }
 
-        return new Response(JSON.stringify({ execution_id: executionId, raw: responseData }), { 
+        const normalizedUpload = {
+          execution_id: executionId,
+          status: responseData?.message?.execution_status ?? responseData?.status ?? null,
+          result: responseData?.message?.result ?? responseData?.result ?? null,
+          raw: responseData,
+        };
+
+        return new Response(JSON.stringify(normalizedUpload), { 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       }
@@ -127,8 +134,16 @@ serve(async (req) => {
         
         if (!statusRes.ok) {
           console.error("Status check failed:", statusRes.status, text);
-          return new Response(JSON.stringify({ error: "Status check failed", details: text }), {
-            status: statusRes.status,
+          // Return normalized error as 200 to avoid client generic non-2xx error
+          let errObj: any = null;
+          try { errObj = JSON.parse(text); } catch {}
+          const normalizedErr = {
+            status: errObj?.status || "ERROR",
+            error: errObj?.message || `Status check failed (${statusRes.status})`,
+            raw: errObj ?? text,
+          };
+          return new Response(JSON.stringify(normalizedErr), {
+            status: 200,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }

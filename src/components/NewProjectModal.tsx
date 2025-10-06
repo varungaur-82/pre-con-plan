@@ -306,6 +306,12 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         throw new Error(uploadError.message || 'Upload failed');
       }
 
+      // If upload already returned an error status, surface it
+      if ((uploadData as any)?.status === 'ERROR' || (uploadData as any)?.status === 'FAILED') {
+        const errMsg = (uploadData as any)?.raw?.message?.result?.[0]?.error || 'Upload failed';
+        throw new Error(errMsg);
+      }
+
       const executionId = (uploadData as any)?.execution_id;
 
       if (!executionId) {
@@ -337,7 +343,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
             null;
           break;
         } else if (status === "FAILED" || status === "ERROR") {
-          throw new Error("Document processing failed");
+          const msg = (statusData as any)?.error || (statusData as any)?.message || "Document processing failed";
+          throw new Error(msg);
         }
 
         attempts++;
