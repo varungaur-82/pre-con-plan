@@ -268,8 +268,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       // Hide success message after 5 seconds
       setTimeout(() => {
         setShowSuccessMessage(false);
-      }, 5000);
-    }, 5000);
+      }, 10000);
+    }, 10000);
   };
 
   // Real extraction implementation calling Edge Function
