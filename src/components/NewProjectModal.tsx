@@ -66,14 +66,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const step2FileInputRef = useRef<HTMLInputElement>(null);
   const step3FileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  // API config (set these in your Vite .env file)
-  // const API_URL = import.meta.env.VITE_UNSTRACT_API_URL as string | undefined;
-  // const API_TOKEN = import.meta.env.VITE_UNSTRACT_API_TOKEN as string | undefined;
-
-  const API_URL =
-    "https://us-central.unstract.com/deployment/api/org_9ZihNxEdmhEZpcme/newcon_1759208927740/";
-
-  const API_TOKEN = "d1d236c2-8abe-418a-9520-c69a60c42d06";
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const EXTRACT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/extract-document`;
 
   // Selected file and dynamic extraction preview
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -280,15 +274,14 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     }, 5000);
   };
 
-  // Real extraction implementation calling Unstract API
+  // Real extraction implementation calling Edge Function
   const extractFromFile = async (file: File) => {
     let progressTimer: ReturnType<typeof setInterval> | null = null;
     try {
-      if (!API_URL || !API_TOKEN) {
+      if (!EXTRACT_FUNCTION_URL) {
         toast({
           title: "Extraction unavailable",
-          description:
-            "Please configure API credentials.",
+          description: "Please configure Supabase URL.",
           variant: "destructive",
         });
         return;
@@ -305,22 +298,19 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         setExtractionProgress((prev) => (prev >= 90 ? 90 : prev + 1));
       }, 150);
 
-      // Step 1: POST document to upload
-      const formData = new FormData();
-      formData.append("files", file);
-      formData.append("timeout", "300");
-      formData.append("include_metadata", "false");
+      // Step 1: Upload document via Edge Function
+      const uploadFormData = new FormData();
+      uploadFormData.append("action", "upload");
+      uploadFormData.append("file", file);
 
-      const uploadRes = await fetch(API_URL, {
+      const uploadRes = await fetch(EXTRACT_FUNCTION_URL, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-        },
-        body: formData,
+        body: uploadFormData,
       });
 
       if (!uploadRes.ok) {
-        throw new Error(`Upload failed: ${uploadRes.status}`);
+        const errorData = await uploadRes.json();
+        throw new Error(errorData.error || `Upload failed: ${uploadRes.status}`);
       }
 
       const uploadData = await uploadRes.json();
@@ -330,7 +320,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         throw new Error("No execution_id returned from upload");
       }
 
-      // Step 2: Poll GET endpoint for status and results
+      // Step 2: Poll status via Edge Function
       let attempts = 0;
       const maxAttempts = 60; // 60 attempts * 2 seconds = 2 minutes max
       let extractedData = null;
@@ -338,18 +328,18 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       while (attempts < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
 
-        const statusRes = await fetch(
-          `${API_URL}?execution_id=${executionId}&include_metadata=False`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${API_TOKEN}`,
-            },
-          }
-        );
+        const statusFormData = new FormData();
+        statusFormData.append("action", "status");
+        statusFormData.append("execution_id", executionId);
+
+        const statusRes = await fetch(EXTRACT_FUNCTION_URL, {
+          method: "POST",
+          body: statusFormData,
+        });
 
         if (!statusRes.ok) {
-          throw new Error(`Status check failed: ${statusRes.status}`);
+          const errorData = await statusRes.json();
+          throw new Error(errorData.error || `Status check failed: ${statusRes.status}`);
         }
 
         const statusData = await statusRes.json();
