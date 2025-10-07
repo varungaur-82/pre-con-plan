@@ -87,8 +87,15 @@ serve(async (req) => {
         
         if (!uploadRes.ok) {
           console.error("Upload failed:", uploadRes.status, text);
-          return new Response(JSON.stringify({ error: "Upload failed", details: text }), {
-            status: uploadRes.status,
+          let errObj: any = null;
+          try { errObj = JSON.parse(text); } catch {}
+          const normalizedErr = {
+            status: "ERROR",
+            error: errObj?.message || errObj?.error || `Upload failed (${uploadRes.status})`,
+            raw: errObj ?? text,
+          };
+          return new Response(JSON.stringify(normalizedErr), {
+            status: 200,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
@@ -218,8 +225,15 @@ serve(async (req) => {
         const text = await uploadRes.text();
         if (!uploadRes.ok) {
           console.error("Upload failed:", uploadRes.status, text);
-          return new Response(text || JSON.stringify({ error: "Upload failed" }), {
-            status: uploadRes.status,
+          let errObj: any = null;
+          try { errObj = JSON.parse(text); } catch {}
+          const normalizedErr = {
+            status: "ERROR",
+            error: errObj?.message || errObj?.error || `Upload failed (${uploadRes.status})`,
+            raw: errObj ?? text,
+          };
+          return new Response(JSON.stringify(normalizedErr), {
+            status: 200,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
@@ -244,8 +258,15 @@ serve(async (req) => {
         const text = await statusRes.text();
         if (!statusRes.ok) {
           console.error("Status check failed:", statusRes.status, text);
-          return new Response(text || JSON.stringify({ error: "Status check failed" }), {
-            status: statusRes.status,
+          let errObj: any = null;
+          try { errObj = JSON.parse(text); } catch {}
+          const normalizedErr = {
+            status: "ERROR",
+            error: errObj?.message || errObj?.error || `Status check failed (${statusRes.status})`,
+            raw: errObj ?? text,
+          };
+          return new Response(JSON.stringify(normalizedErr), {
+            status: 200,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
