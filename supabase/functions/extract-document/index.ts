@@ -17,6 +17,16 @@ function base64ToUint8Array(base64: string): Uint8Array {
   }
 }
 
+function sanitizeUrl(url: string): string {
+  let u = url.trim();
+  // Attempt to decode percent-encodings first (e.g., %27 -> ")
+  try { u = decodeURIComponent(u); } catch {}
+  // Remove surrounding quotes and stray apostrophes or their encodings
+  u = u.replace(/^['"]|['"]$/g, "");
+  u = u.replace(/%27/gi, "").replace(/'+$/g, "");
+  return u;
+}
+
 serve(async (req) => {
   // CORS preflight
   if (req.method === "OPTIONS") {
@@ -24,10 +34,10 @@ serve(async (req) => {
   }
 
   try {
-    const API_URL = Deno.env.get("UNSTRACT_API_URL");
+    const API_URL_RAW = Deno.env.get("UNSTRACT_API_URL");
     const API_TOKEN = Deno.env.get("UNSTRACT_API_TOKEN");
 
-    if (!API_URL || !API_TOKEN) {
+    if (!API_URL_RAW || !API_TOKEN) {
       console.error("Missing Unstract API credentials");
       return new Response(
         JSON.stringify({ error: "API credentials not configured" }),
@@ -35,6 +45,7 @@ serve(async (req) => {
       );
     }
 
+    const API_URL = sanitizeUrl(API_URL_RAW);
     console.log("Using Unstract API URL:", API_URL);
 
     const contentType = req.headers.get("content-type") || "";
