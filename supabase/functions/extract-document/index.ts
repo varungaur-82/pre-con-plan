@@ -35,6 +35,8 @@ serve(async (req) => {
       );
     }
 
+    console.log("Using Unstract API URL:", API_URL);
+
     const contentType = req.headers.get("content-type") || "";
     let action = "";
 
