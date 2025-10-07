@@ -348,12 +348,32 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
           console.log(`Status check ${attempts + 1}/${maxAttempts}: ${status}`);
 
           if (status === "COMPLETED") {
-            // Extract the data from response
-            extractedData =
-              (statusData as any)?.raw?.message?.result?.[0]?.result?.output?.Extract ||
-              (statusData as any)?.result?.[0]?.result?.output?.Extract ||
-              (statusData as any)?.data?.[0]?.result?.output?.Extract ||
+            // Extract the data from response - check all possible field names
+            const output = 
+              (statusData as any)?.raw?.message?.result?.[0]?.result?.output ||
+              (statusData as any)?.result?.[0]?.result?.output ||
+              (statusData as any)?.data?.[0]?.result?.output ||
               null;
+            
+            if (output) {
+              // Try to find the extracted data - it could be under different keys
+              extractedData = output.Extract || output.NewCon_2_1 || output[Object.keys(output)[0]] || null;
+              
+              // If the data is a string, try to parse it
+              if (typeof extractedData === 'string') {
+                console.log('Extracted data is a string, attempting to parse...');
+                // Parse the string to extract key-value pairs
+                const parsed: Record<string, string> = {};
+                const lines = extractedData.split('\n\n');
+                lines.forEach(line => {
+                  const match = line.match(/^([^:]+):\s*(.+)$/);
+                  if (match) {
+                    parsed[match[1].trim()] = match[2].trim();
+                  }
+                });
+                extractedData = parsed;
+              }
+            }
             break;
           } else if (status === "FAILED" || status === "ERROR") {
             const msg = (statusData as any)?.error || (statusData as any)?.message || "Document processing failed";
