@@ -414,22 +414,31 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
       console.log('Extracted data object:', extractedData);
 
+      // Helper function to convert any value to string (handles objects/arrays)
+      const toString = (value: any): string => {
+        if (!value) return "";
+        if (typeof value === 'string') return value;
+        if (Array.isArray(value)) return value.map(v => typeof v === 'object' ? JSON.stringify(v) : String(v)).join('\n');
+        if (typeof value === 'object') return JSON.stringify(value, null, 2);
+        return String(value);
+      };
+
       // Map API extract keys to our form fields
       const mapped = {
-        projectId: extractedData["Project ID"] || extractedData["project_id"] || extractedData["ProjectID"] || "",
-        projectName: extractedData["Project Name"] || extractedData["project_name"] || extractedData["ProjectName"] || "",
-        designStage: extractedData["Design Stage"] || extractedData["design_stage"] || extractedData["DesignStage"] || "",
-        client: extractedData["Client Name"] || extractedData["client"] || extractedData["client_name"] || extractedData["ClientName"] || "",
-        projectType: extractedData["Project Type"] || extractedData["project_type"] || extractedData["ProjectType"] || "",
-        location: extractedData["Location"] || extractedData["location"] || "",
-        budget: extractedData["Budget"] || extractedData["budget"] || "",
-        completion: extractedData["Completion Date"] || extractedData["completion"] || extractedData["completion_date"] || "",
-        visionStatement: extractedData["Vision Statement"] || extractedData["vision_statement"] || extractedData["VisionStatement"] || "",
-        objectives: extractedData["Objectives"] || extractedData["objectives"] || "",
-        keyMetrics: extractedData["Key Metrics"] || extractedData["key_metrics"] || extractedData["KeyMetrics"] || "",
-        stakeholders: extractedData["Stakeholders"] || extractedData["stakeholders"] || "",
-        risks: extractedData["Risks"] || extractedData["risks"] || "",
-        successCriteria: extractedData["Success Criteria"] || extractedData["success_criteria"] || extractedData["SuccessCriteria"] || "",
+        projectId: toString(extractedData["Project ID"] || extractedData["project_id"] || extractedData["ProjectID"]),
+        projectName: toString(extractedData["Project Name"] || extractedData["project_name"] || extractedData["ProjectName"]),
+        designStage: toString(extractedData["Design Stage"] || extractedData["design_stage"] || extractedData["DesignStage"]),
+        client: toString(extractedData["Client Name"] || extractedData["client"] || extractedData["client_name"] || extractedData["ClientName"]),
+        projectType: toString(extractedData["Project Type"] || extractedData["project_type"] || extractedData["ProjectType"]),
+        location: toString(extractedData["Location"] || extractedData["location"]),
+        budget: toString(extractedData["Budget"] || extractedData["budget"]),
+        completion: toString(extractedData["Completion Date"] || extractedData["completion"] || extractedData["completion_date"]),
+        visionStatement: toString(extractedData["Vision Statement"] || extractedData["vision_statement"] || extractedData["VisionStatement"]),
+        objectives: toString(extractedData["Objectives"] || extractedData["objectives"]),
+        keyMetrics: toString(extractedData["Key Metrics"] || extractedData["key_metrics"] || extractedData["KeyMetrics"]),
+        stakeholders: toString(extractedData["Stakeholders"] || extractedData["stakeholders"]),
+        risks: toString(extractedData["Risks"] || extractedData["risks"]),
+        successCriteria: toString(extractedData["Success Criteria"] || extractedData["success_criteria"] || extractedData["SuccessCriteria"]),
       };
 
       console.log('Mapped data:', mapped);
