@@ -73,7 +73,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     Array<{ label: string; value: string; field?: string | null }>
   >([]);
   
-  // Store extracted form data separately (don't populate immediately)
+  // Store extracted form data for step 2 populate button
   const [extractedFormData, setExtractedFormData] = useState<typeof formData | null>(null);
 
   const [transparentConfirmation, setTransparentConfirmation] = useState(true);
@@ -446,8 +446,28 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
       console.log('Mapped data:', mapped);
 
-      // Store extracted data separately (don't populate immediately on step 1)
-      setExtractedFormData(mapped as typeof formData);
+      // Auto-populate step 1 fields immediately
+      setFormData((prev) => ({ 
+        ...prev, 
+        projectId: mapped.projectId,
+        projectName: mapped.projectName,
+        designStage: mapped.designStage,
+        client: mapped.client,
+        projectType: mapped.projectType,
+        location: mapped.location,
+        budget: mapped.budget,
+        completion: mapped.completion,
+      }));
+      
+      // Store step 2 data separately (for manual populate button)
+      setExtractedFormData({
+        visionStatement: mapped.visionStatement,
+        objectives: mapped.objectives,
+        keyMetrics: mapped.keyMetrics,
+        stakeholders: mapped.stakeholders,
+        risks: mapped.risks,
+        successCriteria: mapped.successCriteria,
+      } as typeof formData);
 
       // Build dynamic preview list
       const preview: Array<{
@@ -747,25 +767,6 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     Choose files
                   </Button>
                 </div>
-                
-                {/* Populate button after extraction */}
-                {extractedFormData && (
-                  <div className="flex justify-center">
-                    <Button
-                      onClick={() => {
-                        setFormData((prev) => ({ ...prev, ...extractedFormData }));
-                        toast({
-                          title: "Fields Populated",
-                          description: "Form fields have been filled with extracted data.",
-                        });
-                      }}
-                      variant="outline"
-                      size="sm"
-                    >
-                      Populate Form Fields
-                    </Button>
-                  </div>
-                )}
 
                 {/* Project Information Form */}
                 <div className="space-y-4">
@@ -1048,9 +1049,27 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
                 {/* Right Column - Project Charter Form */}
                 <div className="bg-blue-50/50 rounded-lg p-5 space-y-4">
-                  <h3 className="text-base font-bold text-blue-600 mb-4">
-                    Project Charter
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-bold text-blue-600">
+                      Project Charter
+                    </h3>
+                    {extractedFormData && (
+                      <Button
+                        onClick={() => {
+                          setFormData((prev) => ({ ...prev, ...extractedFormData }));
+                          toast({
+                            title: "Fields Populated",
+                            description: "Form fields have been filled with extracted data from the document.",
+                          });
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-xs"
+                      >
+                        Populate from Document
+                      </Button>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
                     <div>
@@ -1093,13 +1112,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="visionStatement"
                         placeholder="Enter vision statement"
                         value={formData.visionStatement}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             visionStatement: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
@@ -1114,13 +1137,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="objectives"
                         placeholder="Enter objectives"
                         value={formData.objectives}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             objectives: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
@@ -1135,13 +1162,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="keyMetrics"
                         placeholder="Enter key metrics"
                         value={formData.keyMetrics}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             keyMetrics: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
@@ -1156,13 +1187,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="stakeholders"
                         placeholder="Enter stakeholders"
                         value={formData.stakeholders}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             stakeholders: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
@@ -1174,10 +1209,14 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="risks"
                         placeholder="Enter risks"
                         value={formData.risks}
-                        onChange={(e) =>
-                          setFormData({ ...formData, risks: e.target.value })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                        onChange={(e) => {
+                          setFormData({ ...formData, risks: e.target.value });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
@@ -1192,13 +1231,17 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="successCriteria"
                         placeholder="Enter success criteria"
                         value={formData.successCriteria}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             successCriteria: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          // Auto-resize
+                          const target = e.target;
+                          target.style.height = 'auto';
+                          target.style.height = target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
                       />
                     </div>
 
