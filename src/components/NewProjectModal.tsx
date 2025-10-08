@@ -72,6 +72,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [extractedPreview, setExtractedPreview] = useState<
     Array<{ label: string; value: string; field?: string | null }>
   >([]);
+  
+  // Store extracted data separately (not populated to form until user clicks Populate)
+  const [extractedFormData, setExtractedFormData] = useState<typeof formData | null>(null);
 
   const [transparentConfirmation, setTransparentConfirmation] = useState(true);
   const [suggestionAccepted, setSuggestionAccepted] = useState<boolean | null>(
@@ -443,11 +446,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
       console.log('Mapped data:', mapped);
 
-      // Populate form fields with all extracted data
-      setFormData((prev) => ({ 
-        ...prev, 
-        ...mapped,
-      }));
+      // Store extracted data separately - don't populate form yet
+      setExtractedFormData(mapped);
 
       // Build dynamic preview list
       const preview: Array<{
@@ -1029,9 +1029,27 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
                 {/* Right Column - Project Charter Form */}
                 <div className="bg-blue-50/50 rounded-lg p-5 space-y-4">
-                  <h3 className="text-base font-bold text-blue-600 mb-4">
-                    Project Charter
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-bold text-blue-600">
+                      Project Charter
+                    </h3>
+                    {extractedFormData && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-xs"
+                        onClick={() => {
+                          setFormData((prev) => ({ ...prev, ...extractedFormData }));
+                          toast({
+                            title: "Fields Populated",
+                            description: "Extracted data has been populated to the form fields.",
+                          });
+                        }}
+                      >
+                        Populate from Document
+                      </Button>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
                     <div>
@@ -1074,13 +1092,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="visionStatement"
                         placeholder="Enter vision statement"
                         value={formData.visionStatement}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             visionStatement: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
@@ -1095,13 +1116,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="objectives"
                         placeholder="Enter objectives"
                         value={formData.objectives}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             objectives: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
@@ -1116,13 +1140,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="keyMetrics"
                         placeholder="Enter key metrics"
                         value={formData.keyMetrics}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             keyMetrics: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
@@ -1137,13 +1164,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="stakeholders"
                         placeholder="Enter stakeholders"
                         value={formData.stakeholders}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             stakeholders: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
@@ -1155,10 +1185,13 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="risks"
                         placeholder="Enter risks"
                         value={formData.risks}
-                        onChange={(e) =>
-                          setFormData({ ...formData, risks: e.target.value })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                        onChange={(e) => {
+                          setFormData({ ...formData, risks: e.target.value });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
@@ -1173,13 +1206,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         id="successCriteria"
                         placeholder="Enter success criteria"
                         value={formData.successCriteria}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             successCriteria: e.target.value,
-                          })
-                        }
-                        className="min-h-[60px] text-xs bg-white"
+                          });
+                          e.target.style.height = 'auto';
+                          e.target.style.height = e.target.scrollHeight + 'px';
+                        }}
+                        className="min-h-[60px] text-xs bg-white resize-none overflow-hidden"
+                        style={{ height: 'auto' }}
                       />
                     </div>
 
