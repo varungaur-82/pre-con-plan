@@ -388,21 +388,25 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         }
       }
 
-      if (!extractedData) {
+      if (!extractedData || typeof extractedData !== 'object') {
         throw new Error("No data extracted from document");
       }
 
+      console.log('Extracted data object:', extractedData);
+
       // Map API extract keys to our form fields
       const mapped = {
-        projectId: extractedData["Project ID"] || extractedData["project_id"] || "",
-        projectName: extractedData["Project Name"] || extractedData["project_name"] || "",
-        designStage: extractedData["Design Stage"] || extractedData["design_stage"] || "",
-        client: extractedData["Client Name"] || extractedData["client"] || "",
-        projectType: extractedData["Project Type"] || extractedData["project_type"] || "",
+        projectId: extractedData["Project ID"] || extractedData["project_id"] || extractedData["ProjectID"] || "",
+        projectName: extractedData["Project Name"] || extractedData["project_name"] || extractedData["ProjectName"] || "",
+        designStage: extractedData["Design Stage"] || extractedData["design_stage"] || extractedData["DesignStage"] || "",
+        client: extractedData["Client Name"] || extractedData["client"] || extractedData["client_name"] || extractedData["ClientName"] || "",
+        projectType: extractedData["Project Type"] || extractedData["project_type"] || extractedData["ProjectType"] || "",
         location: extractedData["Location"] || extractedData["location"] || "",
         budget: extractedData["Budget"] || extractedData["budget"] || "",
-        completion: extractedData["Completion Date"] || extractedData["completion"] || "",
+        completion: extractedData["Completion Date"] || extractedData["completion"] || extractedData["completion_date"] || "",
       };
+
+      console.log('Mapped data:', mapped);
 
       // Populate form fields
       setFormData((prev) => ({ 
