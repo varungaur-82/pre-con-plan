@@ -553,8 +553,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     const prompt = quickPrompts.find((p) => p.id === promptId);
     const fieldName = prompt?.field as keyof typeof formData;
     
-    // Get the extracted value from formData if it exists
-    const extractedValue = fieldName ? formData[fieldName] : "";
+    // Get the extracted value from extractedFormData if it exists
+    const extractedValue = fieldName && extractedFormData ? extractedFormData[fieldName] : "";
 
     // Only generate if we don't have a response yet
     if (!aiResponses[promptId]) {
@@ -565,8 +565,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         let response = "";
         
         if (extractedValue && extractedValue.trim()) {
-          // Show the extracted value from the document
-          response = `Based on the extracted document data:\n\n${extractedValue}`;
+          // Use the extracted value from the document directly
+          response = extractedValue;
         } else {
           // Fallback to AI template if no extracted data
           response = aiResponseTemplates[promptId] || "AI response generated successfully.";
@@ -1053,22 +1053,6 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     <h3 className="text-base font-bold text-blue-600">
                       Project Charter
                     </h3>
-                    {extractedFormData && (
-                      <Button
-                        onClick={() => {
-                          setFormData((prev) => ({ ...prev, ...extractedFormData }));
-                          toast({
-                            title: "Fields Populated",
-                            description: "Form fields have been filled with extracted data from the document.",
-                          });
-                        }}
-                        variant="outline"
-                        size="sm"
-                        className="h-7 text-xs"
-                      >
-                        Populate from Document
-                      </Button>
-                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
