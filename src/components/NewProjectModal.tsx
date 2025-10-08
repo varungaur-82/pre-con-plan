@@ -72,6 +72,9 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const [extractedPreview, setExtractedPreview] = useState<
     Array<{ label: string; value: string; field?: string | null }>
   >([]);
+  
+  // Store extracted form data separately (don't populate immediately)
+  const [extractedFormData, setExtractedFormData] = useState<typeof formData | null>(null);
 
   const [transparentConfirmation, setTransparentConfirmation] = useState(true);
   const [suggestionAccepted, setSuggestionAccepted] = useState<boolean | null>(
@@ -443,11 +446,8 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
       console.log('Mapped data:', mapped);
 
-      // Populate form fields with all extracted data
-      setFormData((prev) => ({ 
-        ...prev, 
-        ...mapped,
-      }));
+      // Store extracted data separately (don't populate immediately on step 1)
+      setExtractedFormData(mapped as typeof formData);
 
       // Build dynamic preview list
       const preview: Array<{
@@ -747,6 +747,25 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                     Choose files
                   </Button>
                 </div>
+                
+                {/* Populate button after extraction */}
+                {extractedFormData && (
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={() => {
+                        setFormData((prev) => ({ ...prev, ...extractedFormData }));
+                        toast({
+                          title: "Fields Populated",
+                          description: "Form fields have been filled with extracted data.",
+                        });
+                      }}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Populate Form Fields
+                    </Button>
+                  </div>
+                )}
 
                 {/* Project Information Form */}
                 <div className="space-y-4">
