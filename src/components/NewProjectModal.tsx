@@ -316,13 +316,33 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       let extractedData = null;
       
       // If upload response already contains COMPLETED status, extract data directly
-      if ((uploadData as any)?.status === 'COMPLETED') {
-        console.log('Document processed immediately on upload');
-        extractedData =
-          (uploadData as any)?.raw?.message?.result?.[0]?.result?.output?.Extract ||
-          (uploadData as any)?.result?.[0]?.result?.output?.Extract ||
-          null;
-      } else {
+       if ((uploadData as any)?.status === 'COMPLETED') {
+         console.log('Document processed immediately on upload');
+         const output = 
+           (uploadData as any)?.raw?.message?.result?.[0]?.result?.output ||
+           (uploadData as any)?.result?.[0]?.result?.output ||
+           (uploadData as any)?.data?.[0]?.result?.output ||
+           null;
+
+         if (output) {
+           // Try to find the extracted data - it could be under different keys
+           extractedData = output.Extract || output.NewCon_2_1 || output[Object.keys(output)[0]] || null;
+
+           // If the data is a string, try to parse it
+           if (typeof extractedData === 'string') {
+             console.log('Extracted data is a string (immediate response), attempting to parse...');
+             const parsed: Record<string, string> = {};
+             const lines = extractedData.split('\n\n');
+             lines.forEach(line => {
+               const match = line.match(/^([^:]+):\s*(.+)$/);
+               if (match) {
+                 parsed[match[1].trim()] = match[2].trim();
+               }
+             });
+             extractedData = parsed;
+           }
+         }
+       } else {
         // Otherwise, poll for completion
         const executionId = (uploadData as any)?.execution_id;
 
