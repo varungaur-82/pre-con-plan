@@ -424,20 +424,20 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
         location: extractedData["Location"] || extractedData["location"] || "",
         budget: extractedData["Budget"] || extractedData["budget"] || "",
         completion: extractedData["Completion Date"] || extractedData["completion"] || extractedData["completion_date"] || "",
+        visionStatement: extractedData["Vision Statement"] || extractedData["vision_statement"] || extractedData["VisionStatement"] || "",
+        objectives: extractedData["Objectives"] || extractedData["objectives"] || "",
+        keyMetrics: extractedData["Key Metrics"] || extractedData["key_metrics"] || extractedData["KeyMetrics"] || "",
+        stakeholders: extractedData["Stakeholders"] || extractedData["stakeholders"] || "",
+        risks: extractedData["Risks"] || extractedData["risks"] || "",
+        successCriteria: extractedData["Success Criteria"] || extractedData["success_criteria"] || extractedData["SuccessCriteria"] || "",
       };
 
       console.log('Mapped data:', mapped);
 
-      // Populate form fields
+      // Populate form fields with all extracted data
       setFormData((prev) => ({ 
         ...prev, 
         ...mapped,
-        visionStatement: prev.visionStatement,
-        objectives: prev.objectives,
-        keyMetrics: prev.keyMetrics,
-        stakeholders: prev.stakeholders,
-        risks: prev.risks,
-        successCriteria: prev.successCriteria,
       }));
 
       // Build dynamic preview list
@@ -520,17 +520,32 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
     setActivePrompt(promptId);
 
+    // Find the field associated with this prompt
+    const prompt = quickPrompts.find((p) => p.id === promptId);
+    const fieldName = prompt?.field as keyof typeof formData;
+    
+    // Get the extracted value from formData if it exists
+    const extractedValue = fieldName ? formData[fieldName] : "";
+
     // Only generate if we don't have a response yet
     if (!aiResponses[promptId]) {
       setIsGenerating({ ...isGenerating, [promptId]: true });
 
-      // Simulate AI generation delay
+      // Show extracted value if available, otherwise show AI template
       setTimeout(() => {
+        let response = "";
+        
+        if (extractedValue && extractedValue.trim()) {
+          // Show the extracted value from the document
+          response = `Based on the extracted document data:\n\n${extractedValue}`;
+        } else {
+          // Fallback to AI template if no extracted data
+          response = aiResponseTemplates[promptId] || "AI response generated successfully.";
+        }
+        
         setAiResponses({
           ...aiResponses,
-          [promptId]:
-            aiResponseTemplates[promptId] ||
-            "AI response generated successfully.",
+          [promptId]: response,
         });
         setIsGenerating({ ...isGenerating, [promptId]: false });
       }, 1500);
