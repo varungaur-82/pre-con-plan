@@ -71,24 +71,17 @@ export function CostTracker() {
 
       <TabsContent value="cost-snapshot">
         <div className="container px-6 py-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Live Cost Tracker</h1>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm">Cost Snapshot</Button>
-          <Button variant="ghost" size="sm">ACR</Button>
-          <Button variant="ghost" size="sm">Commitments</Button>
-          <Button variant="ghost" size="sm">Change Log</Button>
-          <Button variant="ghost" size="sm">Cashflow</Button>
-          <Button variant="ghost" size="sm">Budget Transfer</Button>
-          <Button variant="ghost" size="sm">Invoice Log</Button>
-          <Button variant="outline" size="sm">
-            Export <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Live Cost Tracker</h1>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm">
+                Export <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
 
-      {/* Key Metrics */}
+          {/* Key Metrics */}
       <div className="grid grid-cols-5 gap-4 mb-6">
         <Card>
           <CardContent className="pt-6">
