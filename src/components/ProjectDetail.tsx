@@ -1,3 +1,4 @@
+import { DataEngine } from "./DataEngine";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -499,11 +500,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
             </TabsContent>
 
             {/* Data Engine Tab */}
-            <TabsContent value="data" className="mt-0">
-              <div className="container px-6 py-16 text-center">
-                <h2 className="text-2xl font-bold text-muted-foreground mb-4">Data Engine</h2>
-                <p className="text-muted-foreground">Content coming soon...</p>
-              </div>
+            <TabsContent value="data" className="mt-0 h-[calc(100vh-200px)]">
+              <DataEngine />
             </TabsContent>
           </Tabs>
         </div>
