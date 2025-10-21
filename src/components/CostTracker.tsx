@@ -23,6 +23,7 @@ import { ACRReport } from "./ACRReport";
 import { CommitmentsReport } from "./CommitmentsReport";
 import { ChangeLogReport } from "./ChangeLogReport";
 import { CashflowReport } from "./CashflowReport";
+import { BudgetTransferReport } from "./BudgetTransferReport";
 import { useState } from "react";
 
 const sCurveData = [
@@ -388,9 +389,7 @@ export function CostTracker() {
       </TabsContent>
 
       <TabsContent value="budget-transfer">
-        <div className="container px-6 py-8">
-          <p className="text-muted-foreground">Budget Transfer content coming soon...</p>
-        </div>
+        <BudgetTransferReport />
       </TabsContent>
 
       <TabsContent value="invoice-log">
