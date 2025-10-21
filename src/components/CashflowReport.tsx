@@ -244,12 +244,20 @@ export function CashflowReport() {
         <h2 className="text-xl font-semibold">Cashflow Overview</h2>
         <div className="flex items-center gap-2">
           <Select defaultValue="all-vendors">
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-[280px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all-vendors">All Vendors</SelectItem>
-              <SelectItem value="active">Active Only</SelectItem>
+              <SelectItem value="commissioning">Commissioning Specialists</SelectItem>
+              <SelectItem value="furniture">Furniture & Fixtures Co.</SelectItem>
+              <SelectItem value="financial">Financial Services Group</SelectItem>
+              <SelectItem value="abc">ABC Construction Group</SelectItem>
+              <SelectItem value="architectural">Architectural Design Associates</SelectItem>
+              <SelectItem value="engineering">Engineering Solutions Inc.</SelectItem>
+              <SelectItem value="mep">MEP Consulting Group</SelectItem>
+              <SelectItem value="landscape">Landscape Design Studio</SelectItem>
+              <SelectItem value="pm">Project Management Partners</SelectItem>
             </SelectContent>
           </Select>
           <Select defaultValue="all-costs">

@@ -228,13 +228,20 @@ export function CommitmentsReport() {
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">9 Active Contracts</span>
           <Select defaultValue="all">
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[280px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Vendors</SelectItem>
-              <SelectItem value="active">Active Only</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="commissioning">Commissioning Specialists</SelectItem>
+              <SelectItem value="furniture">Furniture & Fixtures Co.</SelectItem>
+              <SelectItem value="financial">Financial Services Group</SelectItem>
+              <SelectItem value="abc">ABC Construction Group</SelectItem>
+              <SelectItem value="architectural">Architectural Design Associates</SelectItem>
+              <SelectItem value="engineering">Engineering Solutions Inc.</SelectItem>
+              <SelectItem value="mep">MEP Consulting Group</SelectItem>
+              <SelectItem value="landscape">Landscape Design Studio</SelectItem>
+              <SelectItem value="pm">Project Management Partners</SelectItem>
             </SelectContent>
           </Select>
         </div>
