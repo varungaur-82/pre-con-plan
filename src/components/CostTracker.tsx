@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ACRReport } from "./ACRReport";
+import { CommitmentsReport } from "./CommitmentsReport";
 import { useState } from "react";
 
 const sCurveData = [
@@ -380,9 +381,7 @@ export function CostTracker() {
       </TabsContent>
 
       <TabsContent value="commitments">
-        <div className="container px-6 py-8">
-          <p className="text-muted-foreground">Commitments content coming soon...</p>
-        </div>
+        <CommitmentsReport />
       </TabsContent>
 
       <TabsContent value="change-log">
