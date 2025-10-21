@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ACRReport } from "./ACRReport";
 import { CommitmentsReport } from "./CommitmentsReport";
 import { ChangeLogReport } from "./ChangeLogReport";
+import { CashflowReport } from "./CashflowReport";
 import { useState } from "react";
 
 const sCurveData = [
@@ -390,9 +391,7 @@ export function CostTracker() {
       </TabsContent>
 
       <TabsContent value="cashflow">
-        <div className="container px-6 py-8">
-          <p className="text-muted-foreground">Cashflow content coming soon...</p>
-        </div>
+        <CashflowReport />
       </TabsContent>
 
       <TabsContent value="budget-transfer">
