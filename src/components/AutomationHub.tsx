@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CostTracker } from "./CostTracker";
 import { useState } from "react";
 
 const scheduleData = [
@@ -88,8 +90,15 @@ export function AutomationHub() {
     return "bg-green-100 text-green-700 border-green-200";
   };
   return (
-    <div className="container px-6 py-8">
-      {/* Welcome Header */}
+    <Tabs defaultValue="dashboard" className="w-full">
+      <TabsList className="mb-6">
+        <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+        <TabsTrigger value="cost-tracker">Cost Tracker</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="dashboard">
+        <div className="container px-6 py-8">
+          {/* Welcome Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-lg">
@@ -608,6 +617,12 @@ export function AutomationHub() {
           </CardContent>
         </Card>
       </div>
-    </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="cost-tracker">
+        <CostTracker />
+      </TabsContent>
+    </Tabs>
   );
 }
