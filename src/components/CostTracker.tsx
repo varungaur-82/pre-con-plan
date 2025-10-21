@@ -18,6 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ACRReport } from "./ACRReport";
 import { useState } from "react";
 
 const sCurveData = [
@@ -53,7 +55,19 @@ export function CostTracker() {
   const [layout, setLayout] = useState("1x2");
 
   return (
-    <div className="container px-6 py-8">
+    <Tabs defaultValue="cost-snapshot" className="w-full">
+      <TabsList className="mb-6">
+        <TabsTrigger value="cost-snapshot">Cost Snapshot</TabsTrigger>
+        <TabsTrigger value="acr">ACR</TabsTrigger>
+        <TabsTrigger value="commitments">Commitments</TabsTrigger>
+        <TabsTrigger value="change-log">Change Log</TabsTrigger>
+        <TabsTrigger value="cashflow">Cashflow</TabsTrigger>
+        <TabsTrigger value="budget-transfer">Budget Transfer</TabsTrigger>
+        <TabsTrigger value="invoice-log">Invoice Log</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="cost-snapshot">
+        <div className="container px-6 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Live Cost Tracker</h1>
@@ -358,6 +372,42 @@ export function CostTracker() {
           </div>
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="acr">
+        <ACRReport />
+      </TabsContent>
+
+      <TabsContent value="commitments">
+        <div className="container px-6 py-8">
+          <p className="text-muted-foreground">Commitments content coming soon...</p>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="change-log">
+        <div className="container px-6 py-8">
+          <p className="text-muted-foreground">Change Log content coming soon...</p>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="cashflow">
+        <div className="container px-6 py-8">
+          <p className="text-muted-foreground">Cashflow content coming soon...</p>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="budget-transfer">
+        <div className="container px-6 py-8">
+          <p className="text-muted-foreground">Budget Transfer content coming soon...</p>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="invoice-log">
+        <div className="container px-6 py-8">
+          <p className="text-muted-foreground">Invoice Log content coming soon...</p>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 }
