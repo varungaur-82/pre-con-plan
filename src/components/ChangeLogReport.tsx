@@ -385,6 +385,30 @@ export function ChangeLogReport() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Summary Section */}
+      <Card className="mt-6">
+        <CardContent className="p-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-lg font-semibold">Total Change Orders</span>
+              <span className="text-2xl font-bold">$2,954,483</span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-lg font-semibold">Approved Change Orders</span>
+              <span className="text-2xl font-bold text-green-600">$1,872,573</span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-lg font-semibold">Pending Change Orders</span>
+              <span className="text-2xl font-bold text-amber-600">$1,081,910</span>
+            </div>
+            <div className="flex items-center justify-between py-3">
+              <span className="text-lg font-semibold">Rejected Change Orders</span>
+              <span className="text-2xl font-bold text-red-600">$0</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
