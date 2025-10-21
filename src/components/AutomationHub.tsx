@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const scheduleData = [
   { date: 'Feb 15', baseline: 20, actual: 20 },
@@ -36,7 +38,55 @@ const upcomingMilestones = [
   { name: "Steel Frame Complete", date: "2024-03-15", variance: "+3d" },
 ];
 
+const riskMatrix = [
+  { impact: "HI", lp: { count: 1, active: true }, mp: { count: 0, active: false }, hp: { count: 1, active: true } },
+  { impact: "MI", lp: { count: 0, active: false }, mp: { count: 1, active: true }, hp: { count: 0, active: false } },
+  { impact: "LI", lp: { count: 0, active: false }, mp: { count: 0, active: false }, hp: { count: 0, active: false } },
+];
+
+const topRisks = [
+  {
+    title: "Steel escalation +12%",
+    owner: "J. Smith",
+    due: "2024-01-20",
+    impact: "High",
+    probability: "High",
+    cost: "$2.5M",
+  },
+  {
+    title: "Permit delay risk",
+    owner: "M. Johnson",
+    due: "2024-02-01",
+    impact: "Medium",
+    probability: "Medium",
+    duration: "14d",
+  },
+  {
+    title: "Labor shortage",
+    owner: "R. Davis",
+    due: "2024-03-15",
+    impact: "Low",
+    probability: "High",
+    cost: "$500k",
+    duration: "7d",
+  },
+];
+
 export function AutomationHub() {
+  const [selectedCell, setSelectedCell] = useState<string | null>(null);
+
+  const getCellColor = (impact: string, prob: string) => {
+    if (impact === "HI" && prob === "hp") return "bg-red-100 hover:bg-red-200";
+    if (impact === "HI" && prob === "lp") return "bg-green-100 hover:bg-green-200";
+    if (impact === "MI" && prob === "mp") return "bg-amber-100 hover:bg-amber-200";
+    return "bg-gray-50 hover:bg-gray-100";
+  };
+
+  const getImpactColor = (impact: string) => {
+    if (impact === "High") return "bg-red-100 text-red-700 border-red-200";
+    if (impact === "Medium") return "bg-amber-100 text-amber-700 border-amber-200";
+    return "bg-green-100 text-green-700 border-green-200";
+  };
   return (
     <div className="container px-6 py-8">
       {/* Welcome Header */}
@@ -420,6 +470,141 @@ export function AutomationHub() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Risks & Quick Actions Section */}
+      <div className="grid lg:grid-cols-[1fr_300px] gap-6">
+        {/* Risks Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Risks</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* Risk Heat Map */}
+            <div className="grid grid-cols-[auto_1fr] gap-6">
+              <div>
+                <h3 className="text-sm font-semibold mb-4">Risk Heat Map</h3>
+                <div className="inline-block">
+                  {/* Heat Map Table */}
+                  <div className="grid grid-cols-[60px_repeat(3,140px)] gap-2">
+                    {/* Header */}
+                    <div></div>
+                    <div className="text-center text-xs font-medium text-muted-foreground">LP</div>
+                    <div className="text-center text-xs font-medium text-muted-foreground">MP</div>
+                    <div className="text-center text-xs font-medium text-muted-foreground">HP</div>
+
+                    {/* Rows */}
+                    {riskMatrix.map((row) => (
+                      <>
+                        <div className="flex items-center text-xs font-medium text-muted-foreground">
+                          {row.impact}
+                        </div>
+                        {["lp", "mp", "hp"].map((prob) => {
+                          const cell = row[prob as keyof typeof row] as { count: number; active: boolean };
+                          return (
+                            <button
+                              key={`${row.impact}-${prob}`}
+                              onClick={() => setSelectedCell(`${row.impact}-${prob}`)}
+                              className={`relative h-14 rounded-md border transition-colors ${getCellColor(row.impact, prob)}`}
+                            >
+                              <span className="text-lg font-semibold">{cell.count}</span>
+                              {cell.active && (
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </>
+                    ))}
+                  </div>
+
+                  {/* Legend */}
+                  <div className="mt-4 space-y-2">
+                    <p className="text-xs text-muted-foreground">
+                      HI=High Impact, MI=Medium Impact, LI=Low Impact  LP=Low Probability, MP=Medium Probability, HP=High Probability
+                    </p>
+                    <div className="flex gap-4 text-xs">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-green-100 rounded"></div>
+                        <span className="text-muted-foreground">Green (Low)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-amber-100 rounded"></div>
+                        <span className="text-muted-foreground">Amber (Medium)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span className="text-muted-foreground">Active Risk</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Risk Summary */}
+              <div className="border rounded-lg p-6 flex items-center justify-center">
+                <div className="text-center">
+                  <h3 className="text-sm font-semibold mb-2">Risk Summary</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedCell ? `Selected: ${selectedCell}` : "Select a cell to see details here."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Top Risks */}
+            <div className="mt-6 pt-6 border-t">
+              <h3 className="text-sm font-semibold mb-4">Top Risks</h3>
+              <div className="space-y-3">
+                {topRisks.map((risk, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+                    <div>
+                      <p className="text-sm font-medium">{risk.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {risk.owner} • Due {risk.due}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className={getImpactColor(risk.impact)}>
+                        {risk.impact}
+                      </Badge>
+                      <Badge variant="outline" className={getImpactColor(risk.probability)}>
+                        {risk.probability}
+                      </Badge>
+                      {risk.cost && <span className="text-sm font-medium">{risk.cost}</span>}
+                      {risk.duration && <span className="text-sm font-medium">{risk.duration}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto py-3">
+              <BarChart3 className="h-5 w-5 text-blue-500" />
+              <span>Generate Report</span>
+            </Button>
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto py-3">
+              <Download className="h-5 w-5 text-red-500" />
+              <span>Export Data</span>
+            </Button>
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto py-3">
+              <Bell className="h-5 w-5 text-amber-500" />
+              <span>Set Alerts</span>
+            </Button>
+            <Button variant="outline" className="w-full justify-start gap-3 h-auto py-3">
+              <Settings className="h-5 w-5 text-gray-500" />
+              <span>Configure Settings</span>
+            </Button>
           </CardContent>
         </Card>
       </div>
