@@ -24,6 +24,7 @@ import { CommitmentsReport } from "./CommitmentsReport";
 import { ChangeLogReport } from "./ChangeLogReport";
 import { CashflowReport } from "./CashflowReport";
 import { BudgetTransferReport } from "./BudgetTransferReport";
+import { InvoiceLogReport } from "./InvoiceLogReport";
 import { useState } from "react";
 
 const sCurveData = [
@@ -393,9 +394,7 @@ export function CostTracker() {
       </TabsContent>
 
       <TabsContent value="invoice-log">
-        <div className="container px-6 py-8">
-          <p className="text-muted-foreground">Invoice Log content coming soon...</p>
-        </div>
+        <InvoiceLogReport />
       </TabsContent>
     </Tabs>
   );
