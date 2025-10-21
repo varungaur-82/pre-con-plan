@@ -14,6 +14,7 @@ import {
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
+import { AutomationHub } from "./AutomationHub";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -486,10 +487,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
             {/* Automation Hub Tab */}
             <TabsContent value="automation" className="mt-0">
-              <div className="container px-6 py-16 text-center">
-                <h2 className="text-2xl font-bold text-muted-foreground mb-4">Automation Hub</h2>
-                <p className="text-muted-foreground">Content coming soon...</p>
-              </div>
+              <AutomationHub />
             </TabsContent>
 
             {/* Procurement Tab */}
