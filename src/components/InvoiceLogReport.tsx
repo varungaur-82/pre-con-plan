@@ -523,6 +523,34 @@ export function InvoiceLogReport() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Summary Section */}
+      <Card className="mt-6">
+        <CardContent className="p-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-lg font-semibold">TOTAL APPROVED</span>
+              <span className="text-2xl font-bold">$11,356,547</span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-base">Approved (Ready for AP)</span>
+              <span className="text-xl font-semibold text-green-600">$0</span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-base">Sent to AP</span>
+              <span className="text-xl font-semibold text-blue-600">$0</span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-b">
+              <span className="text-base">Paid</span>
+              <span className="text-xl font-semibold text-green-600">$11,356,547</span>
+            </div>
+            <div className="flex items-center justify-between py-3">
+              <span className="text-base">Pending Review</span>
+              <span className="text-xl font-semibold text-amber-600">$29,770,390</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
