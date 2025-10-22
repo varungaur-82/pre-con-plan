@@ -298,6 +298,372 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Schedule and Cost Overview */}
+                <div className="grid lg:grid-cols-3 gap-6 mb-6">
+                  {/* Schedule Overview */}
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle>Schedule Overview</CardTitle>
+                        <div className="flex gap-1">
+                          <Button variant="outline" size="sm" className="h-7 px-2 text-xs">B0</Button>
+                          <Button variant="outline" size="sm" className="h-7 px-2 text-xs">B1</Button>
+                          <Button variant="outline" size="sm" className="h-7 px-2 text-xs">B2</Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-300 px-4 py-2 rounded text-sm">
+                        Running 5 days behind schedule
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3 text-xs">
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <span>Baseline</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span>Actual %</span>
+                          </div>
+                        </div>
+                        
+                        <ResponsiveContainer width="100%" height={200}>
+                          <LineChart data={[
+                            { month: 'Jan 25', baseline: 5, actual: 5 },
+                            { month: 'Feb 25', baseline: 12, actual: 10 },
+                            { month: 'Mar 25', baseline: 25, actual: 20 },
+                            { month: 'Apr 25', baseline: 45, actual: 38 },
+                            { month: 'May 25', baseline: 65, actual: 58 },
+                            { month: 'Jun 25', baseline: 78, actual: 72 },
+                            { month: 'Jul 25', baseline: 88, actual: 83 },
+                            { month: 'Aug 25', baseline: 100, actual: 95 }
+                          ]}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis 
+                              dataKey="month" 
+                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                            />
+                            <YAxis 
+                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                              label={{ value: '%', angle: 0, position: 'top' }}
+                            />
+                            <Tooltip />
+                            <Line 
+                              type="monotone" 
+                              dataKey="baseline" 
+                              stroke="#3b82f6" 
+                              strokeWidth={2}
+                              dot={{ fill: '#3b82f6', r: 4 }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="actual" 
+                              stroke="#10b981" 
+                              strokeWidth={2}
+                              dot={{ fill: '#10b981', r: 4 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold mb-3">Upcoming Milestones</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between items-center">
+                            <span>Foundation Complete</span>
+                            <span className="text-muted-foreground">2024-01-10</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Steel Frame Start</span>
+                            <span className="text-green-600">2024-01-25 -2d</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Steel Frame Complete</span>
+                            <span className="text-red-600">2024-03-15 +3d</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Cost Overview */}
+                  <Card className="lg:col-span-2">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle>Cost Overview</CardTitle>
+                        <select className="text-sm border rounded px-2 py-1 bg-background">
+                          <option>📊 S-Curve</option>
+                        </select>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-5 gap-4 pb-4">
+                        <div className="text-center">
+                          <div className="text-xs text-muted-foreground mb-1">Budget</div>
+                          <div className="text-xl font-bold">$45.8M</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-muted-foreground mb-1">Commitments</div>
+                          <div className="text-xl font-bold">$41.9M</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-muted-foreground mb-1">Invoiced</div>
+                          <div className="text-xl font-bold">$23.0M</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-muted-foreground mb-1">Forecast</div>
+                          <div className="text-xl font-bold">$42.6M</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-muted-foreground mb-1">Contingency</div>
+                          <div className="text-xl font-bold">$2.3M</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-6 text-sm pb-4">
+                        <div>
+                          <span className="text-muted-foreground">Commit/Budget:</span>
+                          <span className="ml-2 font-semibold text-red-600">91%</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Forecast/Budget:</span>
+                          <span className="ml-2 font-semibold text-green-600">93%</span>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-4 text-xs flex-wrap">
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <span>Approved Budget</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                            <span>Committed</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span>Invoiced</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
+                            <span>Planned Cashflow</span>
+                          </div>
+                        </div>
+
+                        <ResponsiveContainer width="100%" height={300}>
+                          <LineChart data={[
+                            { month: 'Jan 25', budget: 45800000, committed: 2000000, invoiced: 1500000, cashflow: 2500000 },
+                            { month: 'Feb 25', budget: 45800000, committed: 5000000, invoiced: 3500000, cashflow: 6000000 },
+                            { month: 'Mar 25', budget: 45800000, committed: 10000000, invoiced: 7000000, cashflow: 12000000 },
+                            { month: 'Apr 25', budget: 45800000, committed: 18000000, invoiced: 12000000, cashflow: 20000000 },
+                            { month: 'May 25', budget: 45800000, committed: 27000000, invoiced: 16000000, cashflow: 30000000 },
+                            { month: 'Jun 25', budget: 45800000, committed: 35000000, invoiced: 20000000, cashflow: 38000000 },
+                            { month: 'Jul 25', budget: 45800000, committed: 40000000, invoiced: 22000000, cashflow: 43000000 },
+                            { month: 'Aug 25', budget: 45800000, committed: 41900000, invoiced: 23000000, cashflow: 45800000 }
+                          ]}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis 
+                              dataKey="month" 
+                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                            />
+                            <YAxis 
+                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                              axisLine={{ stroke: 'hsl(var(--border))' }}
+                              tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+                            />
+                            <Tooltip 
+                              formatter={(value: number) => `$${(value / 1000000).toFixed(1)}M`}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="budget" 
+                              stroke="#3b82f6" 
+                              strokeWidth={2}
+                              dot={{ fill: '#3b82f6', r: 3 }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="cashflow" 
+                              stroke="#06b6d4" 
+                              strokeWidth={2}
+                              dot={{ fill: '#06b6d4', r: 3 }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="committed" 
+                              stroke="#f97316" 
+                              strokeWidth={2}
+                              dot={{ fill: '#f97316', r: 3 }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="invoiced" 
+                              stroke="#10b981" 
+                              strokeWidth={2}
+                              strokeDasharray="5 5"
+                              dot={{ fill: '#10b981', r: 3 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Risks and Quick Actions */}
+                <div className="grid lg:grid-cols-3 gap-6">
+                  {/* Risks */}
+                  <Card className="lg:col-span-2">
+                    <CardHeader>
+                      <CardTitle>Risks</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid lg:grid-cols-2 gap-6">
+                        {/* Risk Heat Map */}
+                        <div>
+                          <h4 className="font-semibold mb-3">Risk Heat Map</h4>
+                          <div className="space-y-1">
+                            <div className="grid grid-cols-4 gap-1 text-xs">
+                              <div className="text-right pr-2 py-2 text-muted-foreground">HI</div>
+                              <div className="bg-green-100 dark:bg-green-950/30 p-2 text-center rounded relative">
+                                1
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                              </div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                              <div className="bg-red-100 dark:bg-red-950/30 p-2 text-center rounded relative">
+                                1
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-4 gap-1 text-xs">
+                              <div className="text-right pr-2 py-2 text-muted-foreground">MI</div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                              <div className="bg-yellow-100 dark:bg-yellow-950/30 p-2 text-center rounded relative">
+                                1
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full"></div>
+                              </div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                            </div>
+                            <div className="grid grid-cols-4 gap-1 text-xs">
+                              <div className="text-right pr-2 py-2 text-muted-foreground">LI</div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
+                            </div>
+                            <div className="grid grid-cols-4 gap-1 text-xs text-muted-foreground text-center pt-2">
+                              <div></div>
+                              <div>LP</div>
+                              <div>MP</div>
+                              <div>HP</div>
+                            </div>
+                          </div>
+                          <div className="mt-4 space-y-1 text-xs text-muted-foreground">
+                            <div>HI=High Impact, MI=Medium Impact, LI=Low Impact</div>
+                            <div>LP=Low Probability, MP=Medium Probability, HP=High Probability</div>
+                          </div>
+                          <div className="mt-3 flex gap-3 text-xs">
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 bg-green-100 dark:bg-green-950/30 rounded"></div>
+                              <span>Green (Low)</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 bg-yellow-100 dark:bg-yellow-950/30 rounded"></div>
+                              <span>Amber (Medium)</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 bg-red-500 rounded"></div>
+                              <span>Active Risk</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Risk Summary */}
+                        <div>
+                          <h4 className="font-semibold mb-3">Risk Summary</h4>
+                          <div className="bg-muted/30 rounded-lg p-4 text-center text-sm text-muted-foreground">
+                            Select a cell to see details here.
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Top Risks */}
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold mb-3">Top Risks</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                            <div>
+                              <div className="font-medium">Steel escalation +12%</div>
+                              <div className="text-xs text-muted-foreground">J. Smith • Due 2024-01-20</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="destructive">High</Badge>
+                              <Badge variant="destructive">High</Badge>
+                              <span className="font-semibold">$2.5M</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                            <div>
+                              <div className="font-medium">Permit delay risk</div>
+                              <div className="text-xs text-muted-foreground">M. Johnson • Due 2024-02-01</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Medium</Badge>
+                              <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Medium</Badge>
+                              <span className="font-semibold">14d</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                            <div>
+                              <div className="font-medium">Labor shortage</div>
+                              <div className="text-xs text-muted-foreground">R. Davis • Due 2024-03-15</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Low</Badge>
+                              <Badge variant="destructive">High</Badge>
+                              <span className="font-semibold">$500k</span>
+                              <span className="text-muted-foreground">7d</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Quick Actions */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Quick Actions</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Button variant="outline" className="w-full justify-start gap-3">
+                        <BarChart3 className="h-4 w-4 text-green-600" />
+                        Generate Report
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start gap-3">
+                        <FileText className="h-4 w-4 text-red-600" />
+                        Export Data
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start gap-3">
+                        <AlertCircle className="h-4 w-4 text-yellow-600" />
+                        Set Alerts
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start gap-3">
+                        <Users className="h-4 w-4 text-gray-600" />
+                        Configure Settings
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </TabsContent>
 
