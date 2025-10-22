@@ -13,7 +13,7 @@ import {
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
   TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench
 } from "lucide-react";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
@@ -24,6 +24,7 @@ interface ProjectDetailProps {
 
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
+  const [selectedCostView, setSelectedCostView] = useState("s-curve");
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
 
@@ -397,18 +398,23 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle>Cost Overview</CardTitle>
-                        <select className="text-sm border rounded px-2 py-1 bg-background">
-                          <option>📊 S-Curve</option>
-                          <option>💰 Contingency Drawdown</option>
-                          <option>🏁 Cost Position</option>
-                          <option>💵 Cash Flow</option>
-                          <option>⚖️ Contingency Balance</option>
-                          <option>📋 Change Orders</option>
-                          <option>🔧 Trade Budget</option>
+                        <select 
+                          className="text-sm border rounded px-2 py-1 bg-background"
+                          value={selectedCostView}
+                          onChange={(e) => setSelectedCostView(e.target.value)}
+                        >
+                          <option value="s-curve">📊 S-Curve</option>
+                          <option value="contingency-drawdown">💰 Contingency Drawdown</option>
+                          <option value="cost-position">🏁 Cost Position</option>
+                          <option value="cash-flow">💵 Cash Flow</option>
+                          <option value="contingency-balance">⚖️ Contingency Balance</option>
+                          <option value="change-orders">📋 Change Orders</option>
+                          <option value="trade-budget">🔧 Trade Budget</option>
                         </select>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                      {/* Common metrics for all views */}
                       <div className="grid grid-cols-5 gap-4 pb-4">
                         <div className="text-center">
                           <div className="text-xs text-muted-foreground mb-1">Budget</div>
@@ -432,97 +438,167 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-6 text-sm pb-4">
-                        <div>
-                          <span className="text-muted-foreground">Commit/Budget:</span>
-                          <span className="ml-2 font-semibold text-red-600">91%</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Forecast/Budget:</span>
-                          <span className="ml-2 font-semibold text-green-600">93%</span>
-                        </div>
-                        <div>
-                          <span className="font-semibold text-green-600">Under budget by $3.2M</span>
-                        </div>
-                      </div>
+                      {/* S-Curve View */}
+                      {selectedCostView === "s-curve" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div>
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <span className="ml-2 font-semibold text-red-600">91%</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <span className="ml-2 font-semibold text-green-600">93%</span>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
 
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-4 text-xs flex-wrap">
-                          <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                            <span>Approved Budget</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-                            <span>Committed</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                            <span>Invoiced</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
-                            <span>Planned Cashflow</span>
-                          </div>
-                        </div>
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-4 text-xs flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                                <span>Approved Budget</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                                <span>Committed</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                <span>Invoiced</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
+                                <span>Planned Cashflow</span>
+                              </div>
+                            </div>
 
-                        <ResponsiveContainer width="100%" height={300}>
-                          <LineChart data={[
-                            { month: 'Jan 25', budget: 45800000, committed: 2000000, invoiced: 1500000, cashflow: 2500000 },
-                            { month: 'Feb 25', budget: 45800000, committed: 5000000, invoiced: 3500000, cashflow: 6000000 },
-                            { month: 'Mar 25', budget: 45800000, committed: 10000000, invoiced: 7000000, cashflow: 12000000 },
-                            { month: 'Apr 25', budget: 45800000, committed: 18000000, invoiced: 12000000, cashflow: 20000000 },
-                            { month: 'May 25', budget: 45800000, committed: 27000000, invoiced: 16000000, cashflow: 30000000 },
-                            { month: 'Jun 25', budget: 45800000, committed: 35000000, invoiced: 20000000, cashflow: 38000000 },
-                            { month: 'Jul 25', budget: 45800000, committed: 40000000, invoiced: 22000000, cashflow: 43000000 },
-                            { month: 'Aug 25', budget: 45800000, committed: 41900000, invoiced: 23000000, cashflow: 45800000 }
-                          ]}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                            <XAxis 
-                              dataKey="month" 
-                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-                              axisLine={{ stroke: 'hsl(var(--border))' }}
-                            />
-                            <YAxis 
-                              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-                              axisLine={{ stroke: 'hsl(var(--border))' }}
-                              tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
-                            />
-                            <Tooltip 
-                              formatter={(value: number) => `$${(value / 1000000).toFixed(1)}M`}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="budget" 
-                              stroke="#3b82f6" 
-                              strokeWidth={2}
-                              dot={{ fill: '#3b82f6', r: 3 }}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="cashflow" 
-                              stroke="#06b6d4" 
-                              strokeWidth={2}
-                              dot={{ fill: '#06b6d4', r: 3 }}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="committed" 
-                              stroke="#f97316" 
-                              strokeWidth={2}
-                              dot={{ fill: '#f97316', r: 3 }}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="invoiced" 
-                              stroke="#10b981" 
-                              strokeWidth={2}
-                              strokeDasharray="5 5"
-                              dot={{ fill: '#10b981', r: 3 }}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
+                            <ResponsiveContainer width="100%" height={300}>
+                              <LineChart data={[
+                                { month: 'Jan 25', budget: 45800000, committed: 2000000, invoiced: 1500000, cashflow: 2500000 },
+                                { month: 'Feb 25', budget: 45800000, committed: 5000000, invoiced: 3500000, cashflow: 6000000 },
+                                { month: 'Mar 25', budget: 45800000, committed: 10000000, invoiced: 7000000, cashflow: 12000000 },
+                                { month: 'Apr 25', budget: 45800000, committed: 18000000, invoiced: 12000000, cashflow: 20000000 },
+                                { month: 'May 25', budget: 45800000, committed: 27000000, invoiced: 16000000, cashflow: 30000000 },
+                                { month: 'Jun 25', budget: 45800000, committed: 35000000, invoiced: 20000000, cashflow: 38000000 },
+                                { month: 'Jul 25', budget: 45800000, committed: 40000000, invoiced: 22000000, cashflow: 43000000 },
+                                { month: 'Aug 25', budget: 45800000, committed: 41900000, invoiced: 23000000, cashflow: 45800000 }
+                              ]}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="month" 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(value / 1000000).toFixed(1)}M`}
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="budget" 
+                                  stroke="#3b82f6" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#3b82f6', r: 3 }}
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="cashflow" 
+                                  stroke="#06b6d4" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#06b6d4', r: 3 }}
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="committed" 
+                                  stroke="#f97316" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#f97316', r: 3 }}
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="invoiced" 
+                                  stroke="#10b981" 
+                                  strokeWidth={2}
+                                  strokeDasharray="5 5"
+                                  dot={{ fill: '#10b981', r: 3 }}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Contingency Drawdown View */}
+                      {selectedCostView === "contingency-drawdown" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <ResponsiveContainer width="100%" height={300}>
+                              <AreaChart data={[
+                                { month: 'Jan 25', percentage: 100 },
+                                { month: 'Feb 25', percentage: 98 },
+                                { month: 'Mar 25', percentage: 95 },
+                                { month: 'Apr 25', percentage: 92 },
+                                { month: 'May 25', percentage: 88 },
+                                { month: 'Jun 25', percentage: 84 },
+                                { month: 'Jul 25', percentage: 80 },
+                                { month: 'Aug 25', percentage: 76 }
+                              ]}>
+                                <defs>
+                                  <linearGradient id="contingencyGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                                  </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="month" 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  domain={[0, 100]}
+                                  tickFormatter={(value) => `${value}%`}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `${value}%`}
+                                />
+                                <Area 
+                                  type="monotone" 
+                                  dataKey="percentage" 
+                                  stroke="#10b981" 
+                                  strokeWidth={2}
+                                  fill="url(#contingencyGradient)"
+                                  dot={{ fill: '#10b981', r: 4 }}
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                            <p className="text-center text-sm text-muted-foreground">Contingency Drawdown Over Time</p>
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
