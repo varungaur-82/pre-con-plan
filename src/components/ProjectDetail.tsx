@@ -679,6 +679,195 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </div>
                         </>
                       )}
+
+                      {/* Cash Flow View */}
+                      {selectedCostView === "cash-flow" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">Cash Flow – Plan vs Actual vs Forecast</h4>
+                              <span className="text-sm text-muted-foreground">Monthly + cumulative S-curves</span>
+                            </div>
+                            <ResponsiveContainer width="100%" height={350}>
+                              <BarChart 
+                                data={[
+                                  { month: '01', actual: 2000000, forecast: 1800000, planned: 2500000, cumActual: 2000000, cumPlan: 2500000 },
+                                  { month: '02', actual: 3500000, forecast: 3200000, planned: 4000000, cumActual: 5500000, cumPlan: 6500000 },
+                                  { month: '03', actual: 5000000, forecast: 4500000, planned: 6000000, cumActual: 10500000, cumPlan: 12500000 },
+                                  { month: '04', actual: 7000000, forecast: 6500000, planned: 8000000, cumActual: 17500000, cumPlan: 20500000 },
+                                  { month: '05', actual: 9000000, forecast: 8500000, planned: 10000000, cumActual: 26500000, cumPlan: 30500000 },
+                                  { month: '06', actual: 11000000, forecast: 10500000, planned: 12000000, cumActual: 37500000, cumPlan: 42500000 },
+                                  { month: '07', actual: 13000000, forecast: 12500000, planned: 14000000, cumActual: 50500000, cumPlan: 56500000 },
+                                  { month: '08', actual: 0, forecast: 15000000, planned: 16000000, cumActual: 50500000, cumPlan: 72500000 }
+                                ]}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 40 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="month" 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  yAxisId="left"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(0)}M`}
+                                />
+                                <YAxis 
+                                  yAxisId="right"
+                                  orientation="right"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(0)}M`}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(value / 1000000).toFixed(1)}M`}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--background))', 
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '6px'
+                                  }}
+                                />
+                                <Bar yAxisId="left" dataKey="actual" fill="#3b82f6" name="Actual" radius={[4, 4, 0, 0]} />
+                                <Bar yAxisId="left" dataKey="forecast" fill="#93c5fd" name="Forecast" radius={[4, 4, 0, 0]} />
+                                <Bar yAxisId="left" dataKey="planned" fill="#bfdbfe" name="Planned" radius={[4, 4, 0, 0]} />
+                                <Line 
+                                  yAxisId="right"
+                                  type="monotone" 
+                                  dataKey="cumActual" 
+                                  stroke="#10b981" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#10b981', r: 3 }}
+                                  name="Cum Actual"
+                                />
+                                <Line 
+                                  yAxisId="right"
+                                  type="monotone" 
+                                  dataKey="cumPlan" 
+                                  stroke="#374151" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#374151', r: 3 }}
+                                  name="Cum Plan"
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                            <div className="flex items-center justify-center gap-4 text-xs flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-blue-500"></div>
+                                <span>Actual</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                                <span>Cum Actual</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-gray-700"></div>
+                                <span>Cum Plan</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-blue-300"></div>
+                                <span>Forecast</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-blue-200"></div>
+                                <span>Planned</span>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Contingency Balance View */}
+                      {selectedCostView === "contingency-balance" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">Contingency & Allowances – Balance & Burn</h4>
+                              <span className="text-sm text-muted-foreground">With pending exposure</span>
+                            </div>
+                            <ResponsiveContainer width="100%" height={350}>
+                              <BarChart 
+                                data={[
+                                  { category: 'Original\nContingency', balance: 2500000, burned: 0 },
+                                  { category: 'Weather\nDelays', balance: 0, burned: -400000 },
+                                  { category: 'Steel\nEscalation', balance: 0, burned: -500000 },
+                                  { category: 'Design\nChanges', balance: 0, burned: -300000 },
+                                  { category: 'Remaining', balance: 1300000, burned: 0 }
+                                ]}
+                                layout="vertical"
+                                margin={{ top: 20, right: 30, left: 120, bottom: 40 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  type="number"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                                  domain={[-800000, 3000000]}
+                                />
+                                <YAxis 
+                                  dataKey="category"
+                                  type="category"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  width={110}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(Math.abs(value) / 1000000).toFixed(1)}M`}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--background))', 
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '6px'
+                                  }}
+                                />
+                                <Bar 
+                                  dataKey="balance" 
+                                  fill="#f59e0b" 
+                                  stackId="a"
+                                  radius={[0, 4, 4, 0]}
+                                />
+                                <Bar 
+                                  dataKey="burned" 
+                                  fill="#fbbf24" 
+                                  stackId="a"
+                                  radius={[0, 4, 4, 0]}
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
