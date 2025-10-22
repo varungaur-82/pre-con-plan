@@ -18,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ACRReport } from "./ACRReport";
 import { CommitmentsReport } from "./CommitmentsReport";
 import { ChangeLogReport } from "./ChangeLogReport";
@@ -58,30 +57,39 @@ const varianceTableData = [
 export function CostTracker() {
   const [paneCount, setPaneCount] = useState(2);
   const [layout, setLayout] = useState("1x2");
+  const [selectedView, setSelectedView] = useState("cost-snapshot");
 
   return (
-    <Tabs defaultValue="cost-snapshot" className="w-full">
-      <TabsList className="mb-6">
-        <TabsTrigger value="cost-snapshot">Cost Snapshot</TabsTrigger>
-        <TabsTrigger value="acr">ACR</TabsTrigger>
-        <TabsTrigger value="commitments">Commitments</TabsTrigger>
-        <TabsTrigger value="change-log">Change Log</TabsTrigger>
-        <TabsTrigger value="cashflow">Cashflow</TabsTrigger>
-        <TabsTrigger value="budget-transfer">Budget Transfer</TabsTrigger>
-        <TabsTrigger value="invoice-log">Invoice Log</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="cost-snapshot">
-        <div className="container px-6 py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+    <div className="w-full">
+      <div className="container px-6 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">Live Cost Tracker</h1>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                Export <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
+            <Select value={selectedView} onValueChange={setSelectedView}>
+              <SelectTrigger className="w-[200px] bg-background z-50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="cost-snapshot">Cost Snapshot</SelectItem>
+                <SelectItem value="acr">ACR</SelectItem>
+                <SelectItem value="commitments">Commitments</SelectItem>
+                <SelectItem value="change-log">Change Log</SelectItem>
+                <SelectItem value="cashflow">Cashflow</SelectItem>
+                <SelectItem value="budget-transfer">Budget Transfer</SelectItem>
+                <SelectItem value="invoice-log">Invoice Log</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm">
+              Export <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {selectedView === "cost-snapshot" && (
+          <div>
 
           {/* Key Metrics */}
       <div className="grid grid-cols-5 gap-4 mb-6">
@@ -370,32 +378,16 @@ export function CostTracker() {
           </div>
         </CardContent>
       </Card>
-        </div>
-      </TabsContent>
+          </div>
+        )}
 
-      <TabsContent value="acr">
-        <ACRReport />
-      </TabsContent>
-
-      <TabsContent value="commitments">
-        <CommitmentsReport />
-      </TabsContent>
-
-      <TabsContent value="change-log">
-        <ChangeLogReport />
-      </TabsContent>
-
-      <TabsContent value="cashflow">
-        <CashflowReport />
-      </TabsContent>
-
-      <TabsContent value="budget-transfer">
-        <BudgetTransferReport />
-      </TabsContent>
-
-      <TabsContent value="invoice-log">
-        <InvoiceLogReport />
-      </TabsContent>
-    </Tabs>
+        {selectedView === "acr" && <ACRReport />}
+        {selectedView === "commitments" && <CommitmentsReport />}
+        {selectedView === "change-log" && <ChangeLogReport />}
+        {selectedView === "cashflow" && <CashflowReport />}
+        {selectedView === "budget-transfer" && <BudgetTransferReport />}
+        {selectedView === "invoice-log" && <InvoiceLogReport />}
+      </div>
+    </div>
   );
 }
