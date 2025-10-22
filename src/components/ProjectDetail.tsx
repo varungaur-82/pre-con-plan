@@ -1275,10 +1275,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   </Card>
                 </div>
 
-                {/* Risks and Quick Actions */}
-                <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Risks */}
-                  <Card className="lg:col-span-2">
+                {/* Risks */}
+                <Card>
                     <CardHeader>
                       <CardTitle>Risks</CardTitle>
                     </CardHeader>
@@ -1399,9 +1397,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     </CardContent>
                   </Card>
 
-                  {/* Activity and Recent Files Section */}
-                  <div className="col-span-2">
-                    <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  {/* Activity, Notes, Recent Files and Quick Actions */}
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                      <div className="grid md:grid-cols-2 gap-6 mb-6">
                       {/* Activity */}
                       <Card>
                         <CardHeader className="pb-3">
