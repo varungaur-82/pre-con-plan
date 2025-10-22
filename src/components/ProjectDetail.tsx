@@ -282,6 +282,85 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   </div>
                 </div>
 
+                {/* What Changed This Period */}
+                <Card className="mb-6">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <CardTitle>What Changed This Period?</CardTitle>
+                        <span className="text-sm text-muted-foreground">Last 30 days</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">7d</Button>
+                        <Button variant="outline" size="sm">30d</Button>
+                        <Button variant="outline" size="sm">Quarter</Button>
+                        <Button variant="outline" size="sm">Custom</Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                      {/* New Commitments */}
+                      <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-blue-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">4</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">New Commitments</div>
+                        <div className="text-lg font-bold">$2.5M</div>
+                      </div>
+
+                      {/* Approved Change Orders */}
+                      <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-green-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">3</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Approved Change Orders</div>
+                        <div className="text-lg font-bold">$1.3M</div>
+                      </div>
+
+                      {/* Invoices Processed */}
+                      <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-purple-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">12</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Invoices Processed</div>
+                        <div className="text-lg font-bold">$3.8M</div>
+                      </div>
+
+                      {/* Budget Transfers */}
+                      <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-orange-600 mb-2">
+                          <span className="text-sm font-semibold">→ 2</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Budget Transfers</div>
+                        <div className="text-lg font-bold">$500k</div>
+                      </div>
+
+                      {/* Schedule Movement */}
+                      <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-red-600 mb-2">
+                          <span className="text-sm font-semibold">↘ 1</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Schedule Movement</div>
+                        <div className="text-lg font-bold">-5d</div>
+                      </div>
+
+                      {/* Milestones Updated */}
+                      <div className="bg-teal-50 dark:bg-teal-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-teal-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">1</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Milestones Updated</div>
+                        <div className="text-lg font-bold">+1</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* Main Content Grid */}
                 <div className="grid lg:grid-cols-2 gap-6 mb-6">
                   {/* Left Column - Project Details & Status */}
@@ -382,196 +461,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       </div>
                     </CardContent>
                   </Card>
-                </div>
-
-                {/* What Changed This Period */}
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <CardTitle>What Changed This Period?</CardTitle>
-                        <span className="text-sm text-muted-foreground">Last 30 days</span>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">7d</Button>
-                        <Button variant="outline" size="sm">30d</Button>
-                        <Button variant="outline" size="sm">Quarter</Button>
-                        <Button variant="outline" size="sm">Custom</Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                      {/* New Commitments */}
-                      <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-blue-600 mb-2">
-                          <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">4</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">New Commitments</div>
-                        <div className="text-lg font-bold">$2.5M</div>
-                      </div>
-
-                      {/* Approved Change Orders */}
-                      <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-green-600 mb-2">
-                          <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">3</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">Approved Change Orders</div>
-                        <div className="text-lg font-bold">$1.3M</div>
-                      </div>
-
-                      {/* Invoices Processed */}
-                      <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-purple-600 mb-2">
-                          <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">12</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">Invoices Processed</div>
-                        <div className="text-lg font-bold">$3.8M</div>
-                      </div>
-
-                      {/* Budget Transfers */}
-                      <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-orange-600 mb-2">
-                          <span className="text-sm font-semibold">→ 2</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">Budget Transfers</div>
-                        <div className="text-lg font-bold">$500k</div>
-                      </div>
-
-                      {/* Schedule Movement */}
-                      <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-red-600 mb-2">
-                          <span className="text-sm font-semibold">↘ 1</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">Schedule Movement</div>
-                        <div className="text-lg font-bold">-5d</div>
-                      </div>
-
-                      {/* Milestones Updated */}
-                      <div className="bg-teal-50 dark:bg-teal-950/20 rounded-lg p-4 text-center">
-                        <div className="flex items-center justify-center gap-1 text-teal-600 mb-2">
-                          <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">1</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-2">Milestones Updated</div>
-                        <div className="text-lg font-bold">+1</div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Activity and Recent Files Section */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  {/* Activity */}
-                  <Card>
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-base">
-                        <Zap className="h-4 w-4" />
-                        Activity
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">Budget approval received</p>
-                            <p className="text-xs text-muted-foreground">2 hours ago</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">Foundation milestone completed</p>
-                            <p className="text-xs text-muted-foreground">4 hours ago</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-purple-500 mt-2" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">New drawings uploaded</p>
-                            <p className="text-xs text-muted-foreground">6 hours ago</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Notes and Recent Files Combined */}
-                  <div className="space-y-6">
-                    {/* Notes */}
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-base">
-                          <StickyNote className="h-4 w-4" />
-                          Notes
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <Input 
-                          placeholder="Quick notes..." 
-                          className="border-muted"
-                        />
-                      </CardContent>
-                    </Card>
-
-                    {/* Recent Files */}
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-base">
-                          <FolderOpen className="h-4 w-4" />
-                          Recent Files
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-2 flex-1">
-                              <File className="h-4 w-4 text-red-500" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">Project_Overview.pdf</p>
-                                <p className="text-xs text-muted-foreground">2 hours ago</p>
-                              </div>
-                            </div>
-                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                          </div>
-                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-2 flex-1">
-                              <BarChart3 className="h-4 w-4 text-green-500" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">Cost_Analysis_Report.xlsx</p>
-                                <p className="text-xs text-muted-foreground">4 hours ago</p>
-                              </div>
-                            </div>
-                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                          </div>
-                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-2 flex-1">
-                              <FileText className="h-4 w-4 text-blue-500" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">Schedule_Milestones.docx</p>
-                                <p className="text-xs text-muted-foreground">1 day ago</p>
-                              </div>
-                            </div>
-                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                          </div>
-                          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-2 flex-1">
-                              <BarChart3 className="h-4 w-4 text-orange-500" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">Risk_Assessment.pptx</p>
-                                <p className="text-xs text-muted-foreground">2 days ago</p>
-                              </div>
-                            </div>
-                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
                 </div>
 
                 {/* Schedule and Cost Overview */}
@@ -1458,6 +1347,119 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       </div>
                     </CardContent>
                   </Card>
+
+                  {/* Activity and Recent Files Section */}
+                  <div className="col-span-2">
+                    <div className="grid md:grid-cols-2 gap-6 mb-6">
+                      {/* Activity */}
+                      <Card>
+                        <CardHeader className="pb-3">
+                          <CardTitle className="flex items-center gap-2 text-base">
+                            <Zap className="h-4 w-4" />
+                            Activity
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex items-start gap-3">
+                              <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">Budget approval received</p>
+                                <p className="text-xs text-muted-foreground">2 hours ago</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                              <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">Foundation milestone completed</p>
+                                <p className="text-xs text-muted-foreground">4 hours ago</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                              <div className="w-2 h-2 rounded-full bg-purple-500 mt-2" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">New drawings uploaded</p>
+                                <p className="text-xs text-muted-foreground">6 hours ago</p>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Notes and Recent Files Combined */}
+                      <div className="space-y-6">
+                        {/* Notes */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center gap-2 text-base">
+                              <StickyNote className="h-4 w-4" />
+                              Notes
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <Input 
+                              placeholder="Quick notes..." 
+                              className="border-muted"
+                            />
+                          </CardContent>
+                        </Card>
+
+                        {/* Recent Files */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center gap-2 text-base">
+                              <FolderOpen className="h-4 w-4" />
+                              Recent Files
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center gap-2 flex-1">
+                                  <File className="h-4 w-4 text-red-500" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Project_Overview.pdf</p>
+                                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                                  </div>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                              </div>
+                              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center gap-2 flex-1">
+                                  <BarChart3 className="h-4 w-4 text-green-500" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Cost_Analysis_Report.xlsx</p>
+                                    <p className="text-xs text-muted-foreground">4 hours ago</p>
+                                  </div>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                              </div>
+                              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center gap-2 flex-1">
+                                  <FileText className="h-4 w-4 text-blue-500" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Schedule_Milestones.docx</p>
+                                    <p className="text-xs text-muted-foreground">1 day ago</p>
+                                  </div>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                              </div>
+                              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                                <div className="flex items-center gap-2 flex-1">
+                                  <BarChart3 className="h-4 w-4 text-orange-500" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Risk_Assessment.pptx</p>
+                                    <p className="text-xs text-muted-foreground">2 days ago</p>
+                                  </div>
+                                </div>
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </div>
+                  </div>
 
                   {/* Quick Actions */}
                   <Card>
