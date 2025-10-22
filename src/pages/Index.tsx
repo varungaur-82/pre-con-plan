@@ -42,7 +42,7 @@ const Index = () => {
       {!activeTabId ? (
         <>
           {/* Hero Section */}
-          <section className="relative py-16 px-6 overflow-hidden">
+          <section className="relative py-10 px-6 overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
               style={{ backgroundImage: `url(${constructionHero})` }}
@@ -51,21 +51,21 @@ const Index = () => {
 
             <div className="container relative z-10">
               <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl font-bold text-construction-primary mb-6">
+                <h1 className="text-3xl md:text-4xl font-bold text-construction-primary mb-4">
                   Optimize Your{" "}
                   <span className="text-construction-secondary">
                     Pre-Construction
                   </span>{" "}
                   Planning
                 </h1>
-                <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
                   Manage projects, track budgets, coordinate teams, and ensure
                   regulatory compliance all in one comprehensive platform
                   designed for construction professionals.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Button
-                    size="lg"
+                    size="default"
                     className="bg-gradient-to-r from-construction-primary to-construction-secondary hover:opacity-90 transition-opacity"
                     onClick={handleNewProject}
                   >
@@ -73,7 +73,7 @@ const Index = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    size="lg"
+                    size="default"
                     className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white"
                   >
                     View All Projects
@@ -83,18 +83,18 @@ const Index = () => {
             </div>
           </section>
 
-          <div className="container px-6 pb-12">
+          <div className="container px-6 pb-8">
             {/* Dashboard Stats */}
-            <section className="mb-12">
+            <section className="mb-8">
               <DashboardStats />
             </section>
 
             {/* Quick Actions */}
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
+            <section className="mb-8">
+              <h2 className="text-xl font-bold text-foreground mb-4">
                 Quick Actions
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                   {
                     icon: Calendar,
@@ -121,11 +121,11 @@ const Index = () => {
                     key={index}
                     className="group cursor-pointer hover:shadow-lg transition-all duration-300 hover:border-construction-primary/30"
                   >
-                    <CardContent className="flex flex-col items-center justify-center p-6">
+                    <CardContent className="flex flex-col items-center justify-center p-4">
                       <action.icon
-                        className={`h-8 w-8 mb-3 ${action.color} group-hover:scale-110 transition-transform`}
+                        className={`h-7 w-7 mb-2 ${action.color} group-hover:scale-110 transition-transform`}
                       />
-                      <span className="text-sm font-medium text-center">
+                      <span className="text-xs font-medium text-center">
                         {action.label}
                       </span>
                     </CardContent>
@@ -135,18 +135,18 @@ const Index = () => {
             </section>
 
             {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-6">
               {/* Projects Section */}
               <section className="lg:col-span-2">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-foreground">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-foreground">
                     Active Projects
                   </h2>
                   <Button variant="outline" size="sm">
                     View All
                   </Button>
                 </div>
-                <div className="grid gap-6">
+                <div className="grid gap-4">
                   {[
                     {
                       id: "1",
@@ -188,23 +188,23 @@ const Index = () => {
               </section>
 
               {/* Sidebar */}
-              <aside className="space-y-6">
+              <aside className="space-y-4">
                 <RecentActivity />
 
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-semibold">
                       Upcoming Deadlines
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
                         <div>
-                          <p className="font-medium text-sm">
+                          <p className="font-medium text-xs">
                             Permit Submission
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-[10px] text-muted-foreground">
                             Downtown Office Complex
                           </p>
                         </div>
@@ -212,10 +212,10 @@ const Index = () => {
                           2 days
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
+                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
                         <div>
-                          <p className="font-medium text-sm">Budget Review</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="font-medium text-xs">Budget Review</p>
+                          <p className="text-[10px] text-muted-foreground">
                             Riverside Apartments
                           </p>
                         </div>
@@ -223,10 +223,10 @@ const Index = () => {
                           5 days
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-3 rounded-lg bg-construction-surface/50">
+                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
                         <div>
-                          <p className="font-medium text-sm">Site Survey</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="font-medium text-xs">Site Survey</p>
+                          <p className="text-[10px] text-muted-foreground">
                             City Mall Renovation
                           </p>
                         </div>
