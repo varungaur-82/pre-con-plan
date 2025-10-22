@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
-  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen
+  FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
+  TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench
 } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
@@ -398,6 +399,12 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         <CardTitle>Cost Overview</CardTitle>
                         <select className="text-sm border rounded px-2 py-1 bg-background">
                           <option>📊 S-Curve</option>
+                          <option>💰 Contingency Drawdown</option>
+                          <option>🏁 Cost Position</option>
+                          <option>💵 Cash Flow</option>
+                          <option>⚖️ Contingency Balance</option>
+                          <option>📋 Change Orders</option>
+                          <option>🔧 Trade Budget</option>
                         </select>
                       </div>
                     </CardHeader>
