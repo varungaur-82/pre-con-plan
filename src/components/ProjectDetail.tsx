@@ -9,11 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { 
   AlertTriangle, TrendingUp, Calendar, DollarSign, 
   Target, AlertCircle, CheckCircle2, Upload, Send,
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
-  TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File
+  TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File,
+  CalendarIcon
 } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
@@ -32,6 +38,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRisk, setSelectedRisk] = useState<string | null>(null);
+  const [timePeriod, setTimePeriod] = useState<"7d" | "30d" | "quarter" | "custom">("30d");
+  const [customDateRange, setCustomDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
+  const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -236,6 +245,64 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
     }
   };
 
+  const kpiData = {
+    "7d": {
+      label: "Last 7 days",
+      newCommitments: { count: 2, value: "$1.2M" },
+      approvedChangeOrders: { count: 1, value: "$600k" },
+      invoicesProcessed: { count: 5, value: "$1.8M" },
+      budgetTransfers: { count: 1, value: "$200k" },
+      scheduleMovement: { count: 0, value: "-2d" },
+      milestonesUpdated: { count: 0, value: "+0" }
+    },
+    "30d": {
+      label: "Last 30 days",
+      newCommitments: { count: 4, value: "$2.5M" },
+      approvedChangeOrders: { count: 3, value: "$1.3M" },
+      invoicesProcessed: { count: 12, value: "$3.8M" },
+      budgetTransfers: { count: 2, value: "$500k" },
+      scheduleMovement: { count: 1, value: "-5d" },
+      milestonesUpdated: { count: 1, value: "+1" }
+    },
+    "quarter": {
+      label: "This Quarter",
+      newCommitments: { count: 15, value: "$8.5M" },
+      approvedChangeOrders: { count: 9, value: "$4.2M" },
+      invoicesProcessed: { count: 38, value: "$12.5M" },
+      budgetTransfers: { count: 5, value: "$1.8M" },
+      scheduleMovement: { count: 3, value: "-12d" },
+      milestonesUpdated: { count: 4, value: "+4" }
+    },
+    "custom": {
+      label: "Custom Range",
+      newCommitments: { count: 0, value: "$0" },
+      approvedChangeOrders: { count: 0, value: "$0" },
+      invoicesProcessed: { count: 0, value: "$0" },
+      budgetTransfers: { count: 0, value: "$0" },
+      scheduleMovement: { count: 0, value: "0d" },
+      milestonesUpdated: { count: 0, value: "+0" }
+    }
+  };
+
+  const currentKpiData = kpiData[timePeriod];
+
+  const handleCustomDateApply = () => {
+    if (customDateRange.from && customDateRange.to) {
+      setTimePeriod("custom");
+      setIsCustomDialogOpen(false);
+      toast({
+        title: "Custom date range applied",
+        description: `${format(customDateRange.from, "PPP")} - ${format(customDateRange.to, "PPP")}`,
+      });
+    } else {
+      toast({
+        title: "Select both dates",
+        description: "Please select a start and end date",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <div className="flex h-full">
@@ -334,13 +401,102 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <CardTitle>What Changed This Period?</CardTitle>
-                        <span className="text-sm text-muted-foreground">Last 30 days</span>
+                        <span className="text-sm text-muted-foreground">{currentKpiData.label}</span>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">7d</Button>
-                        <Button variant="outline" size="sm">30d</Button>
-                        <Button variant="outline" size="sm">Quarter</Button>
-                        <Button variant="outline" size="sm">Custom</Button>
+                        <Button 
+                          variant={timePeriod === "7d" ? "default" : "outline"} 
+                          size="sm"
+                          onClick={() => setTimePeriod("7d")}
+                        >
+                          7d
+                        </Button>
+                        <Button 
+                          variant={timePeriod === "30d" ? "default" : "outline"} 
+                          size="sm"
+                          onClick={() => setTimePeriod("30d")}
+                        >
+                          30d
+                        </Button>
+                        <Button 
+                          variant={timePeriod === "quarter" ? "default" : "outline"} 
+                          size="sm"
+                          onClick={() => setTimePeriod("quarter")}
+                        >
+                          Quarter
+                        </Button>
+                        <Dialog open={isCustomDialogOpen} onOpenChange={setIsCustomDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant={timePeriod === "custom" ? "default" : "outline"} 
+                              size="sm"
+                            >
+                              Custom
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                              <DialogTitle>Select Custom Date Range</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">Start Date</label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full justify-start text-left font-normal",
+                                        !customDateRange.from && "text-muted-foreground"
+                                      )}
+                                    >
+                                      <CalendarIcon className="mr-2 h-4 w-4" />
+                                      {customDateRange.from ? format(customDateRange.from, "PPP") : "Pick a date"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0" align="start">
+                                    <CalendarComponent
+                                      mode="single"
+                                      selected={customDateRange.from}
+                                      onSelect={(date) => setCustomDateRange({ ...customDateRange, from: date })}
+                                      initialFocus
+                                      className="pointer-events-auto"
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">End Date</label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full justify-start text-left font-normal",
+                                        !customDateRange.to && "text-muted-foreground"
+                                      )}
+                                    >
+                                      <CalendarIcon className="mr-2 h-4 w-4" />
+                                      {customDateRange.to ? format(customDateRange.to, "PPP") : "Pick a date"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0" align="start">
+                                    <CalendarComponent
+                                      mode="single"
+                                      selected={customDateRange.to}
+                                      onSelect={(date) => setCustomDateRange({ ...customDateRange, to: date })}
+                                      initialFocus
+                                      className="pointer-events-auto"
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                              <Button onClick={handleCustomDateApply} className="w-full">
+                                Apply Date Range
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
                   </CardHeader>
@@ -350,58 +506,58 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-blue-600 mb-2">
                           <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">4</span>
+                          <span className="text-sm font-semibold">{currentKpiData.newCommitments.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">New Commitments</div>
-                        <div className="text-lg font-bold">$2.5M</div>
+                        <div className="text-lg font-bold">{currentKpiData.newCommitments.value}</div>
                       </div>
 
                       {/* Approved Change Orders */}
                       <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-green-600 mb-2">
                           <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">3</span>
+                          <span className="text-sm font-semibold">{currentKpiData.approvedChangeOrders.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">Approved Change Orders</div>
-                        <div className="text-lg font-bold">$1.3M</div>
+                        <div className="text-lg font-bold">{currentKpiData.approvedChangeOrders.value}</div>
                       </div>
 
                       {/* Invoices Processed */}
                       <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-purple-600 mb-2">
                           <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">12</span>
+                          <span className="text-sm font-semibold">{currentKpiData.invoicesProcessed.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">Invoices Processed</div>
-                        <div className="text-lg font-bold">$3.8M</div>
+                        <div className="text-lg font-bold">{currentKpiData.invoicesProcessed.value}</div>
                       </div>
 
                       {/* Budget Transfers */}
                       <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-orange-600 mb-2">
-                          <span className="text-sm font-semibold">→ 2</span>
+                          <span className="text-sm font-semibold">→ {currentKpiData.budgetTransfers.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">Budget Transfers</div>
-                        <div className="text-lg font-bold">$500k</div>
+                        <div className="text-lg font-bold">{currentKpiData.budgetTransfers.value}</div>
                       </div>
 
                       {/* Schedule Movement */}
                       <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-red-600 mb-2">
-                          <span className="text-sm font-semibold">↘ 1</span>
+                          <span className="text-sm font-semibold">↘ {currentKpiData.scheduleMovement.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">Schedule Movement</div>
-                        <div className="text-lg font-bold">-5d</div>
+                        <div className="text-lg font-bold">{currentKpiData.scheduleMovement.value}</div>
                       </div>
 
                       {/* Milestones Updated */}
                       <div className="bg-teal-50 dark:bg-teal-950/20 rounded-lg p-4 text-center">
                         <div className="flex items-center justify-center gap-1 text-teal-600 mb-2">
                           <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-semibold">1</span>
+                          <span className="text-sm font-semibold">{currentKpiData.milestonesUpdated.count}</span>
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">Milestones Updated</div>
-                        <div className="text-lg font-bold">+1</div>
+                        <div className="text-lg font-bold">{currentKpiData.milestonesUpdated.value}</div>
                       </div>
                     </div>
                   </CardContent>
