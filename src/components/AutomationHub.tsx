@@ -102,6 +102,319 @@ export function AutomationHub() {
             <h1 className="text-3xl font-bold mb-2">Report Automation</h1>
             <p className="text-muted-foreground">AI-powered report generation</p>
           </div>
+
+          {/* My Reports Section */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold">My Reports</h2>
+              <Button>
+                <Download className="mr-2 h-4 w-4" />
+                Create New Report
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                {
+                  title: "Q1 2025 Cost Performance Report",
+                  date: "Jan 15, 2025",
+                  type: "Cost Analysis",
+                  status: "Completed",
+                  kpis: ["Budget Variance", "Cost Efficiency", "ROI"]
+                },
+                {
+                  title: "Foundation Phase Schedule Analysis",
+                  date: "Jan 10, 2025",
+                  type: "Schedule Report",
+                  status: "In Progress",
+                  kpis: ["Schedule Variance", "Critical Path", "Milestones"]
+                },
+                {
+                  title: "Steel Frame Risk Assessment",
+                  date: "Jan 8, 2025",
+                  type: "Risk Report",
+                  status: "Completed",
+                  kpis: ["Risk Matrix", "Mitigation Status", "Impact Analysis"]
+                },
+                {
+                  title: "Contractor Performance Review",
+                  date: "Jan 5, 2025",
+                  type: "Performance Report",
+                  status: "Completed",
+                  kpis: ["Quality Score", "Timeline Adherence", "Cost Control"]
+                },
+                {
+                  title: "Monthly Safety Compliance Report",
+                  date: "Dec 28, 2024",
+                  type: "Safety Report",
+                  status: "Completed",
+                  kpis: ["Incident Rate", "Compliance Score", "Training Hours"]
+                },
+                {
+                  title: "Change Order Impact Analysis",
+                  date: "Dec 20, 2024",
+                  type: "Change Management",
+                  status: "Completed",
+                  kpis: ["Change Orders", "Cost Impact", "Schedule Impact"]
+                }
+              ].map((report, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-lg">{report.title}</CardTitle>
+                      <Badge variant={report.status === "Completed" ? "default" : "secondary"}>
+                        {report.status}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <BarChart3 className="mr-2 h-4 w-4" />
+                        {report.type}
+                      </div>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <TrendingUp className="mr-2 h-4 w-4" />
+                        {report.date}
+                      </div>
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {report.kpis.map((kpi, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">
+                            {kpi}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Templates Section */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold">Templates</h2>
+              <Button variant="outline">View All Templates</Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                {
+                  name: "Monthly Executive Summary",
+                  description: "High-level project overview for stakeholders",
+                  category: "Executive",
+                  frequency: "Monthly"
+                },
+                {
+                  name: "Cost Performance Index",
+                  description: "Detailed cost variance and efficiency analysis",
+                  category: "Financial",
+                  frequency: "Weekly"
+                },
+                {
+                  name: "Schedule Variance Report",
+                  description: "Track timeline deviations and critical path",
+                  category: "Schedule",
+                  frequency: "Weekly"
+                },
+                {
+                  name: "Risk Register Update",
+                  description: "Active risks, mitigation plans, and status",
+                  category: "Risk",
+                  frequency: "Bi-weekly"
+                },
+                {
+                  name: "Quality Control Report",
+                  description: "Inspections, defects, and corrective actions",
+                  category: "Quality",
+                  frequency: "Weekly"
+                },
+                {
+                  name: "Subcontractor Performance",
+                  description: "Evaluate contractor quality and timeline",
+                  category: "Performance",
+                  frequency: "Monthly"
+                },
+                {
+                  name: "Safety Incident Report",
+                  description: "Safety metrics, incidents, and training",
+                  category: "Safety",
+                  frequency: "Weekly"
+                },
+                {
+                  name: "Change Order Summary",
+                  description: "Track change requests and approvals",
+                  category: "Change Mgmt",
+                  frequency: "As needed"
+                }
+              ].map((template, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-base">{template.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {template.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary">{template.category}</Badge>
+                      <span className="text-xs text-muted-foreground">{template.frequency}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Activity Section */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+            <Card>
+              <CardContent className="p-0">
+                <div className="divide-y">
+                  {[
+                    {
+                      action: "Opened",
+                      report: "Q1 2025 Cost Performance Report",
+                      time: "2 hours ago",
+                      user: "You"
+                    },
+                    {
+                      action: "Generated",
+                      report: "Foundation Phase Schedule Analysis",
+                      time: "5 hours ago",
+                      user: "You"
+                    },
+                    {
+                      action: "Shared",
+                      report: "Steel Frame Risk Assessment",
+                      time: "1 day ago",
+                      user: "You"
+                    },
+                    {
+                      action: "Edited",
+                      report: "Monthly Executive Summary",
+                      time: "2 days ago",
+                      user: "You"
+                    },
+                    {
+                      action: "Opened",
+                      report: "Contractor Performance Review",
+                      time: "3 days ago",
+                      user: "You"
+                    }
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-primary/10">
+                          <BarChart3 className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{activity.report}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {activity.action} by {activity.user}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-sm text-muted-foreground">{activity.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Training Section */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Training</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Getting Started */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="h-5 w-5" />
+                    Getting Started
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      "Introduction to Report Automation",
+                      "Understanding KPIs",
+                      "AI Assistant Basics"
+                    ].map((item, index) => (
+                      <div 
+                        key={index} 
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                      >
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                          {index + 1}
+                        </div>
+                        <span className="text-sm">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Advanced Features */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    Advanced Features
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      "Scenario Simulation",
+                      "Custom Templates",
+                      "Data Integration"
+                    ].map((item, index) => (
+                      <div 
+                        key={index} 
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                      >
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                          {index + 1}
+                        </div>
+                        <span className="text-sm">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Best Practices */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Bell className="h-5 w-5" />
+                    Best Practices
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      "Report Quality Guidelines",
+                      "Team Collaboration",
+                      "Common Pitfalls"
+                    ].map((item, index) => (
+                      <div 
+                        key={index} 
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                      >
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                          {index + 1}
+                        </div>
+                        <span className="text-sm">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </TabsContent>
 
