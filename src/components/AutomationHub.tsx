@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Calendar, User } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Calendar, User, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -148,6 +148,7 @@ export function AutomationHub() {
     if (impact === "Medium") return "bg-amber-100 text-amber-700 border-amber-200";
     return "bg-green-100 text-green-700 border-green-200";
   };
+  
   return (
     <Tabs defaultValue="report-automation" className="w-full">
       <TabsList className="mb-6">
@@ -156,10 +157,21 @@ export function AutomationHub() {
       </TabsList>
 
       <TabsContent value="report-automation">
-        <div className="container px-6 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Report Automation</h1>
-            <p className="text-muted-foreground">AI-powered report generation</p>
+        <div className="w-full">
+          {/* Hero Section with subtle gradient */}
+          <div className="bg-gradient-to-br from-blue-50/30 via-background to-purple-50/30 py-12 px-6 mb-0">
+            <div className="container max-w-7xl mx-auto">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-4xl font-bold mb-3">Report Automation</h1>
+                  <p className="text-lg text-muted-foreground">AI-powered insights and analytics at your fingertips</p>
+                </div>
+                <Button size="lg" onClick={() => setCreateReportOpen(true)} className="shadow-lg">
+                  <Download className="mr-2 h-5 w-5" />
+                  Create New Report
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Create Report Dialog */}
@@ -246,316 +258,257 @@ export function AutomationHub() {
             </DialogContent>
           </Dialog>
 
-          {/* My Reports Section */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">My Reports</h2>
-              <Button onClick={() => setCreateReportOpen(true)}>
-                <Download className="mr-2 h-4 w-4" />
-                Create New Report
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                {
-                  title: "Q1 2025 Cost Performance Report",
-                  date: "Jan 15, 2025",
-                  type: "Cost Analysis",
-                  status: "Completed",
-                  kpis: ["Budget Variance", "Cost Efficiency", "ROI"]
-                },
-                {
-                  title: "Foundation Phase Schedule Analysis",
-                  date: "Jan 10, 2025",
-                  type: "Schedule Report",
-                  status: "In Progress",
-                  kpis: ["Schedule Variance", "Critical Path", "Milestones"]
-                },
-                {
-                  title: "Steel Frame Risk Assessment",
-                  date: "Jan 8, 2025",
-                  type: "Risk Report",
-                  status: "Completed",
-                  kpis: ["Risk Matrix", "Mitigation Status", "Impact Analysis"]
-                },
-                {
-                  title: "Contractor Performance Review",
-                  date: "Jan 5, 2025",
-                  type: "Performance Report",
-                  status: "Completed",
-                  kpis: ["Quality Score", "Timeline Adherence", "Cost Control"]
-                },
-                {
-                  title: "Monthly Safety Compliance Report",
-                  date: "Dec 28, 2024",
-                  type: "Safety Report",
-                  status: "Completed",
-                  kpis: ["Incident Rate", "Compliance Score", "Training Hours"]
-                },
-                {
-                  title: "Change Order Impact Analysis",
-                  date: "Dec 20, 2024",
-                  type: "Change Management",
-                  status: "Completed",
-                  kpis: ["Change Orders", "Cost Impact", "Schedule Impact"]
-                }
-              ].map((report, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg">{report.title}</CardTitle>
-                      <Badge variant={report.status === "Completed" ? "default" : "secondary"}>
-                        {report.status}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
+          {/* My Reports Section - Clean white background */}
+          <div className="bg-background py-12 px-6">
+            <div className="container max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">My Reports</h2>
+                  <p className="text-muted-foreground">Access and manage your generated reports</p>
+                </div>
+                <Button variant="outline" size="lg">
+                  View All Reports
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  {
+                    title: "Q1 2025 Cost Performance Report",
+                    date: "Jan 15, 2025",
+                    type: "Cost Analysis",
+                    status: "Completed",
+                    kpis: ["Budget Variance", "Cost Efficiency", "ROI"]
+                  },
+                  {
+                    title: "Foundation Phase Schedule Analysis",
+                    date: "Jan 10, 2025",
+                    type: "Schedule Report",
+                    status: "In Progress",
+                    kpis: ["Schedule Variance", "Critical Path", "Milestones"]
+                  },
+                  {
+                    title: "Steel Frame Risk Assessment",
+                    date: "Jan 8, 2025",
+                    type: "Risk Report",
+                    status: "Completed",
+                    kpis: ["Risk Matrix", "Mitigation Status", "Impact Analysis"]
+                  },
+                  {
+                    title: "Contractor Performance Review",
+                    date: "Jan 5, 2025",
+                    type: "Performance Report",
+                    status: "Completed",
+                    kpis: ["Quality Score", "Timeline Adherence", "Cost Control"]
+                  },
+                  {
+                    title: "Monthly Safety Compliance Report",
+                    date: "Dec 28, 2024",
+                    type: "Safety Report",
+                    status: "Completed",
+                    kpis: ["Incident Rate", "Compliance Score", "Training Hours"]
+                  },
+                  {
+                    title: "Change Order Impact Analysis",
+                    date: "Dec 20, 2024",
+                    type: "Change Management",
+                    status: "Completed",
+                    kpis: ["Change Orders", "Cost Impact", "Schedule Impact"]
+                  }
+                ].map((report, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-all cursor-pointer border-l-4 border-l-primary/20 hover:border-l-primary">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <CardTitle className="text-base font-semibold leading-snug">{report.title}</CardTitle>
+                        <Badge variant={report.status === "Completed" ? "default" : "secondary"} className="ml-2 shrink-0">
+                          {report.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
                       <div className="flex items-center text-sm text-muted-foreground">
                         <BarChart3 className="mr-2 h-4 w-4" />
                         {report.type}
                       </div>
                       <div className="flex items-center text-sm text-muted-foreground">
-                        <TrendingUp className="mr-2 h-4 w-4" />
+                        <Calendar className="mr-2 h-4 w-4" />
                         {report.date}
                       </div>
-                      <div className="flex flex-wrap gap-1 mt-3">
+                      <div className="flex flex-wrap gap-1.5 pt-2">
                         {report.kpis.map((kpi, i) => (
                           <Badge key={i} variant="outline" className="text-xs">
                             {kpi}
                           </Badge>
                         ))}
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Templates Section */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">Templates</h2>
-              <Button variant="outline">View All Templates</Button>
+          {/* Recent Activity Section - Subtle teal background */}
+          <div className="bg-gradient-to-br from-teal-50/20 via-background to-cyan-50/20 py-12 px-6">
+            <div className="container max-w-7xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold mb-2">Recent Activity</h2>
+                <p className="text-muted-foreground">Track your recent interactions and changes</p>
+              </div>
+              
+              <Card className="shadow-lg">
+                <CardContent className="p-0">
+                  <div className="divide-y">
+                    {[
+                      {
+                        action: "Opened",
+                        report: "Q1 2025 Cost Performance Report",
+                        time: "2 hours ago",
+                        user: "You"
+                      },
+                      {
+                        action: "Generated",
+                        report: "Foundation Phase Schedule Analysis",
+                        time: "5 hours ago",
+                        user: "You"
+                      },
+                      {
+                        action: "Shared",
+                        report: "Steel Frame Risk Assessment",
+                        time: "1 day ago",
+                        user: "You"
+                      },
+                      {
+                        action: "Edited",
+                        report: "Monthly Executive Summary",
+                        time: "2 days ago",
+                        user: "You"
+                      },
+                      {
+                        action: "Opened",
+                        report: "Contractor Performance Review",
+                        time: "3 days ago",
+                        user: "You"
+                      }
+                    ].map((activity, index) => (
+                      <div key={index} className="flex items-center justify-between p-5 hover:bg-accent/30 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-4">
+                          <div className="p-3 rounded-full bg-primary/10">
+                            <BarChart3 className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-base">{activity.report}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {activity.action} by {activity.user}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-sm text-muted-foreground">{activity.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  name: "Monthly Executive Summary",
-                  description: "High-level project overview for stakeholders",
-                  category: "Executive",
-                  frequency: "Monthly"
-                },
-                {
-                  name: "Cost Performance Index",
-                  description: "Detailed cost variance and efficiency analysis",
-                  category: "Financial",
-                  frequency: "Weekly"
-                },
-                {
-                  name: "Schedule Variance Report",
-                  description: "Track timeline deviations and critical path",
-                  category: "Schedule",
-                  frequency: "Weekly"
-                },
-                {
-                  name: "Risk Register Update",
-                  description: "Active risks, mitigation plans, and status",
-                  category: "Risk",
-                  frequency: "Bi-weekly"
-                },
-                {
-                  name: "Quality Control Report",
-                  description: "Inspections, defects, and corrective actions",
-                  category: "Quality",
-                  frequency: "Weekly"
-                },
-                {
-                  name: "Subcontractor Performance",
-                  description: "Evaluate contractor quality and timeline",
-                  category: "Performance",
-                  frequency: "Monthly"
-                },
-                {
-                  name: "Safety Incident Report",
-                  description: "Safety metrics, incidents, and training",
-                  category: "Safety",
-                  frequency: "Weekly"
-                },
-                {
-                  name: "Change Order Summary",
-                  description: "Track change requests and approvals",
-                  category: "Change Mgmt",
-                  frequency: "As needed"
-                }
-              ].map((template, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+          </div>
+
+          {/* Training Section - Subtle purple background */}
+          <div className="bg-gradient-to-br from-purple-50/20 via-background to-indigo-50/20 py-12 px-6">
+            <div className="container max-w-7xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold mb-2">Training & Resources</h2>
+                <p className="text-muted-foreground">Learn how to maximize your report automation capabilities</p>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Getting Started */}
+                <Card className="shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-base">{template.name}</CardTitle>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Settings className="h-5 w-5 text-primary" />
+                      Getting Started
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {template.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="secondary">{template.category}</Badge>
-                      <span className="text-xs text-muted-foreground">{template.frequency}</span>
+                    <div className="space-y-3">
+                      {[
+                        "Introduction to Report Automation",
+                        "Understanding KPIs",
+                        "AI Assistant Basics"
+                      ].map((item, index) => (
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer border border-transparent hover:border-primary/20"
+                        >
+                          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary">
+                            {index + 1}
+                          </div>
+                          <span className="text-sm font-medium">{item}</span>
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </div>
 
-          {/* Recent Activity Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
-            <Card>
-              <CardContent className="p-0">
-                <div className="divide-y">
-                  {[
-                    {
-                      action: "Opened",
-                      report: "Q1 2025 Cost Performance Report",
-                      time: "2 hours ago",
-                      user: "You"
-                    },
-                    {
-                      action: "Generated",
-                      report: "Foundation Phase Schedule Analysis",
-                      time: "5 hours ago",
-                      user: "You"
-                    },
-                    {
-                      action: "Shared",
-                      report: "Steel Frame Risk Assessment",
-                      time: "1 day ago",
-                      user: "You"
-                    },
-                    {
-                      action: "Edited",
-                      report: "Monthly Executive Summary",
-                      time: "2 days ago",
-                      user: "You"
-                    },
-                    {
-                      action: "Opened",
-                      report: "Contractor Performance Review",
-                      time: "3 days ago",
-                      user: "You"
-                    }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-                      <div className="flex items-center gap-4">
-                        <div className="p-2 rounded-full bg-primary/10">
-                          <BarChart3 className="h-4 w-4 text-primary" />
+                {/* Advanced Features */}
+                <Card className="shadow-lg hover:shadow-xl transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <TrendingUp className="h-5 w-5 text-primary" />
+                      Advanced Features
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[
+                        "Scenario Simulation",
+                        "Custom Templates",
+                        "Data Integration"
+                      ].map((item, index) => (
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer border border-transparent hover:border-primary/20"
+                        >
+                          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary">
+                            {index + 1}
+                          </div>
+                          <span className="text-sm font-medium">{item}</span>
                         </div>
-                        <div>
-                          <p className="font-medium">{activity.report}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {activity.action} by {activity.user}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-sm text-muted-foreground">{activity.time}</span>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                  </CardContent>
+                </Card>
 
-          {/* Training Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Training</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Getting Started */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Settings className="h-5 w-5" />
-                    Getting Started
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {[
-                      "Introduction to Report Automation",
-                      "Understanding KPIs",
-                      "AI Assistant Basics"
-                    ].map((item, index) => (
-                      <div 
-                        key={index} 
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                      >
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
-                          {index + 1}
+                {/* Best Practices */}
+                <Card className="shadow-lg hover:shadow-xl transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Bell className="h-5 w-5 text-primary" />
+                      Best Practices
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[
+                        "Report Quality Guidelines",
+                        "Team Collaboration",
+                        "Common Pitfalls"
+                      ].map((item, index) => (
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer border border-transparent hover:border-primary/20"
+                        >
+                          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary">
+                            {index + 1}
+                          </div>
+                          <span className="text-sm font-medium">{item}</span>
                         </div>
-                        <span className="text-sm">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Advanced Features */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Advanced Features
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {[
-                      "Scenario Simulation",
-                      "Custom Templates",
-                      "Data Integration"
-                    ].map((item, index) => (
-                      <div 
-                        key={index} 
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                      >
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
-                          {index + 1}
-                        </div>
-                        <span className="text-sm">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Best Practices */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Bell className="h-5 w-5" />
-                    Best Practices
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {[
-                      "Report Quality Guidelines",
-                      "Team Collaboration",
-                      "Common Pitfalls"
-                    ].map((item, index) => (
-                      <div 
-                        key={index} 
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                      >
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
-                          {index + 1}
-                        </div>
-                        <span className="text-sm">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
