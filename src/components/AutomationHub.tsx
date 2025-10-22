@@ -4,8 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Calendar, User, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CostTracker } from "./CostTracker";
+import { CreateReportWizard } from "./CreateReportWizard";
 import { useState } from "react";
 
 const scheduleData = [
@@ -87,7 +87,9 @@ export function AutomationHub() {
       frequency: "Monthly (weekly in crunch)",
       stakeholder: "PMC Controls",
       metrics: ["CPI/SPI", "Milestone variance (days)", "+6 more"],
-      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"],
+      suggestedKPIs: ["Budget Variance", "Schedule Performance", "Risk Score", "Milestone Achievement"],
+      suggestedDataSources: ["financials", "schedules", "reports"]
     },
     {
       title: "Schedule Management Plan",
@@ -96,7 +98,9 @@ export function AutomationHub() {
       frequency: "Baseline once; monthly updates",
       stakeholder: "Scheduler / PMC",
       metrics: ["Baseline acceptance (Y/N)", "Logic quality (% DCMA checks passed)", "+2 more"],
-      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"],
+      suggestedKPIs: ["Schedule Performance", "Critical Path Variance", "Milestone Achievement"],
+      suggestedDataSources: ["schedules", "reports", "drawings"]
     },
     {
       title: "OAC Meeting Minutes + Action Tracker",
@@ -105,7 +109,9 @@ export function AutomationHub() {
       frequency: "Weekly–Bi-weekly",
       stakeholder: "PMC Coordinator",
       metrics: ["Action closure rate (%/wk)", "Overdue actions (#)", "+2 more"],
-      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"],
+      suggestedKPIs: ["Milestone Achievement", "Compliance Rate"],
+      suggestedDataSources: ["correspondence", "reports", "admin"]
     },
     {
       title: "Cost Performance Report",
@@ -114,7 +120,9 @@ export function AutomationHub() {
       frequency: "Monthly",
       stakeholder: "Cost Controller",
       metrics: ["Budget variance (%)", "Cost efficiency index", "+4 more"],
-      previewColors: ["bg-purple-400", "bg-cyan-400", "bg-amber-400"]
+      previewColors: ["bg-purple-400", "bg-cyan-400", "bg-amber-400"],
+      suggestedKPIs: ["Budget Variance", "Cost Efficiency Index", "Change Order Impact", "Resource Utilization"],
+      suggestedDataSources: ["financials", "procurement", "contracts"]
     },
     {
       title: "Risk Assessment Matrix",
@@ -123,7 +131,9 @@ export function AutomationHub() {
       frequency: "Bi-weekly",
       stakeholder: "Risk Manager",
       metrics: ["Active risks (#)", "High-priority items", "+3 more"],
-      previewColors: ["bg-red-400", "bg-yellow-400", "bg-blue-400"]
+      previewColors: ["bg-red-400", "bg-yellow-400", "bg-blue-400"],
+      suggestedKPIs: ["Risk Score", "Compliance Rate", "Safety Incidents"],
+      suggestedDataSources: ["reports", "correspondence", "admin"]
     },
     {
       title: "Quality Control Report",
@@ -132,7 +142,9 @@ export function AutomationHub() {
       frequency: "Weekly",
       stakeholder: "QA Manager",
       metrics: ["Inspection pass rate (%)", "Open defects (#)", "+5 more"],
-      previewColors: ["bg-indigo-400", "bg-pink-400", "bg-green-400"]
+      previewColors: ["bg-indigo-400", "bg-pink-400", "bg-green-400"],
+      suggestedKPIs: ["Quality Metrics", "Compliance Rate", "Safety Incidents", "Vendor Performance"],
+      suggestedDataSources: ["reports", "drawings", "correspondence"]
     }
   ];
 
@@ -174,89 +186,12 @@ export function AutomationHub() {
             </div>
           </div>
 
-          {/* Create Report Dialog */}
-          <Dialog open={createReportOpen} onOpenChange={setCreateReportOpen}>
-            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-3xl font-bold text-center mb-2">
-                  Choose Your Template
-                </DialogTitle>
-                <p className="text-center text-muted-foreground">
-                  Select from our enterprise-grade slides templates
-                </p>
-              </DialogHeader>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {templates.map((template, index) => (
-                  <Card 
-                    key={index} 
-                    className="hover:shadow-lg transition-all cursor-pointer hover:border-primary overflow-hidden"
-                    onClick={() => {
-                      setCreateReportOpen(false);
-                      // Handle template selection
-                    }}
-                  >
-                    {/* Preview Area */}
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 space-y-3">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-3 bg-blue-300 rounded-full w-3/4"></div>
-                        <BarChart3 className="h-6 w-6 text-primary" />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 bg-gray-200 rounded-full w-1/2"></div>
-                        <div className="h-2 bg-gray-200 rounded-full w-2/3"></div>
-                      </div>
-                      <div className="flex gap-2 mt-4">
-                        {template.previewColors.map((color, i) => (
-                          <div key={i} className={`h-16 ${color} rounded flex-1`}></div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Content Area */}
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-semibold text-lg leading-tight flex-1">
-                          {template.title}
-                        </h3>
-                        <Badge variant="secondary" className="ml-2 shrink-0">
-                          {template.badge}
-                        </Badge>
-                      </div>
-                      
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {template.description}
-                      </p>
-
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-muted-foreground">{template.frequency}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <User className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-muted-foreground">{template.stakeholder}</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        {template.metrics.slice(0, 2).map((metric, i) => (
-                          <div key={i} className="text-sm text-primary">
-                            {metric}
-                          </div>
-                        ))}
-                        {template.metrics.length > 2 && (
-                          <div className="text-sm text-muted-foreground">
-                            {template.metrics[2]}
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog>
+          {/* Create Report Wizard */}
+          <CreateReportWizard
+            open={createReportOpen}
+            onOpenChange={setCreateReportOpen}
+            templates={templates}
+          />
 
           {/* My Reports Section - Clean white background */}
           <div className="bg-background py-12 px-6">
