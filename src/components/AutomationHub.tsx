@@ -1,9 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CostTracker } from "./CostTracker";
 import { useState } from "react";
 
@@ -76,6 +77,64 @@ const topRisks = [
 
 export function AutomationHub() {
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
+  const [createReportOpen, setCreateReportOpen] = useState(false);
+
+  const templates = [
+    {
+      title: "Executive Status Dashboard",
+      badge: "SD",
+      description: "One-page truth for leadership – cost, schedule, risks, benchmarks,...",
+      frequency: "Monthly (weekly in crunch)",
+      stakeholder: "PMC Controls",
+      metrics: ["CPI/SPI", "Milestone variance (days)", "+6 more"],
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+    },
+    {
+      title: "Schedule Management Plan",
+      badge: "SD",
+      description: "Set scheduling standards and acceptance; underpin time-risk...",
+      frequency: "Baseline once; monthly updates",
+      stakeholder: "Scheduler / PMC",
+      metrics: ["Baseline acceptance (Y/N)", "Logic quality (% DCMA checks passed)", "+2 more"],
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+    },
+    {
+      title: "OAC Meeting Minutes + Action Tracker",
+      badge: "Initiation",
+      description: "Institutional memory and accountability: decisions, owners,...",
+      frequency: "Weekly–Bi-weekly",
+      stakeholder: "PMC Coordinator",
+      metrics: ["Action closure rate (%/wk)", "Overdue actions (#)", "+2 more"],
+      previewColors: ["bg-blue-400", "bg-green-400", "bg-orange-400"]
+    },
+    {
+      title: "Cost Performance Report",
+      badge: "Financial",
+      description: "Comprehensive cost analysis with variance tracking and forecasting...",
+      frequency: "Monthly",
+      stakeholder: "Cost Controller",
+      metrics: ["Budget variance (%)", "Cost efficiency index", "+4 more"],
+      previewColors: ["bg-purple-400", "bg-cyan-400", "bg-amber-400"]
+    },
+    {
+      title: "Risk Assessment Matrix",
+      badge: "Risk",
+      description: "Identify, assess and track project risks with mitigation plans...",
+      frequency: "Bi-weekly",
+      stakeholder: "Risk Manager",
+      metrics: ["Active risks (#)", "High-priority items", "+3 more"],
+      previewColors: ["bg-red-400", "bg-yellow-400", "bg-blue-400"]
+    },
+    {
+      title: "Quality Control Report",
+      badge: "QA/QC",
+      description: "Track inspections, defects, and corrective actions for quality assurance...",
+      frequency: "Weekly",
+      stakeholder: "QA Manager",
+      metrics: ["Inspection pass rate (%)", "Open defects (#)", "+5 more"],
+      previewColors: ["bg-indigo-400", "bg-pink-400", "bg-green-400"]
+    }
+  ];
 
   const getCellColor = (impact: string, prob: string) => {
     if (impact === "HI" && prob === "hp") return "bg-red-100 hover:bg-red-200";
@@ -103,11 +162,95 @@ export function AutomationHub() {
             <p className="text-muted-foreground">AI-powered report generation</p>
           </div>
 
+          {/* Create Report Dialog */}
+          <Dialog open={createReportOpen} onOpenChange={setCreateReportOpen}>
+            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-bold text-center mb-2">
+                  Choose Your Template
+                </DialogTitle>
+                <p className="text-center text-muted-foreground">
+                  Select from our enterprise-grade slides templates
+                </p>
+              </DialogHeader>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                {templates.map((template, index) => (
+                  <Card 
+                    key={index} 
+                    className="hover:shadow-lg transition-all cursor-pointer hover:border-primary overflow-hidden"
+                    onClick={() => {
+                      setCreateReportOpen(false);
+                      // Handle template selection
+                    }}
+                  >
+                    {/* Preview Area */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 space-y-3">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="h-3 bg-blue-300 rounded-full w-3/4"></div>
+                        <BarChart3 className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-2 bg-gray-200 rounded-full w-1/2"></div>
+                        <div className="h-2 bg-gray-200 rounded-full w-2/3"></div>
+                      </div>
+                      <div className="flex gap-2 mt-4">
+                        {template.previewColors.map((color, i) => (
+                          <div key={i} className={`h-16 ${color} rounded flex-1`}></div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Content Area */}
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-semibold text-lg leading-tight flex-1">
+                          {template.title}
+                        </h3>
+                        <Badge variant="secondary" className="ml-2 shrink-0">
+                          {template.badge}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        {template.description}
+                      </p>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">{template.frequency}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <User className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">{template.stakeholder}</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        {template.metrics.slice(0, 2).map((metric, i) => (
+                          <div key={i} className="text-sm text-primary">
+                            {metric}
+                          </div>
+                        ))}
+                        {template.metrics.length > 2 && (
+                          <div className="text-sm text-muted-foreground">
+                            {template.metrics[2]}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+
           {/* My Reports Section */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-semibold">My Reports</h2>
-              <Button>
+              <Button onClick={() => setCreateReportOpen(true)}>
                 <Download className="mr-2 h-4 w-4" />
                 Create New Report
               </Button>
