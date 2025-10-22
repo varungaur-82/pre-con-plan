@@ -1396,46 +1396,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         </div>
                       </div>
 
-                      {/* Top Risks */}
-                      <div className="pt-4 border-t">
-                        <h4 className="font-semibold mb-3">Top Risks</h4>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                            <div>
-                              <div className="font-medium">Steel escalation +12%</div>
-                              <div className="text-xs text-muted-foreground">J. Smith • Due 2024-01-20</div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="destructive">High</Badge>
-                              <Badge variant="destructive">High</Badge>
-                              <span className="font-semibold">$2.5M</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                            <div>
-                              <div className="font-medium">Permit delay risk</div>
-                              <div className="text-xs text-muted-foreground">M. Johnson • Due 2024-02-01</div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Medium</Badge>
-                              <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Medium</Badge>
-                              <span className="font-semibold">14d</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                            <div>
-                              <div className="font-medium">Labor shortage</div>
-                              <div className="text-xs text-muted-foreground">R. Davis • Due 2024-03-15</div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Low</Badge>
-                              <Badge variant="destructive">High</Badge>
-                              <span className="font-semibold">$500k</span>
-                              <span className="text-muted-foreground">7d</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </CardContent>
                   </Card>
 
