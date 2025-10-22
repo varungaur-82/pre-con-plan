@@ -144,71 +144,100 @@ export function DataEngine() {
 
   const folderNames = initialFolderData.map(f => f.name);
 
-  // AI mapping logic based on file name and type
+  // Enhanced AI mapping logic with broader pattern matching
   const mapFileToFolder = (fileName: string): string => {
     const lowerName = fileName.toLowerCase();
     const extension = fileName.split('.').pop()?.toLowerCase() || '';
 
-    // Drawings - CAD, DWG, PDF drawings, architectural files
-    if (extension === 'dwg' || extension === 'dxf' || lowerName.includes('drawing') || 
-        lowerName.includes('plan') || lowerName.includes('architectural') || 
-        lowerName.includes('mep') || lowerName.includes('structural')) {
+    // Drawings - CAD files, architectural plans, engineering drawings
+    if (extension === 'dwg' || extension === 'dxf' || extension === 'rvt' || 
+        lowerName.includes('drawing') || lowerName.includes('plan') || 
+        lowerName.includes('architectural') || lowerName.includes('mep') || 
+        lowerName.includes('structural') || lowerName.includes('blueprint') ||
+        lowerName.includes('floor') || lowerName.includes('elevation') ||
+        lowerName.includes('section') || lowerName.includes('detail') ||
+        lowerName.includes('site') && (extension === 'pdf' || extension === 'dwg')) {
       return 'Drawings';
     }
 
-    // Financials - Excel, CSV, budget files
+    // Financials - Financial documents, budgets, invoices
     if (extension === 'xlsx' || extension === 'xls' || extension === 'csv' || 
         lowerName.includes('budget') || lowerName.includes('cost') || 
         lowerName.includes('invoice') || lowerName.includes('payment') ||
-        lowerName.includes('financial')) {
+        lowerName.includes('financial') || lowerName.includes('accounting') ||
+        lowerName.includes('expense') || lowerName.includes('billing') ||
+        lowerName.includes('quote') || lowerName.includes('estimate') && extension === 'xlsx') {
       return 'Financials';
     }
 
-    // Reports - PDF reports, analysis documents
-    if (extension === 'pdf' && (lowerName.includes('report') || lowerName.includes('analysis') || 
-        lowerName.includes('summary') || lowerName.includes('review'))) {
-      return 'Reports';
-    }
-
-    // Contracts & Legal - Legal documents, agreements
+    // Contracts & Legal - Must check before Reports to avoid PDF conflicts
     if (lowerName.includes('contract') || lowerName.includes('agreement') || 
         lowerName.includes('legal') || lowerName.includes('nda') ||
-        lowerName.includes('terms')) {
+        lowerName.includes('terms') || lowerName.includes('conditions') ||
+        lowerName.includes('addendum') || lowerName.includes('amendment') ||
+        lowerName.includes('bond') || lowerName.includes('insurance')) {
       return 'Contracts & Legal';
     }
 
-    // Schedules - Schedule files, timelines
+    // Reports - Various report types
+    if (lowerName.includes('report') || lowerName.includes('analysis') || 
+        lowerName.includes('summary') || lowerName.includes('review') ||
+        lowerName.includes('assessment') || lowerName.includes('evaluation') ||
+        lowerName.includes('inspection') || lowerName.includes('survey') ||
+        lowerName.includes('findings') || lowerName.includes('results')) {
+      return 'Reports';
+    }
+
+    // Schedules - Project schedules and timelines
     if (lowerName.includes('schedule') || lowerName.includes('timeline') || 
-        lowerName.includes('gantt') || extension === 'mpp') {
+        lowerName.includes('gantt') || extension === 'mpp' ||
+        lowerName.includes('milestone') || lowerName.includes('program') ||
+        lowerName.includes('planning') || lowerName.includes('calendar')) {
       return 'Schedules';
     }
 
-    // Correspondence - Emails, letters, memos
+    // Correspondence - Communications
     if (lowerName.includes('email') || lowerName.includes('letter') || 
-        lowerName.includes('memo') || lowerName.includes('correspondence')) {
+        lowerName.includes('memo') || lowerName.includes('correspondence') ||
+        lowerName.includes('message') || lowerName.includes('communication') ||
+        lowerName.includes('notification') || lowerName.includes('notice') ||
+        extension === 'msg' || extension === 'eml') {
       return 'Correspondence';
     }
 
-    // Procurement - Purchase orders, RFQs, vendor docs
+    // Procurement - Purchasing and vendor documents
     if (lowerName.includes('purchase') || lowerName.includes('procurement') || 
         lowerName.includes('rfq') || lowerName.includes('vendor') ||
-        lowerName.includes('supplier')) {
+        lowerName.includes('supplier') || lowerName.includes('order') ||
+        lowerName.includes('requisition') || lowerName.includes('bid') ||
+        lowerName.includes('proposal') || lowerName.includes('quotation')) {
       return 'Procurement';
     }
 
-    // Closeout - Closeout documents, warranties, manuals
+    // Closeout - Project closeout documents
     if (lowerName.includes('closeout') || lowerName.includes('warranty') || 
-        lowerName.includes('manual') || lowerName.includes('commissioning')) {
+        lowerName.includes('manual') || lowerName.includes('commissioning') ||
+        lowerName.includes('handover') || lowerName.includes('completion') ||
+        lowerName.includes('certificate') || lowerName.includes('as-built') ||
+        lowerName.includes('o&m') || lowerName.includes('operation')) {
       return 'Closeout';
     }
 
-    // Change Management - Change orders, RFIs
+    // Change Management - Change orders and modifications
     if (lowerName.includes('change') || lowerName.includes('rfi') || 
-        lowerName.includes('modification')) {
+        lowerName.includes('modification') || lowerName.includes('variation') ||
+        lowerName.includes('amendment') && !lowerName.includes('contract') ||
+        lowerName.includes('revision') || lowerName.includes('update')) {
       return 'Change Management';
     }
 
-    // Default to Admin for misc files
+    // Smart categorization by file type when name doesn't match
+    if (extension === 'pdf') return 'Reports';
+    if (extension === 'xlsx' || extension === 'xls') return 'Financials';
+    if (extension === 'docx' || extension === 'doc') return 'Correspondence';
+    if (extension === 'jpg' || extension === 'jpeg' || extension === 'png') return 'Drawings';
+
+    // Default to Admin for unrecognized files
     return 'Admin';
   };
 
