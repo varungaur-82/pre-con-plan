@@ -11,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar as CalendarIcon, BarChart3, User, ChevronRight, ChevronLeft, Sparkles, CheckCircle2, Database, Clock, FileText, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { GeneratedReportView } from "./GeneratedReportView";
 
 interface Template {
   title: string;
@@ -40,6 +41,7 @@ export function CreateReportWizard({ open, onOpenChange, templates }: CreateRepo
   const [selectedKPIs, setSelectedKPIs] = useState<string[]>([]);
   const [scheduleType, setScheduleType] = useState("one-time");
   const [frequency, setFrequency] = useState("weekly");
+  const [showGeneratedReport, setShowGeneratedReport] = useState(false);
   const { toast } = useToast();
 
   const dataSources = [
@@ -97,10 +99,18 @@ export function CreateReportWizard({ open, onOpenChange, templates }: CreateRepo
   };
 
   const handleComplete = () => {
+    // Close wizard and show generated report
+    onOpenChange(false);
+    setShowGeneratedReport(true);
+    
     toast({
-      title: "Report Created Successfully! 🎉",
-      description: `${reportName} has been created and ${scheduleType === "one-time" ? "will be generated shortly" : `scheduled to run ${frequency}`}.`,
+      title: "Report Generated Successfully! 🎉",
+      description: `${reportName} has been created and is ready to view.`,
     });
+  };
+
+  const handleCloseReport = () => {
+    setShowGeneratedReport(false);
     
     // Reset wizard
     setStep(1);
@@ -112,7 +122,6 @@ export function CreateReportWizard({ open, onOpenChange, templates }: CreateRepo
     setSelectedKPIs([]);
     setScheduleType("one-time");
     setFrequency("weekly");
-    onOpenChange(false);
   };
 
   const toggleDataSource = (id: string) => {
@@ -150,7 +159,8 @@ export function CreateReportWizard({ open, onOpenChange, templates }: CreateRepo
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <div className="flex items-center justify-between mb-2">
@@ -519,5 +529,20 @@ export function CreateReportWizard({ open, onOpenChange, templates }: CreateRepo
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    <GeneratedReportView
+      open={showGeneratedReport}
+      onOpenChange={handleCloseReport}
+      reportData={{
+        reportName,
+        templateTitle: selectedTemplate?.title || "",
+        dateRange,
+        selectedDataSources,
+        selectedKPIs,
+        scheduleType,
+        frequency,
+      }}
+    />
+    </>
   );
 }
