@@ -85,16 +85,16 @@ const Index = () => {
 
           <div className="container px-6 pb-8">
             {/* Dashboard Stats */}
-            <section className="mb-8">
+            <section className="mb-5">
               <DashboardStats />
             </section>
 
             {/* Quick Actions */}
-            <section className="mb-8">
-              <h2 className="text-xl font-bold text-foreground mb-4">
+            <section className="mb-5">
+              <h2 className="text-xl font-bold text-foreground mb-3">
                 Quick Actions
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {[
                   {
                     icon: Calendar,
@@ -135,10 +135,10 @@ const Index = () => {
             </section>
 
             {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-5">
               {/* Projects Section */}
               <section className="lg:col-span-2">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <h2 className="text-xl font-bold text-foreground">
                     Active Projects
                   </h2>
@@ -146,7 +146,7 @@ const Index = () => {
                     View All
                   </Button>
                 </div>
-                <div className="grid gap-4">
+                <div className="grid gap-3">
                   {[
                     {
                       id: "1",
@@ -188,18 +188,18 @@ const Index = () => {
               </section>
 
               {/* Sidebar */}
-              <aside className="space-y-4">
+              <aside className="space-y-3">
                 <RecentActivity />
 
                 <Card>
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-2">
                     <CardTitle className="text-base font-semibold">
                       Upcoming Deadlines
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center p-2 rounded-lg bg-construction-surface/50">
                         <div>
                           <p className="font-medium text-xs">
                             Permit Submission
@@ -212,7 +212,7 @@ const Index = () => {
                           2 days
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
+                      <div className="flex justify-between items-center p-2 rounded-lg bg-construction-surface/50">
                         <div>
                           <p className="font-medium text-xs">Budget Review</p>
                           <p className="text-[10px] text-muted-foreground">
@@ -223,7 +223,7 @@ const Index = () => {
                           5 days
                         </span>
                       </div>
-                      <div className="flex justify-between items-center p-2.5 rounded-lg bg-construction-surface/50">
+                      <div className="flex justify-between items-center p-2 rounded-lg bg-construction-surface/50">
                         <div>
                           <p className="font-medium text-xs">Site Survey</p>
                           <p className="text-[10px] text-muted-foreground">
