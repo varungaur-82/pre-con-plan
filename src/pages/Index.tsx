@@ -7,7 +7,8 @@ import { RecentActivity } from "@/components/RecentActivity";
 import { NewProjectModal } from "@/components/NewProjectModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, BarChart3, FileText, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Calendar, BarChart3, FileText, Users, Zap, StickyNote, FolderOpen, File } from "lucide-react";
 import { useTabContext } from "@/contexts/TabContext";
 import { useState } from "react";
 import constructionHero from "@/assets/construction-hero.jpg";
@@ -131,6 +132,119 @@ const Index = () => {
                     </CardContent>
                   </Card>
                 ))}
+              </div>
+            </section>
+
+            {/* Activity and Recent Files Section */}
+            <section className="mb-5">
+              <div className="grid md:grid-cols-2 gap-5">
+                {/* Activity */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Zap className="h-4 w-4" />
+                      Activity
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Budget approval received</p>
+                          <p className="text-xs text-muted-foreground">2 hours ago</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Foundation milestone completed</p>
+                          <p className="text-xs text-muted-foreground">4 hours ago</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-purple-500 mt-2" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">New drawings uploaded</p>
+                          <p className="text-xs text-muted-foreground">6 hours ago</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Notes and Recent Files Combined */}
+                <div className="space-y-5">
+                  {/* Notes */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <StickyNote className="h-4 w-4" />
+                        Notes
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Input 
+                        placeholder="Quick notes..." 
+                        className="border-muted"
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Recent Files */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <FolderOpen className="h-4 w-4" />
+                        Recent Files
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-2 flex-1">
+                            <File className="h-4 w-4 text-red-500" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Project_Overview.pdf</p>
+                              <p className="text-xs text-muted-foreground">2 hours ago</p>
+                            </div>
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-2 flex-1">
+                            <BarChart3 className="h-4 w-4 text-green-500" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Cost_Analysis_Report.xlsx</p>
+                              <p className="text-xs text-muted-foreground">4 hours ago</p>
+                            </div>
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-2 flex-1">
+                            <FileText className="h-4 w-4 text-blue-500" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Schedule_Milestones.docx</p>
+                              <p className="text-xs text-muted-foreground">1 day ago</p>
+                            </div>
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-2 flex-1">
+                            <BarChart3 className="h-4 w-4 text-orange-500" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Risk_Assessment.pptx</p>
+                              <p className="text-xs text-muted-foreground">2 days ago</p>
+                            </div>
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </section>
 
