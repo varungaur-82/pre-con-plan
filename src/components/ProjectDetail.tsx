@@ -1,6 +1,8 @@
 import { DataEngine } from "./DataEngine";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -25,8 +27,150 @@ interface ProjectDetailProps {
 export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
   const [selectedCostView, setSelectedCostView] = useState("s-curve");
+  const [currentTab, setCurrentTab] = useState("overview");
+  const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  
   const projectName = projectId === "1" ? "NYC Tower" : 
                       projectId === "2" ? "Riverside Apartments" : "New Project";
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const sendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
+
+    const userMessage = inputMessage.trim();
+    setInputMessage("");
+    setMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    setIsLoading(true);
+
+    try {
+      const pageContext = {
+        currentPage: currentTab,
+        projectData: {
+          id: projectId,
+          name: projectName,
+        }
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/copilot-chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            messages: [...messages, { role: "user", content: userMessage }],
+            pageContext,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          toast({
+            title: "Rate Limit Exceeded",
+            description: "Too many requests. Please try again in a moment.",
+            variant: "destructive",
+          });
+          return;
+        }
+        if (response.status === 402) {
+          toast({
+            title: "Payment Required",
+            description: "Please add credits to your workspace.",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw new Error("Failed to get response");
+      }
+
+      if (!response.body) throw new Error("No response body");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let assistantMessage = "";
+      let streamDone = false;
+
+      // Add empty assistant message that will be updated
+      setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              assistantMessage += content;
+              setMessages(prev => {
+                const newMessages = [...prev];
+                newMessages[newMessages.length - 1] = {
+                  role: "assistant",
+                  content: assistantMessage,
+                };
+                return newMessages;
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to get response from AI assistant.",
+        variant: "destructive",
+      });
+      setMessages(prev => prev.slice(0, -1)); // Remove empty assistant message
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const handleSuggestedPrompt = (prompt: string) => {
+    setInputMessage(prompt);
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -37,7 +181,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         <div className="bg-card border-b">
           <div className="container px-6">
             <div className="flex items-center justify-between">
-              <Tabs defaultValue="overview" className="flex-1">
+              <Tabs defaultValue="overview" className="flex-1" onValueChange={setCurrentTab}>
                 <div className="flex items-center justify-between">
                   <TabsList className="bg-transparent border-b-0 h-auto p-0 space-x-1">
                     <TabsTrigger 
@@ -1279,72 +1423,238 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
       
       {/* Chat Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Welcome Message */}
-        <div className="flex gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center shrink-0">
-            <span className="text-white text-xs font-bold">AI</span>
-          </div>
-          <div className="flex-1">
-            <div className="bg-muted rounded-2xl rounded-tl-sm p-3">
-              <p className="text-sm">Hello! I'm your AI project assistant. I can help you with:</p>
-              <ul className="text-sm mt-2 space-y-1 text-muted-foreground">
-                <li>• Analyzing KPIs and performance metrics</li>
-                <li>• Reviewing project risks and schedules</li>
-                <li>• Generating reports and summaries</li>
-                <li>• Answering questions about your project</li>
-              </ul>
+        {messages.length === 0 ? (
+          <>
+            {/* Welcome Message */}
+            <div className="flex gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center shrink-0">
+                <span className="text-white text-xs font-bold">AI</span>
+              </div>
+              <div className="flex-1">
+                <div className="bg-muted rounded-2xl rounded-tl-sm p-3">
+                  <p className="text-sm">
+                    Hello! I'm your AI Co-Pilot. I'm context-aware and can help you with insights specific to the{" "}
+                    <strong>{currentTab === "overview" ? "Overview" : 
+                             currentTab === "design-studio" ? "Design Studio" :
+                             currentTab === "5d" ? "5D Cost Management" :
+                             currentTab === "automation" ? "Automation Hub" :
+                             currentTab === "procurement" ? "Procurement" :
+                             currentTab === "data" ? "Data Engine" : "current"}</strong> page.
+                  </p>
+                </div>
+                <span className="text-xs text-muted-foreground mt-1 block">Just now</span>
+              </div>
             </div>
-            <span className="text-xs text-muted-foreground mt-1 block">Just now</span>
-          </div>
-        </div>
 
-        {/* Suggested Prompts */}
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground px-2">Suggested prompts:</p>
-          <div className="flex flex-wrap gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
-            >
-              What's my current SPI/CPI?
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
-            >
-              Show budget summary
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
-            >
-              List critical risks
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
-            >
-              Schedule status
-            </Button>
-          </div>
-        </div>
+            {/* Dynamic Suggested Prompts based on current page */}
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground px-2">
+                Try asking about this page:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {currentTab === "overview" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Analyze the 5-day schedule delay and suggest recovery actions")}
+                    >
+                      Analyze schedule delay
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("What are the top 3 risks that need immediate attention?")}
+                    >
+                      Top 3 risks
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Generate an executive summary for stakeholders")}
+                    >
+                      Executive summary
+                    </Button>
+                  </>
+                )}
+                {currentTab === "5d" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("What's our current Cost Performance Index (CPI)?")}
+                    >
+                      Show CPI
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Forecast final project cost based on current trends")}
+                    >
+                      Forecast costs
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Identify cost centers exceeding budget")}
+                    >
+                      Budget overruns
+                    </Button>
+                  </>
+                )}
+                {currentTab === "automation" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Help me create a monthly executive report")}
+                    >
+                      Create report
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Which template should I use for stakeholder updates?")}
+                    >
+                      Suggest template
+                    </Button>
+                  </>
+                )}
+                {currentTab === "design-studio" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Summarize open RFIs and their priority")}
+                    >
+                      Open RFIs
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("What are the latest clash detection findings?")}
+                    >
+                      Clash detection
+                    </Button>
+                  </>
+                )}
+                {currentTab === "procurement" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Show procurement items at risk")}
+                    >
+                      Items at risk
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Which vendors are causing delays?")}
+                    >
+                      Vendor delays
+                    </Button>
+                  </>
+                )}
+                {currentTab === "data" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Analyze project data trends")}
+                    >
+                      Data trends
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs rounded-full border-construction-primary/20 hover:bg-construction-primary/10"
+                      onClick={() => handleSuggestedPrompt("Show me correlations between cost and schedule")}
+                    >
+                      Cost/schedule correlation
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Chat Messages */}
+            {messages.map((message, index) => (
+              <div key={index} className="flex gap-3">
+                {message.role === "assistant" && (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center shrink-0">
+                    <span className="text-white text-xs font-bold">AI</span>
+                  </div>
+                )}
+                <div className={`flex-1 ${message.role === "user" ? "flex justify-end" : ""}`}>
+                  <div className={`rounded-2xl p-3 ${
+                    message.role === "user" 
+                      ? "bg-construction-primary text-white rounded-tr-sm ml-8" 
+                      : "bg-muted rounded-tl-sm"
+                  }`}>
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-construction-primary to-construction-accent flex items-center justify-center shrink-0">
+                  <span className="text-white text-xs font-bold">AI</span>
+                </div>
+                <div className="flex-1">
+                  <div className="bg-muted rounded-2xl rounded-tl-sm p-3">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </>
+        )}
       </div>
 
       {/* Input Area */}
       <div className="border-t bg-card p-4">
         <div className="flex gap-2 items-end">
           <Textarea 
-            placeholder="Ask me anything about your project..."
+            placeholder={`Ask about ${currentTab === "overview" ? "project health" : 
+                         currentTab === "5d" ? "costs & budget" :
+                         currentTab === "automation" ? "reports" :
+                         currentTab === "design-studio" ? "design" :
+                         currentTab === "procurement" ? "procurement" :
+                         currentTab === "data" ? "data" : "your project"}...`}
             className="min-h-[44px] max-h-[120px] resize-none rounded-xl"
             rows={1}
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={isLoading}
           />
           <Button 
             size="icon" 
             className="h-11 w-11 rounded-xl bg-construction-primary hover:bg-construction-primary/90 shrink-0"
+            onClick={sendMessage}
+            disabled={isLoading || !inputMessage.trim()}
           >
             <Send className="h-5 w-5" />
           </Button>
