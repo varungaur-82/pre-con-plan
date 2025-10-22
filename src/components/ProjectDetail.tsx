@@ -31,6 +31,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRisk, setSelectedRisk] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -188,6 +189,51 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
   const handleSuggestedPrompt = (prompt: string) => {
     setInputMessage(prompt);
+  };
+
+  const riskData = {
+    labor: {
+      title: "Labor shortage",
+      owner: "R. Davis",
+      dueDate: "2024-03-15",
+      impact: "Low",
+      probability: "High",
+      cost: "$500k",
+      timeline: "7d",
+      impactBadgeClass: "bg-green-100 text-green-800 hover:bg-green-100",
+      impactBadgeVariant: undefined,
+      probabilityBadgeClass: undefined,
+      probabilityBadgeVariant: "destructive" as const,
+      description: "Risk of labor shortage affecting project timeline and costs. Mitigation strategies include pre-qualified subcontractor backup lists and early contract commitments."
+    },
+    permit: {
+      title: "Permit delay risk",
+      owner: "M. Johnson",
+      dueDate: "2024-02-01",
+      impact: "Medium",
+      probability: "Medium",
+      cost: "14d",
+      timeline: "",
+      impactBadgeClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
+      impactBadgeVariant: undefined,
+      probabilityBadgeClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
+      probabilityBadgeVariant: undefined,
+      description: "Potential delays in permit approvals could impact project schedule. Active coordination with regulatory authorities and expedited review processes are in place."
+    },
+    steel: {
+      title: "Steel escalation +12%",
+      owner: "J. Smith",
+      dueDate: "2024-01-20",
+      impact: "High",
+      probability: "High",
+      cost: "$2.5M",
+      timeline: "",
+      impactBadgeClass: undefined,
+      impactBadgeVariant: "destructive" as const,
+      probabilityBadgeClass: undefined,
+      probabilityBadgeVariant: "destructive" as const,
+      description: "Market volatility has caused a 12% increase in steel prices. Contingency budget allocation and alternative material sourcing are being evaluated to mitigate cost impact."
+    }
   };
 
   return (
@@ -1244,12 +1290,18 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           <div className="space-y-1">
                             <div className="grid grid-cols-4 gap-1 text-xs">
                               <div className="text-right pr-2 py-2 text-muted-foreground">HI</div>
-                              <div className="bg-green-100 dark:bg-green-950/30 p-2 text-center rounded relative">
+                              <div 
+                                className="bg-green-100 dark:bg-green-950/30 p-2 text-center rounded relative cursor-pointer hover:opacity-80 transition-opacity"
+                                onClick={() => setSelectedRisk('labor')}
+                              >
                                 1
                                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                               </div>
                               <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
-                              <div className="bg-red-100 dark:bg-red-950/30 p-2 text-center rounded relative">
+                              <div 
+                                className="bg-red-100 dark:bg-red-950/30 p-2 text-center rounded relative cursor-pointer hover:opacity-80 transition-opacity"
+                                onClick={() => setSelectedRisk('steel')}
+                              >
                                 1
                                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                               </div>
@@ -1257,7 +1309,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                             <div className="grid grid-cols-4 gap-1 text-xs">
                               <div className="text-right pr-2 py-2 text-muted-foreground">MI</div>
                               <div className="bg-gray-100 dark:bg-gray-800 p-2 text-center rounded">0</div>
-                              <div className="bg-yellow-100 dark:bg-yellow-950/30 p-2 text-center rounded relative">
+                              <div 
+                                className="bg-yellow-100 dark:bg-yellow-950/30 p-2 text-center rounded relative cursor-pointer hover:opacity-80 transition-opacity"
+                                onClick={() => setSelectedRisk('permit')}
+                              >
                                 1
                                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full"></div>
                               </div>
@@ -1299,9 +1354,45 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         {/* Risk Summary */}
                         <div>
                           <h4 className="font-semibold mb-3">Risk Summary</h4>
-                          <div className="bg-muted/30 rounded-lg p-4 text-center text-sm text-muted-foreground">
-                            Select a cell to see details here.
-                          </div>
+                          {!selectedRisk ? (
+                            <div className="bg-muted/30 rounded-lg p-4 text-center text-sm text-muted-foreground">
+                              Select a cell to see details here.
+                            </div>
+                          ) : (
+                            <div className="bg-muted/30 rounded-lg p-4 space-y-3">
+                              <div>
+                                <h5 className="font-semibold text-base mb-1">
+                                  {riskData[selectedRisk as keyof typeof riskData].title}
+                                </h5>
+                                <p className="text-xs text-muted-foreground">
+                                  {riskData[selectedRisk as keyof typeof riskData].owner} • Due {riskData[selectedRisk as keyof typeof riskData].dueDate}
+                                </p>
+                              </div>
+                              
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <Badge 
+                                  variant={riskData[selectedRisk as keyof typeof riskData].impactBadgeVariant as any}
+                                  className={riskData[selectedRisk as keyof typeof riskData].impactBadgeClass}
+                                >
+                                  {riskData[selectedRisk as keyof typeof riskData].impact}
+                                </Badge>
+                                <Badge 
+                                  variant={riskData[selectedRisk as keyof typeof riskData].probabilityBadgeVariant as any}
+                                  className={riskData[selectedRisk as keyof typeof riskData].probabilityBadgeClass}
+                                >
+                                  {riskData[selectedRisk as keyof typeof riskData].probability}
+                                </Badge>
+                                <span className="font-semibold">{riskData[selectedRisk as keyof typeof riskData].cost}</span>
+                                {riskData[selectedRisk as keyof typeof riskData].timeline && (
+                                  <span className="text-muted-foreground">{riskData[selectedRisk as keyof typeof riskData].timeline}</span>
+                                )}
+                              </div>
+
+                              <p className="text-sm text-muted-foreground leading-relaxed">
+                                {riskData[selectedRisk as keyof typeof riskData].description}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
 
