@@ -1,12 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Save, Users, Clock, GraduationCap } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CostTracker } from "./CostTracker";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const scheduleData = [
   { date: 'Feb 15', baseline: 20, actual: 20 },
@@ -75,16 +74,7 @@ const topRisks = [
   },
 ];
 
-const navigationItems = [
-  { id: "templates", label: "Templates", icon: BarChart3, count: 3, path: "/report-automation/templates" },
-  { id: "my-reports", label: "My Reports", icon: Save, count: 2, path: "/report-automation/my-reports" },
-  { id: "shared-templates", label: "Shared Templates", icon: Users, path: "/report-automation/shared-templates" },
-  { id: "recent-activity", label: "Recent Activity", icon: Clock, count: 3, path: "/report-automation/recent-activity" },
-  { id: "training", label: "Training", icon: GraduationCap, path: "/report-automation/training" },
-];
-
 export function AutomationHub() {
-  const navigate = useNavigate();
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
 
   const getCellColor = (impact: string, prob: string) => {
@@ -111,31 +101,6 @@ export function AutomationHub() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Report Automation</h1>
             <p className="text-muted-foreground">AI-powered report generation</p>
-          </div>
-
-          <div className="space-y-3 max-w-md">
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => navigate(item.path)}
-                  className="w-full flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span className="font-medium text-foreground">{item.label}</span>
-                  </div>
-                  {item.count !== undefined && (
-                    <Badge variant="secondary" className="bg-secondary/50">
-                      {item.count}
-                    </Badge>
-                  )}
-                </button>
-              );
-            })}
           </div>
         </div>
       </TabsContent>
