@@ -1289,7 +1289,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium">
-                      Transparent Confirmation
+                      {transparentConfirmation ? "AI Smart" : "Manual"}
                     </span>
                     <Switch
                       checked={transparentConfirmation}
@@ -1314,7 +1314,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
                       <p className="text-xs text-muted-foreground leading-relaxed">
                         Welcome to your Project Repository. I'll classify files
-                        and suggest folders. Transparent confirmation is ON by
+                        and suggest folders. {transparentConfirmation ? "AI Smart mode is ON" : "Manual mode is ON"} by
                         default.
                       </p>
 
