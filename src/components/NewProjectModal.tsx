@@ -1386,7 +1386,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                           Drag & drop files here
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Contracts, drawings, schedules, spreadsheets
+                          Contracts, drawings, schedules, reports, and other documents
                         </p>
                       </div>
                       <input
@@ -1436,11 +1436,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                       {/* Folder List */}
                       <div className="space-y-2">
                         {[
-                          { name: "Contracts", tag: "enterprise" },
+                          { name: "Admin", tag: "enterprise" },
+                          { name: "Financials", tag: "enterprise" },
                           { name: "Drawings", tag: "enterprise" },
-                          { name: "Schedules", tag: "enterprise" },
-                          { name: "Permits", tag: "enterprise" },
+                          { name: "Reports", tag: "enterprise" },
                           { name: "Correspondence", tag: "enterprise" },
+                          { name: "Contracts & Legal", tag: "enterprise" },
+                          { name: "Schedules", tag: "enterprise" },
+                          { name: "Procurement", tag: "enterprise" },
+                          { name: "Closeout", tag: "enterprise" },
+                          { name: "Change Management", tag: "enterprise" },
                         ].map((folder) => (
                           <div
                             key={folder.name}
@@ -1734,7 +1739,11 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                         <ul className="space-y-1 pl-4">
                           <li className="flex items-center gap-2">
                             <div className="w-1 h-1 rounded-full bg-purple-600"></div>
-                            Contracts
+                            Admin
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Financials
                           </li>
                           <li className="flex items-center gap-2">
                             <div className="w-1 h-1 rounded-full bg-purple-600"></div>
@@ -1742,20 +1751,33 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
                           </li>
                           <li className="flex items-center gap-2">
                             <div className="w-1 h-1 rounded-full bg-purple-600"></div>
-                            Schedules
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
-                            Permits
+                            Reports
                           </li>
                           <li className="flex items-center gap-2">
                             <div className="w-1 h-1 rounded-full bg-purple-600"></div>
                             Correspondence
                           </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Contracts & Legal
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Schedules
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Procurement
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Closeout
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                            Change Management
+                          </li>
                         </ul>
-                        <p className="text-muted-foreground pt-2">
-                          Custom folder structure: Design, Procurement, Admin
-                        </p>
                       </div>
                     </div>
                   </div>
