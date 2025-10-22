@@ -100,376 +100,204 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 {/* Overview Tab Content */}
                 <TabsContent value="overview" className="mt-0">
               <div className="container px-6 py-8">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h1 className="text-3xl font-bold text-foreground mb-1">
-                      Welcome Varun to {projectName}
-                    </h1>
-                    <p className="text-sm text-muted-foreground">Project Overview • AI summary</p>
+                {/* Welcome Banner */}
+                <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-6 mb-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-semibold flex-shrink-0">
+                      SC
+                    </div>
+                    <div>
+                      <h1 className="text-2xl font-bold text-foreground mb-1">
+                        Welcome back, Sarah Chen
+                      </h1>
+                      <p className="text-sm text-muted-foreground mb-2">Project Manager (PM)</p>
+                      <p className="text-sm text-muted-foreground">
+                        Your project dashboard is updated with the latest cost data and schedule insights.
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">Compliance Check</Button>
-                    <Button variant="outline" size="sm">Simulate Delay</Button>
-                    <Button variant="outline" size="sm">Collapse</Button>
+                </div>
+
+                {/* Main Content Grid */}
+                <div className="grid lg:grid-cols-2 gap-6 mb-6">
+                  {/* Left Column - Project Details & Status */}
+                  <div className="space-y-6">
+                    {/* Project Details */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Project Details</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Name:</span>
+                          <span className="font-semibold">Downtown Office Complex</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">ID:</span>
+                          <span className="font-semibold">PRJ-2024-001</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Type:</span>
+                          <span className="font-semibold">Commercial Office</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Size:</span>
+                          <span className="font-semibold">125,000 sq ft</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Budget:</span>
+                          <span className="font-semibold">$50.0M</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Target:</span>
+                          <span className="font-semibold">2024-12-15</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Project Status */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Project Status</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Overall Health:</span>
+                          <Badge className="bg-green-100 text-green-700 hover:bg-green-100">On Track</Badge>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Budget Status:</span>
+                          <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Within Budget</Badge>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-muted-foreground">Schedule Status:</span>
+                          <Badge className="bg-green-100 text-green-700 hover:bg-green-100">On Time</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </div>
 
-                <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Left Column - Project Overview & Signals */}
+                  {/* Right Column - Executive Summary */}
                   <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      {/* Project Details Section */}
-                      <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
-                          <FileText className="h-4 w-4" />
-                          Project Details
-                        </h3>
-                        <div className="space-y-3 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Name</span>
-                            <span className="font-medium">{projectName}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">ID</span>
-                            <span className="font-medium">P-NYC-2025</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Type</span>
-                            <span className="font-medium">Healthcare</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Size</span>
-                            <span className="font-medium">120,000 sq ft</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Approved Budget</span>
-                            <span className="font-medium">$2.5M</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Target Completion</span>
-                            <span className="font-medium">Q4 2025</span>
-                          </div>
-                        </div>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <CardTitle>Executive Summary</CardTitle>
+                      <span className="text-sm text-muted-foreground">↗ Last updated 2024-01-15</span>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Cost & Schedule:</span>
+                        <span className="text-right font-medium">Under budget by $2.1M; Running 5 days behind schedule</span>
                       </div>
-
-                      {/* Signals Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-warning mb-3">
-                          <AlertTriangle className="h-4 w-4" />
-                          Signals
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          Cost risk 1 (steel): schedule slack 3d. I can run a what-if now.
-                        </p>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Current Phase:</span>
+                        <span className="font-medium">Foundation & Structure</span>
                       </div>
-
-                      {/* Project Phase Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
-                          <Target className="h-4 w-4" />
-                          Project Phase
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex justify-between text-xs text-muted-foreground mb-2">
-                            <span>Conceptual Design</span>
-                            <span>Schematic</span>
-                            <span>Detailed Design</span>
-                          </div>
-                          <Progress value={35} className="h-2" />
-                          <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Current: Schematic</span>
-                          </div>
-                        </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Scope Changes:</span>
+                        <span className="text-right font-medium">8 approved ($4.2M), 3 pending ($1.5M)</span>
                       </div>
-
-                      {/* Upcoming Milestones Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
-                          <Calendar className="h-4 w-4" />
-                          Upcoming Milestones
-                        </h3>
-                        <ul className="space-y-2 text-sm">
-                          <li className="flex items-start gap-2">
-                            <span className="text-foreground">•</span>
-                            <span>Schematic freeze (Thu)</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-foreground">•</span>
-                            <span>ZEB study draft (Mon)</span>
-                          </li>
-                        </ul>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Cashflow:</span>
+                        <span className="text-right font-medium">This period $3.8M Actual / $4.2M Planned; This period 90% of Planned</span>
                       </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Center Column - Performance Metrics */}
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      {/* Key KPIs Section */}
-                      <div>
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-primary mb-3">
-                          <BarChart3 className="h-4 w-4" />
-                          Key KPIs
-                        </h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Metric</span>
-                            <span className="text-muted-foreground">Value</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-success">Budget Utilization</span>
-                            <span className="text-sm font-bold">107%</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-primary">Schedule Variance</span>
-                            <span className="text-sm font-bold">+5 days</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-primary">Schedule Performance Index (SPI)</span>
-                            <span className="text-sm font-bold">0.92</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b">
-                            <span className="text-sm font-medium text-construction-warning">Cost Performance Index (CPI)</span>
-                            <span className="text-sm font-bold">0.95</span>
-                          </div>
-                          <div className="flex justify-between items-center py-2">
-                            <span className="text-sm font-medium text-destructive">Critical Risks</span>
-                            <span className="text-sm font-bold">2</span>
-                          </div>
-                        </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Last Completed:</span>
+                        <span className="font-medium">Foundation Complete (2024-01-10)</span>
                       </div>
-
-                      {/* Previous Milestone Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold flex items-center gap-2 text-construction-success mb-3">
-                          <CheckCircle2 className="h-4 w-4" />
-                          Previous Completed Milestone
-                        </h3>
-                        <p className="text-sm">Schematic approved</p>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Next Milestone:</span>
+                        <span className="font-medium">Steel Frame Start (2024-01-25)</span>
                       </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Right Column - Project Information */}
-                  <Card>
-                    <CardContent className="pt-6 space-y-6">
-                      {/* Recent Activity Section - Less Prominent */}
-                      <div className="border-2 border-dashed border-muted rounded-lg p-4 bg-muted/20">
-                        <h3 className="text-sm font-medium mb-3 text-muted-foreground">Recent Activity</h3>
-                        <ul className="space-y-2 text-xs text-muted-foreground/70">
-                          <li>Alice replied to RH-102 (2h ago)</li>
-                          <li>Bob uploaded Design v12 (4h ago)</li>
-                          <li>Chen drafted PO: Steel (1d ago)</li>
-                        </ul>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Decision Needed:</span>
+                        <span className="text-right font-medium text-red-600">Approve steel escalation contingency (due 2024-01-20, J. Smith)</span>
                       </div>
-
-                      {/* Project Charter Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold mb-3">Project Charter & Vision</h3>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Access the project's guiding principles, scope, and long-term vision.
-                        </p>
-                        <Button className="w-full bg-construction-primary/30 hover:bg-construction-primary/40 text-construction-primary border border-construction-primary/20">Open Charter</Button>
-                      </div>
-
-                      {/* Required Information Section */}
-                      <div className="pt-4 border-t">
-                        <h3 className="text-base font-semibold mb-3">Required Information & Working version of files</h3>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Budget:</span>
-                            <span>$2.5M</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Design File:</span>
-                            <span>v12.dwg</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Schedule Target:</span>
-                            <span>Q4 2025</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* File Upload Section */}
-                      <div className="pt-4 border-t">
-                        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-                          <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
-                          <p className="text-xs text-muted-foreground">
-                            Drag & drop files here or click to upload
-                          </p>
-                        </div>
+                      <div className="flex justify-between py-2">
+                        <span className="text-muted-foreground">Signals:</span>
+                        <span className="text-right font-medium">SPI: 0.95 (↓), CPI: 1.02 (↑), Market: Steel +12% (↑)</span>
                       </div>
                     </CardContent>
                   </Card>
                 </div>
 
-                {/* Bottom Charts Row */}
-                <div className="grid md:grid-cols-4 gap-6 mt-8">
-                  {/* Design Progress */}
-                  <Card className="flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-sm">Design Progress</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <div className="flex flex-col items-center justify-center py-6">
-                        <div className="relative w-32 h-32">
-                          <svg className="transform -rotate-90 w-32 h-32">
-                            <circle
-                              cx="64"
-                              cy="64"
-                              r="56"
-                              stroke="hsl(var(--construction-grid))"
-                              strokeWidth="12"
-                              fill="none"
-                            />
-                            <circle
-                              cx="64"
-                              cy="64"
-                              r="56"
-                              stroke="hsl(var(--construction-primary))"
-                              strokeWidth="12"
-                              fill="none"
-                              strokeDasharray={`${2 * Math.PI * 56}`}
-                              strokeDashoffset={`${2 * Math.PI * 56 * (1 - 0.74)}`}
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-2xl font-bold text-construction-primary">74%</span>
-                          </div>
-                        </div>
+                {/* What Changed This Period */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <CardTitle>What Changed This Period?</CardTitle>
+                        <span className="text-sm text-muted-foreground">Last 30 days</span>
                       </div>
-                    </CardContent>
-                    <div className="border-t bg-muted/30 px-6 py-3">
-                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">7d</Button>
+                        <Button variant="outline" size="sm">30d</Button>
+                        <Button variant="outline" size="sm">Quarter</Button>
+                        <Button variant="outline" size="sm">Custom</Button>
+                      </div>
                     </div>
-                  </Card>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                      {/* New Commitments */}
+                      <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-blue-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">4</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">New Commitments</div>
+                        <div className="text-lg font-bold">$2.5M</div>
+                      </div>
 
-                  {/* Cost Chart */}
-                  <Card className="flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-sm">Cost (Budget vs Anticipated vs Committed)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <ResponsiveContainer width="100%" height={160}>
-                        <BarChart data={[
-                          { name: 'Budget', value: 800 },
-                          { name: 'Anticipated', value: 1000 },
-                          { name: 'Committed', value: 850 }
-                        ]}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis 
-                            dataKey="name" 
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                          />
-                          <YAxis 
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                          />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'hsl(var(--card))',
-                              border: '1px solid hsl(var(--border))',
-                              borderRadius: '6px'
-                            }}
-                            labelStyle={{ color: 'hsl(var(--foreground))' }}
-                          />
-                          <Bar dataKey="value" fill="hsl(var(--construction-primary))" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </CardContent>
-                    <div className="border-t bg-muted/30 px-6 py-3">
-                      <Button variant="outline" size="sm" className="w-full">Open</Button>
-                    </div>
-                  </Card>
+                      {/* Approved Change Orders */}
+                      <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-green-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">3</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Approved Change Orders</div>
+                        <div className="text-lg font-bold">$1.3M</div>
+                      </div>
 
-                  {/* Schedule Chart */}
-                  <Card className="flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-sm">Schedule (Baseline vs Actual)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <ResponsiveContainer width="100%" height={160}>
-                        <LineChart data={[
-                          { month: 'Jan', baseline: 10, actual: 15 },
-                          { month: 'Feb', baseline: 30, actual: 35 },
-                          { month: 'Mar', baseline: 50, actual: 52 },
-                          { month: 'Apr', baseline: 65, actual: 68 },
-                          { month: 'May', baseline: 80, actual: 82 }
-                        ]}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis 
-                            dataKey="month" 
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                          />
-                          <YAxis 
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                          />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'hsl(var(--card))',
-                              border: '1px solid hsl(var(--border))',
-                              borderRadius: '6px'
-                            }}
-                            labelStyle={{ color: 'hsl(var(--foreground))' }}
-                          />
-                          <Legend 
-                            wrapperStyle={{ fontSize: '11px' }}
-                            iconSize={10}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="baseline" 
-                            stroke="hsl(var(--construction-grid))" 
-                            strokeDasharray="4 4"
-                            strokeWidth={2}
-                            dot={{ fill: 'hsl(var(--construction-grid))', r: 3 }}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="actual" 
-                            stroke="hsl(var(--construction-primary))" 
-                            strokeWidth={2}
-                            dot={{ fill: 'hsl(var(--construction-primary))', r: 3 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </CardContent>
-                    <div className="border-t bg-muted/30 px-6 py-3">
-                      <Button variant="outline" size="sm" className="w-full">Open</Button>
-                    </div>
-                  </Card>
+                      {/* Invoices Processed */}
+                      <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-purple-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">12</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Invoices Processed</div>
+                        <div className="text-lg font-bold">$3.8M</div>
+                      </div>
 
-                  {/* Reports */}
-                  <Card className="flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-sm">Reports</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1 space-y-2">
-                      <p className="text-xs text-muted-foreground mb-3">last used</p>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
-                        <FileText className="h-3 w-3 mr-2" />
-                        SPI/CPI
-                      </Button>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
-                        <FileText className="h-3 w-3 mr-2" />
-                        Risks
-                      </Button>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
-                        <FileText className="h-3 w-3 mr-2" />
-                        Status Report
-                      </Button>
-                    </CardContent>
-                    <div className="border-t bg-muted/30 px-6 py-3">
-                      <Button variant="outline" size="sm" className="w-full">Open</Button>
+                      {/* Budget Transfers */}
+                      <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-orange-600 mb-2">
+                          <span className="text-sm font-semibold">→ 2</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Budget Transfers</div>
+                        <div className="text-lg font-bold">$500k</div>
+                      </div>
+
+                      {/* Schedule Movement */}
+                      <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-red-600 mb-2">
+                          <span className="text-sm font-semibold">↘ 1</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Schedule Movement</div>
+                        <div className="text-lg font-bold">-5d</div>
+                      </div>
+
+                      {/* Milestones Updated */}
+                      <div className="bg-teal-50 dark:bg-teal-950/20 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center gap-1 text-teal-600 mb-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="text-sm font-semibold">1</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mb-2">Milestones Updated</div>
+                        <div className="text-lg font-bold">+1</div>
+                      </div>
                     </div>
-                  </Card>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
