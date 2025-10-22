@@ -25,28 +25,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-interface FolderItem {
+interface FileItem {
   name: string;
-  type: "Folder";
+  type: string;
   tags: string[];
   version: string;
   date: string;
   owner: string;
+  folderPath?: string;
 }
 
-const folderData: FolderItem[] = [
-  { name: "Admin", type: "Folder", tags: ["folder"], version: "–", date: "15/01/2024", owner: "System" },
-  { name: "Financials", type: "Folder", tags: ["folder"], version: "–", date: "14/01/2024", owner: "System" },
-  { name: "Drawings", type: "Folder", tags: ["folder"], version: "–", date: "16/01/2024", owner: "System" },
-  { name: "Reports", type: "Folder", tags: ["folder"], version: "–", date: "17/01/2024", owner: "System" },
-  { name: "Correspondence", type: "Folder", tags: ["folder"], version: "–", date: "18/01/2024", owner: "System" },
-  { name: "Contracts & Legal", type: "Folder", tags: ["folder"], version: "–", date: "19/01/2024", owner: "System" },
-  { name: "Schedules", type: "Folder", tags: ["folder"], version: "–", date: "20/01/2024", owner: "System" },
-  { name: "Procurement", type: "Folder", tags: ["folder"], version: "–", date: "21/01/2024", owner: "System" },
-  { name: "Closeout", type: "Folder", tags: ["folder"], version: "–", date: "22/01/2024", owner: "System" },
-  { name: "Change Management", type: "Folder", tags: ["folder"], version: "–", date: "23/01/2024", owner: "System" },
+interface FolderItem extends FileItem {
+  type: "Folder";
+  files?: FileItem[];
+}
+
+const initialFolderData: FolderItem[] = [
+  { name: "Admin", type: "Folder", tags: ["folder"], version: "–", date: "15/01/2024", owner: "System", files: [] },
+  { name: "Financials", type: "Folder", tags: ["folder"], version: "–", date: "14/01/2024", owner: "System", files: [] },
+  { name: "Drawings", type: "Folder", tags: ["folder"], version: "–", date: "16/01/2024", owner: "System", files: [] },
+  { name: "Reports", type: "Folder", tags: ["folder"], version: "–", date: "17/01/2024", owner: "System", files: [] },
+  { name: "Correspondence", type: "Folder", tags: ["folder"], version: "–", date: "18/01/2024", owner: "System", files: [] },
+  { name: "Contracts & Legal", type: "Folder", tags: ["folder"], version: "–", date: "19/01/2024", owner: "System", files: [] },
+  { name: "Schedules", type: "Folder", tags: ["folder"], version: "–", date: "20/01/2024", owner: "System", files: [] },
+  { name: "Procurement", type: "Folder", tags: ["folder"], version: "–", date: "21/01/2024", owner: "System", files: [] },
+  { name: "Closeout", type: "Folder", tags: ["folder"], version: "–", date: "22/01/2024", owner: "System", files: [] },
+  { name: "Change Management", type: "Folder", tags: ["folder"], version: "–", date: "23/01/2024", owner: "System", files: [] },
 ];
 
 const sidebarFolders = [
@@ -103,6 +110,177 @@ export function DataEngine() {
   const [expandedFolder, setExpandedFolder] = useState(true);
   const [aiSmart, setAiSmart] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [folderData, setFolderData] = useState<FolderItem[]>(initialFolderData);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+  const [isProcessing, setIsProcessing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  // AI mapping logic based on file name and type
+  const mapFileToFolder = (fileName: string): string => {
+    const lowerName = fileName.toLowerCase();
+    const extension = fileName.split('.').pop()?.toLowerCase() || '';
+
+    // Drawings - CAD, DWG, PDF drawings, architectural files
+    if (extension === 'dwg' || extension === 'dxf' || lowerName.includes('drawing') || 
+        lowerName.includes('plan') || lowerName.includes('architectural') || 
+        lowerName.includes('mep') || lowerName.includes('structural')) {
+      return 'Drawings';
+    }
+
+    // Financials - Excel, CSV, budget files
+    if (extension === 'xlsx' || extension === 'xls' || extension === 'csv' || 
+        lowerName.includes('budget') || lowerName.includes('cost') || 
+        lowerName.includes('invoice') || lowerName.includes('payment') ||
+        lowerName.includes('financial')) {
+      return 'Financials';
+    }
+
+    // Reports - PDF reports, analysis documents
+    if (extension === 'pdf' && (lowerName.includes('report') || lowerName.includes('analysis') || 
+        lowerName.includes('summary') || lowerName.includes('review'))) {
+      return 'Reports';
+    }
+
+    // Contracts & Legal - Legal documents, agreements
+    if (lowerName.includes('contract') || lowerName.includes('agreement') || 
+        lowerName.includes('legal') || lowerName.includes('nda') ||
+        lowerName.includes('terms')) {
+      return 'Contracts & Legal';
+    }
+
+    // Schedules - Schedule files, timelines
+    if (lowerName.includes('schedule') || lowerName.includes('timeline') || 
+        lowerName.includes('gantt') || extension === 'mpp') {
+      return 'Schedules';
+    }
+
+    // Correspondence - Emails, letters, memos
+    if (lowerName.includes('email') || lowerName.includes('letter') || 
+        lowerName.includes('memo') || lowerName.includes('correspondence')) {
+      return 'Correspondence';
+    }
+
+    // Procurement - Purchase orders, RFQs, vendor docs
+    if (lowerName.includes('purchase') || lowerName.includes('procurement') || 
+        lowerName.includes('rfq') || lowerName.includes('vendor') ||
+        lowerName.includes('supplier')) {
+      return 'Procurement';
+    }
+
+    // Closeout - Closeout documents, warranties, manuals
+    if (lowerName.includes('closeout') || lowerName.includes('warranty') || 
+        lowerName.includes('manual') || lowerName.includes('commissioning')) {
+      return 'Closeout';
+    }
+
+    // Change Management - Change orders, RFIs
+    if (lowerName.includes('change') || lowerName.includes('rfi') || 
+        lowerName.includes('modification')) {
+      return 'Change Management';
+    }
+
+    // Default to Admin for misc files
+    return 'Admin';
+  };
+
+  const getFileType = (fileName: string): string => {
+    const extension = fileName.split('.').pop()?.toLowerCase() || '';
+    const typeMap: Record<string, string> = {
+      'pdf': 'PDF Document',
+      'dwg': 'CAD Drawing',
+      'dxf': 'CAD Drawing',
+      'xlsx': 'Excel Spreadsheet',
+      'xls': 'Excel Spreadsheet',
+      'csv': 'CSV Data',
+      'docx': 'Word Document',
+      'doc': 'Word Document',
+      'pptx': 'PowerPoint',
+      'jpg': 'Image',
+      'jpeg': 'Image',
+      'png': 'Image',
+      'mpp': 'Project Schedule',
+    };
+    return typeMap[extension] || 'Document';
+  };
+
+  const handleFileUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setIsProcessing(true);
+    const filesArray = Array.from(files);
+
+    toast({
+      title: "Processing files...",
+      description: `AI is analyzing and mapping ${filesArray.length} file(s) to appropriate folders.`,
+    });
+
+    // Simulate AI processing delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    const newFolderData = [...folderData];
+    const currentDate = new Date().toLocaleDateString('en-GB');
+
+    filesArray.forEach(file => {
+      const targetFolder = aiSmart ? mapFileToFolder(file.name) : 'Admin';
+      const folderIndex = newFolderData.findIndex(f => f.name === targetFolder);
+
+      if (folderIndex !== -1) {
+        const newFile: FileItem = {
+          name: file.name,
+          type: getFileType(file.name),
+          tags: [targetFolder.toLowerCase().replace(/ /g, '-')],
+          version: 'v1.0',
+          date: currentDate,
+          owner: 'You',
+          folderPath: targetFolder,
+        };
+
+        if (!newFolderData[folderIndex].files) {
+          newFolderData[folderIndex].files = [];
+        }
+        newFolderData[folderIndex].files!.push(newFile);
+
+        // Auto-expand the folder
+        setExpandedFolders(prev => new Set(prev).add(targetFolder));
+      }
+    });
+
+    setFolderData(newFolderData);
+    setIsProcessing(false);
+
+    toast({
+      title: "Files successfully mapped!",
+      description: `${filesArray.length} file(s) have been intelligently categorized and added to your repository.`,
+    });
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleFileUpload(e.dataTransfer.files);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileUpload(e.target.files);
+  };
+
+  const toggleFolderExpansion = (folderName: string) => {
+    setExpandedFolders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(folderName)) {
+        newSet.delete(folderName);
+      } else {
+        newSet.add(folderName);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <div className="flex h-full">
@@ -135,16 +313,29 @@ export function DataEngine() {
 
               {expandedFolder && (
                 <div className="ml-4 mt-1 space-y-1">
-                  {sidebarFolders.map((folder) => (
-                    <button
-                      key={folder}
-                      className="flex items-center gap-2 w-full text-sm hover:bg-muted/50 rounded p-1"
-                    >
-                      <ChevronRight className="h-3 w-3" />
-                      <Folder className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm">{folder}</span>
-                    </button>
-                  ))}
+                  {folderData.map((folder) => {
+                    const fileCount = folder.files?.length || 0;
+                    return (
+                      <button
+                        key={folder.name}
+                        className="flex items-center gap-2 w-full text-sm hover:bg-muted/50 rounded p-1"
+                        onClick={() => toggleFolderExpansion(folder.name)}
+                      >
+                        {expandedFolders.has(folder.name) ? (
+                          <ChevronDown className="h-3 w-3" />
+                        ) : (
+                          <ChevronRight className="h-3 w-3" />
+                        )}
+                        <Folder className="h-4 w-4 text-blue-500" />
+                        <span className="text-sm">{folder.name}</span>
+                        {fileCount > 0 && (
+                          <Badge variant="secondary" className="ml-auto h-4 px-1 text-xs">
+                            {fileCount}
+                          </Badge>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -258,35 +449,84 @@ export function DataEngine() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {folderData.map((folder) => (
-                    <TableRow key={folder.name} className="hover:bg-muted/50">
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <FolderOpen className="h-4 w-4 text-blue-500" />
-                          <span className="font-medium">{folder.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>{folder.type}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                          {folder.tags[0]}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">{folder.version}</TableCell>
-                      <TableCell>{folder.date}</TableCell>
-                      <TableCell>{folder.owner}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <FolderOpen className="h-4 w-4 text-blue-500" />
-                          </Button>
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <LinkIcon className="h-4 w-4 text-muted-foreground" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {folderData.map((folder) => {
+                    const isExpanded = expandedFolders.has(folder.name);
+                    return (
+                      <>
+                        <TableRow key={folder.name} className="hover:bg-muted/50">
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <button 
+                                onClick={() => toggleFolderExpansion(folder.name)}
+                                className="hover:bg-muted/50 rounded p-0.5"
+                              >
+                                {isExpanded ? (
+                                  <ChevronDown className="h-4 w-4" />
+                                ) : (
+                                  <ChevronRight className="h-4 w-4" />
+                                )}
+                              </button>
+                              <FolderOpen className="h-4 w-4 text-blue-500" />
+                              <span className="font-medium">{folder.name}</span>
+                              {folder.files && folder.files.length > 0 && (
+                                <Badge variant="secondary" className="ml-2">
+                                  {folder.files.length}
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>{folder.type}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                              {folder.tags[0]}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">{folder.version}</TableCell>
+                          <TableCell>{folder.date}</TableCell>
+                          <TableCell>{folder.owner}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Eye className="h-4 w-4 text-muted-foreground" />
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                        {isExpanded && folder.files?.map((file) => (
+                          <TableRow key={`${folder.name}-${file.name}`} className="bg-muted/20">
+                            <TableCell className="pl-12">
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <span>{file.name}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>{file.type}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                {file.tags[0]}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">{file.version}</TableCell>
+                            <TableCell>{file.date}</TableCell>
+                            <TableCell>{file.owner}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <Eye className="h-4 w-4 text-muted-foreground" />
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </CardContent>
@@ -309,16 +549,34 @@ export function DataEngine() {
             </p>
 
             {/* Drag & Drop Area */}
-            <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-12 bg-background">
+            <div 
+              className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-12 bg-background hover:border-primary/50 transition-colors"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
               <div className="flex flex-col items-center justify-center">
-                <Upload className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Drag & Drop Files</h3>
+                <Upload className={`h-12 w-12 mb-4 ${isProcessing ? 'text-primary animate-pulse' : 'text-muted-foreground'}`} />
+                <h3 className="text-lg font-semibold mb-2">
+                  {isProcessing ? 'Processing Files...' : 'Drag & Drop Files'}
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Drag & drop files here or use the upload button below. AI will automatically classify, tag, and organize them.
+                  {aiSmart 
+                    ? 'AI Smart mode is ON - Files will be automatically classified and organized into the appropriate folders.'
+                    : 'Manual mode is ON - All files will be placed in the Admin folder.'}
                 </p>
-                <Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  onChange={handleFileInputChange}
+                  className="hidden"
+                />
+                <Button 
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isProcessing}
+                >
                   <Upload className="h-4 w-4 mr-2" />
-                  Choose Files
+                  {isProcessing ? 'Processing...' : 'Choose Files'}
                 </Button>
               </div>
             </div>
