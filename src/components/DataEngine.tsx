@@ -4,6 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ChevronRight,
   ChevronDown,
   Folder,
@@ -16,6 +31,8 @@ import {
   Link as LinkIcon,
   AlertTriangle,
   FileText,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import {
   Table,
@@ -36,6 +53,13 @@ interface FileItem {
   date: string;
   owner: string;
   folderPath?: string;
+}
+
+interface PendingFileMapping {
+  file: File;
+  suggestedFolder: string;
+  selectedFolder: string;
+  fileType: string;
 }
 
 interface FolderItem extends FileItem {
@@ -113,8 +137,12 @@ export function DataEngine() {
   const [folderData, setFolderData] = useState<FolderItem[]>(initialFolderData);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showMappingDialog, setShowMappingDialog] = useState(false);
+  const [pendingMappings, setPendingMappings] = useState<PendingFileMapping[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const folderNames = initialFolderData.map(f => f.name);
 
   // AI mapping logic based on file name and type
   const mapFileToFolder = (fileName: string): string => {
@@ -218,22 +246,38 @@ export function DataEngine() {
     // Simulate AI processing delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
+    // Create pending mappings
+    const mappings: PendingFileMapping[] = filesArray.map(file => {
+      const suggestedFolder = aiSmart ? mapFileToFolder(file.name) : 'Admin';
+      return {
+        file,
+        suggestedFolder,
+        selectedFolder: suggestedFolder,
+        fileType: getFileType(file.name),
+      };
+    });
+
+    setPendingMappings(mappings);
+    setIsProcessing(false);
+    setShowMappingDialog(true);
+  };
+
+  const handleConfirmMapping = () => {
     const newFolderData = [...folderData];
     const currentDate = new Date().toLocaleDateString('en-GB');
 
-    filesArray.forEach(file => {
-      const targetFolder = aiSmart ? mapFileToFolder(file.name) : 'Admin';
-      const folderIndex = newFolderData.findIndex(f => f.name === targetFolder);
+    pendingMappings.forEach(mapping => {
+      const folderIndex = newFolderData.findIndex(f => f.name === mapping.selectedFolder);
 
       if (folderIndex !== -1) {
         const newFile: FileItem = {
-          name: file.name,
-          type: getFileType(file.name),
-          tags: [targetFolder.toLowerCase().replace(/ /g, '-')],
+          name: mapping.file.name,
+          type: mapping.fileType,
+          tags: [mapping.selectedFolder.toLowerCase().replace(/ /g, '-')],
           version: 'v1.0',
           date: currentDate,
           owner: 'You',
-          folderPath: targetFolder,
+          folderPath: mapping.selectedFolder,
         };
 
         if (!newFolderData[folderIndex].files) {
@@ -242,17 +286,26 @@ export function DataEngine() {
         newFolderData[folderIndex].files!.push(newFile);
 
         // Auto-expand the folder
-        setExpandedFolders(prev => new Set(prev).add(targetFolder));
+        setExpandedFolders(prev => new Set(prev).add(mapping.selectedFolder));
       }
     });
 
     setFolderData(newFolderData);
-    setIsProcessing(false);
+    setShowMappingDialog(false);
+    setPendingMappings([]);
 
     toast({
       title: "Files successfully mapped!",
-      description: `${filesArray.length} file(s) have been intelligently categorized and added to your repository.`,
+      description: `${pendingMappings.length} file(s) have been categorized and added to your repository.`,
     });
+  };
+
+  const updateMapping = (index: number, newFolder: string) => {
+    setPendingMappings(prev => 
+      prev.map((mapping, i) => 
+        i === index ? { ...mapping, selectedFolder: newFolder } : mapping
+      )
+    );
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -283,7 +336,88 @@ export function DataEngine() {
   };
 
   return (
-    <div className="flex h-full">
+    <>
+      {/* AI Mapping Dialog */}
+      <Dialog open={showMappingDialog} onOpenChange={setShowMappingDialog}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              AI File Mapping Review
+            </DialogTitle>
+            <DialogDescription>
+              Review and adjust the AI-suggested folder mappings for your uploaded files.
+              {aiSmart && " AI Smart mode has automatically categorized files based on their names and types."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 overflow-y-auto pr-2">
+            <div className="space-y-3">
+              {pendingMappings.map((mapping, index) => (
+                <Card key={index} className="p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <FileText className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium text-sm">{mapping.file.name}</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {mapping.fileType}
+                      </Badge>
+                    </div>
+
+                    <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {aiSmart && mapping.suggestedFolder !== mapping.selectedFolder && (
+                        <div className="text-xs text-muted-foreground">
+                          <span className="line-through">{mapping.suggestedFolder}</span>
+                        </div>
+                      )}
+                      <Select
+                        value={mapping.selectedFolder}
+                        onValueChange={(value) => updateMapping(index, value)}
+                      >
+                        <SelectTrigger className="w-[200px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {folderNames.map((folderName) => (
+                            <SelectItem key={folderName} value={folderName}>
+                              <div className="flex items-center gap-2">
+                                <Folder className="h-4 w-4 text-blue-500" />
+                                {folderName}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {aiSmart && mapping.selectedFolder === mapping.suggestedFolder && (
+                    <div className="mt-2 flex items-center gap-1 text-xs text-green-600">
+                      <Sparkles className="h-3 w-3" />
+                      AI suggested: {mapping.suggestedFolder}
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setShowMappingDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmMapping}>
+              Confirm & Add {pendingMappings.length} File{pendingMappings.length !== 1 ? 's' : ''}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <div className="flex h-full">
       {/* Left Sidebar */}
       <div className="w-64 bg-muted/30 border-r overflow-y-auto">
         {/* File Explorer */}
@@ -584,5 +718,6 @@ export function DataEngine() {
         </div>
       </div>
     </div>
+    </>
   );
 }
