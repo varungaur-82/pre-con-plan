@@ -285,34 +285,34 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 {/* Main Content Grid */}
                 <div className="grid lg:grid-cols-2 gap-6 mb-6">
                   {/* Left Column - Project Details & Status */}
-                  <div className="space-y-6">
+                  <div className="space-y-3">
                     {/* Project Details */}
                     <Card>
                       <CardHeader>
                         <CardTitle>Project Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div className="flex justify-between py-2">
+                      <CardContent className="space-y-0">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Name:</span>
                           <span className="font-semibold">Downtown Office Complex</span>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">ID:</span>
                           <span className="font-semibold">PRJ-2024-001</span>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Type:</span>
                           <span className="font-semibold">Commercial Office</span>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Size:</span>
                           <span className="font-semibold">125,000 sq ft</span>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Budget:</span>
                           <span className="font-semibold">$50.0M</span>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Target:</span>
                           <span className="font-semibold">2024-12-15</span>
                         </div>
@@ -324,16 +324,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       <CardHeader>
                         <CardTitle>Project Status</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div className="flex justify-between py-2">
+                      <CardContent className="space-y-0">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Overall Health:</span>
                           <Badge className="bg-green-100 text-green-700 hover:bg-green-100">On Track</Badge>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Budget Status:</span>
                           <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Within Budget</Badge>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Schedule Status:</span>
                           <Badge className="bg-green-100 text-green-700 hover:bg-green-100">On Time</Badge>
                         </div>
@@ -347,36 +347,36 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       <CardTitle>Executive Summary</CardTitle>
                       <span className="text-sm text-muted-foreground">↗ Last updated 2024-01-15</span>
                     </CardHeader>
-                    <CardContent className="space-y-3 text-sm">
-                      <div className="flex justify-between py-2">
+                    <CardContent className="space-y-0 text-sm">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Cost & Schedule:</span>
                         <span className="text-right font-medium">Under budget by $2.1M; Running 5 days behind schedule</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Current Phase:</span>
                         <span className="font-medium">Foundation & Structure</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Scope Changes:</span>
                         <span className="text-right font-medium">8 approved ($4.2M), 3 pending ($1.5M)</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Cashflow:</span>
                         <span className="text-right font-medium">This period $3.8M Actual / $4.2M Planned; This period 90% of Planned</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Last Completed:</span>
                         <span className="font-medium">Foundation Complete (2024-01-10)</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Next Milestone:</span>
                         <span className="font-medium">Steel Frame Start (2024-01-25)</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Decision Needed:</span>
                         <span className="text-right font-medium text-red-600">Approve steel escalation contingency (due 2024-01-20, J. Smith)</span>
                       </div>
-                      <div className="flex justify-between py-2">
+                      <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Signals:</span>
                         <span className="text-right font-medium">SPI: 0.95 (↓), CPI: 1.02 (↑), Market: Steel +12% (↑)</span>
                       </div>
