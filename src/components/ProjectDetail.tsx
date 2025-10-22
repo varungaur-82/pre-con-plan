@@ -53,6 +53,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
     setMessages(prev => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
 
+    console.log("Sending message to Co-Pilot...");
+
     try {
       const pageContext = {
         currentPage: currentTab,
@@ -62,13 +64,15 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         }
       };
 
+      console.log("Page context:", pageContext);
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/copilot-chat`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             messages: [...messages, { role: "user", content: userMessage }],
@@ -77,13 +81,19 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
         }
       );
 
+      console.log("Response status:", response.status);
+
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+        
         if (response.status === 429) {
           toast({
             title: "Rate Limit Exceeded",
             description: "Too many requests. Please try again in a moment.",
             variant: "destructive",
           });
+          setMessages(prev => prev.slice(0, -1));
           return;
         }
         if (response.status === 402) {
@@ -92,9 +102,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
             description: "Please add credits to your workspace.",
             variant: "destructive",
           });
+          setMessages(prev => prev.slice(0, -1));
           return;
         }
-        throw new Error("Failed to get response");
+        toast({
+          title: "Error",
+          description: `Failed to get response: ${response.status}`,
+          variant: "destructive",
+        });
+        setMessages(prev => prev.slice(0, -1));
+        return;
       }
 
       if (!response.body) throw new Error("No response body");
@@ -150,9 +167,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
       }
     } catch (error) {
       console.error("Chat error:", error);
+      console.error("Error details:", error instanceof Error ? error.message : error);
       toast({
         title: "Error",
-        description: "Failed to get response from AI assistant.",
+        description: error instanceof Error ? error.message : "Failed to get response from AI assistant.",
         variant: "destructive",
       });
       setMessages(prev => prev.slice(0, -1)); // Remove empty assistant message
