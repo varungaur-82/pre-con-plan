@@ -868,6 +868,201 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </div>
                         </>
                       )}
+
+                      {/* Change Orders View */}
+                      {selectedCostView === "change-orders" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">Change Orders & Cost Exposure Over Time</h4>
+                              <span className="text-sm text-muted-foreground">Monthly + cumulative</span>
+                            </div>
+                            <ResponsiveContainer width="100%" height={350}>
+                              <BarChart 
+                                data={[
+                                  { month: '01', approved: 150000, pending: 50000, cumulative: 200000 },
+                                  { month: '02', approved: 180000, pending: 70000, cumulative: 450000 },
+                                  { month: '03', approved: 120000, pending: 40000, cumulative: 610000 },
+                                  { month: '04', approved: 280000, pending: 120000, cumulative: 1010000 },
+                                  { month: '05', approved: 160000, pending: 60000, cumulative: 1230000 },
+                                  { month: '06', approved: 200000, pending: 80000, cumulative: 1510000 },
+                                  { month: '07', approved: 150000, pending: 50000, cumulative: 1710000 },
+                                  { month: '08', approved: 180000, pending: 90000, cumulative: 1980000 }
+                                ]}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 40 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="month" 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  yAxisId="left"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                                />
+                                <YAxis 
+                                  yAxisId="right"
+                                  orientation="right"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(value / 1000).toFixed(0)}K`}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--background))', 
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '6px'
+                                  }}
+                                />
+                                <Bar yAxisId="left" dataKey="approved" stackId="a" fill="#10b981" name="Approved" radius={[0, 0, 0, 0]} />
+                                <Bar yAxisId="left" dataKey="pending" stackId="a" fill="#f97316" name="Pending" radius={[4, 4, 0, 0]} />
+                                <Line 
+                                  yAxisId="right"
+                                  type="monotone" 
+                                  dataKey="cumulative" 
+                                  stroke="#374151" 
+                                  strokeWidth={2}
+                                  dot={{ fill: '#374151', r: 3 }}
+                                  name="Cumulative"
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                            <div className="flex items-center justify-center gap-4 text-xs">
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-green-600"></div>
+                                <span>Approved</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-orange-500"></div>
+                                <span>Pending</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-gray-700"></div>
+                                <span>Cumulative</span>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Trade Budget View */}
+                      {selectedCostView === "trade-budget" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">Budget vs Commitments by Trade (Variance Focus)</h4>
+                              <span className="text-sm text-muted-foreground">Sort by variance</span>
+                            </div>
+                            <ResponsiveContainer width="100%" height={350}>
+                              <BarChart 
+                                data={[
+                                  { trade: 'Steel', budget: 0, committed: 8500000, budgetStart: 0, variance: 500000, forecast: 0 },
+                                  { trade: 'Concrete', budget: 0, committed: 5200000, budgetStart: 0, variance: 300000, forecast: 0 },
+                                  { trade: 'MEP', budget: 0, committed: 5800000, budgetStart: 0, variance: -200000, forecast: 0 },
+                                  { trade: 'Finishes', budget: 0, committed: 4200000, budgetStart: 0, variance: -300000, forecast: 0 },
+                                  { trade: 'Site Work', budget: 2100000, committed: 0, budgetStart: 0, variance: -800000, forecast: 0 }
+                                ]}
+                                layout="vertical"
+                                margin={{ top: 20, right: 80, left: 80, bottom: 40 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  type="number"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                                  domain={[-3000000, 10000000]}
+                                />
+                                <YAxis 
+                                  dataKey="trade"
+                                  type="category"
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  width={70}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(Math.abs(value) / 1000000).toFixed(1)}M`}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--background))', 
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '6px'
+                                  }}
+                                />
+                                <Bar 
+                                  dataKey="budget" 
+                                  fill="#d1d5db" 
+                                  stackId="a"
+                                  radius={[0, 4, 4, 0]}
+                                />
+                                <Bar 
+                                  dataKey="committed" 
+                                  fill="#3b82f6" 
+                                  stackId="a"
+                                  radius={[0, 4, 4, 0]}
+                                  label={{ 
+                                    position: 'right', 
+                                    formatter: (value: number) => `$${(value / 1000000).toFixed(1)}M`,
+                                    fill: 'hsl(var(--foreground))',
+                                    fontSize: 10
+                                  }}
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                            <div className="flex items-center justify-center gap-4 text-xs flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-gray-300"></div>
+                                <span>Budget</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-sm bg-blue-500"></div>
+                                <span>Committed</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-gray-700"></div>
+                                <span>Forecast</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 rounded-full bg-gray-700"></div>
+                                <span>Variance</span>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
