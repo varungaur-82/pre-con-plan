@@ -113,23 +113,23 @@ export function AutomationHub() {
             <p className="text-muted-foreground">AI-powered report generation</p>
           </div>
 
-          <div className="space-y-2 max-w-sm">
+          <div className="space-y-3 max-w-md">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.id}
                   onClick={() => navigate(item.path)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-md border bg-card hover:bg-accent/50 transition-colors group text-sm"
+                  className="w-full flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors group"
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Icon className="h-4 w-4" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Icon className="h-5 w-5" />
                     </div>
                     <span className="font-medium text-foreground">{item.label}</span>
                   </div>
                   {item.count !== undefined && (
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="bg-secondary/50">
                       {item.count}
                     </Badge>
                   )}
