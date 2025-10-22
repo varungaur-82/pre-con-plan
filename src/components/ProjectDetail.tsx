@@ -599,6 +599,86 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </div>
                         </>
                       )}
+
+                      {/* Cost Position View */}
+                      {selectedCostView === "cost-position" && (
+                        <>
+                          <div className="flex items-center gap-6 text-sm pb-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Commit/Budget:</span>
+                              <Badge variant="destructive" className="bg-red-100 text-red-700 hover:bg-red-100">91%</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground">Forecast/Budget:</span>
+                              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">93%</Badge>
+                            </div>
+                            <div>
+                              <span className="font-semibold text-green-600">Under budget by $3.2M</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-semibold">Total Cost Position – Funding vs EAC</h4>
+                              <span className="text-sm text-muted-foreground">USD</span>
+                            </div>
+                            <ResponsiveContainer width="100%" height={350}>
+                              <BarChart 
+                                data={[
+                                  { name: 'Original Budget', amount: 22000000 },
+                                  { name: 'Approved Changes', amount: 1800000 },
+                                  { name: 'Current Budget', amount: 23800000 },
+                                  { name: 'Committed', amount: 18900000 },
+                                  { name: 'Invoiced', amount: 10500000 },
+                                  { name: 'Forecast to Complete', amount: 6400000 },
+                                  { name: 'EAC', amount: 16900000 }
+                                ]}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 60 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis 
+                                  dataKey="name" 
+                                  angle={-45}
+                                  textAnchor="end"
+                                  height={80}
+                                  interval={0}
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                />
+                                <YAxis 
+                                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+                                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                                  tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`}
+                                />
+                                <Tooltip 
+                                  formatter={(value: number) => `$${(value / 1000000).toFixed(1)}M`}
+                                  labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                  contentStyle={{ 
+                                    backgroundColor: 'hsl(var(--background))', 
+                                    border: '1px solid hsl(var(--border))',
+                                    borderRadius: '6px'
+                                  }}
+                                />
+                                <Bar 
+                                  dataKey="amount" 
+                                  fill="#3b82f6" 
+                                  radius={[4, 4, 0, 0]}
+                                  label={{ 
+                                    position: 'top', 
+                                    formatter: (value: number) => `$${(value / 1000000).toFixed(1)}M`,
+                                    fill: 'hsl(var(--foreground))',
+                                    fontSize: 11
+                                  }}
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                            <div className="flex items-center justify-center gap-2 text-xs">
+                              <div className="w-3 h-3 rounded-sm bg-blue-500"></div>
+                              <span className="text-muted-foreground">Amount</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
