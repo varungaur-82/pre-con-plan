@@ -1,12 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings, Calendar, User, ExternalLink } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings as SettingsIcon, Calendar, User, ExternalLink, FileText, Users2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CostTracker } from "./CostTracker";
 import { CreateReportWizard } from "./CreateReportWizard";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 const scheduleData = [
   { date: 'Feb 15', baseline: 20, actual: 20 },
@@ -78,6 +85,7 @@ const topRisks = [
 export function AutomationHub() {
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [createReportOpen, setCreateReportOpen] = useState(false);
+  const { toast } = useToast();
 
   const templates = [
     {
@@ -178,10 +186,70 @@ export function AutomationHub() {
                   <h1 className="text-4xl font-bold mb-3">Report Automation</h1>
                   <p className="text-lg text-muted-foreground">AI-powered insights and analytics at your fingertips</p>
                 </div>
-                <Button size="lg" onClick={() => setCreateReportOpen(true)} className="shadow-lg">
-                  <Download className="mr-2 h-5 w-5" />
-                  Create New Report
-                </Button>
+                <div className="flex items-center gap-3">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="lg" variant="outline" className="shadow-lg">
+                        <SettingsIcon className="mr-2 h-5 w-5" />
+                        Quick Actions
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-64">
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          toast({
+                            title: "Generate Report",
+                            description: "Report generation feature coming soon!",
+                          });
+                        }}
+                        className="py-3 cursor-pointer"
+                      >
+                        <BarChart3 className="mr-3 h-5 w-5 text-green-600" />
+                        <span className="text-base font-medium">Generate Report</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          toast({
+                            title: "Export Data",
+                            description: "Data export feature coming soon!",
+                          });
+                        }}
+                        className="py-3 cursor-pointer"
+                      >
+                        <FileText className="mr-3 h-5 w-5 text-red-600" />
+                        <span className="text-base font-medium">Export Data</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          toast({
+                            title: "Set Alerts",
+                            description: "Alert configuration feature coming soon!",
+                          });
+                        }}
+                        className="py-3 cursor-pointer"
+                      >
+                        <AlertCircle className="mr-3 h-5 w-5 text-orange-600" />
+                        <span className="text-base font-medium">Set Alerts</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          toast({
+                            title: "Configure Settings",
+                            description: "Settings configuration feature coming soon!",
+                          });
+                        }}
+                        className="py-3 cursor-pointer"
+                      >
+                        <Users2 className="mr-3 h-5 w-5 text-gray-600" />
+                        <span className="text-base font-medium">Configure Settings</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <Button size="lg" onClick={() => setCreateReportOpen(true)} className="shadow-lg">
+                    <Download className="mr-2 h-5 w-5" />
+                    Create New Report
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -285,7 +353,7 @@ export function AutomationHub() {
           </div>
 
           {/* Recent Activity Section - Subtle teal background */}
-          <div className="bg-gradient-to-br from-teal-50/20 via-background to-cyan-50/20 py-12 px-6">
+          <div className="bg-gradient-to-br from-teal-50/20 via-background to-cyan-50/20 py-12 px-6 mt-6">
             <div className="container max-w-7xl mx-auto">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold mb-2">Recent Activity</h2>
@@ -349,7 +417,7 @@ export function AutomationHub() {
           </div>
 
           {/* Training Section - Subtle purple background */}
-          <div className="bg-gradient-to-br from-purple-50/20 via-background to-indigo-50/20 py-12 px-6">
+          <div className="bg-gradient-to-br from-purple-50/20 via-background to-indigo-50/20 py-12 px-6 mt-6">
             <div className="container max-w-7xl mx-auto">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold mb-2">Training & Resources</h2>
@@ -361,7 +429,7 @@ export function AutomationHub() {
                 <Card className="shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
-                      <Settings className="h-5 w-5 text-primary" />
+                      <SettingsIcon className="h-5 w-5 text-primary" />
                       Getting Started
                     </CardTitle>
                   </CardHeader>
