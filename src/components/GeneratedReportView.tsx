@@ -78,22 +78,23 @@ export function GeneratedReportView({ open, onOpenChange, reportData }: Generate
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-6 py-4">
+        <div className="flex-1 overflow-y-auto space-y-4 py-4">
           {/* Executive Summary */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-xl">
                 <Activity className="h-5 w-5 text-primary" />
                 Executive Summary
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground leading-relaxed">
+            <CardContent className="pt-0">
+              <p className="text-muted-foreground leading-relaxed text-sm">
                 This {reportData.templateTitle.toLowerCase()} covers the period of {reportData.dateRange.replace(/-/g, ' ')}. 
                 Analysis includes data from {reportData.selectedDataSources.length} sources: {reportData.selectedDataSources.slice(0, 3).join(', ')}
                 {reportData.selectedDataSources.length > 3 && ` and ${reportData.selectedDataSources.length - 3} more`}.
                 Overall performance shows positive trends across {mockData.filter(d => d.trend === 'up').length} of {mockData.length} key metrics,
-                with particular strength in operational efficiency and cost management.
+                with particular strength in operational efficiency and cost management. The data reveals consistent improvements in project delivery timelines 
+                and resource utilization, while maintaining budget adherence across all monitored cost centers.
               </p>
             </CardContent>
           </Card>
@@ -127,8 +128,8 @@ export function GeneratedReportView({ open, onOpenChange, reportData }: Generate
 
           {/* Detailed Metrics Table */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-xl">
                 <BarChart3 className="h-5 w-5 text-primary" />
                 Detailed Performance Metrics
               </CardTitle>
@@ -166,8 +167,8 @@ export function GeneratedReportView({ open, onOpenChange, reportData }: Generate
           {/* Visual Analytics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-xl">
                   <PieChart className="h-5 w-5 text-primary" />
                   Data Source Distribution
                 </CardTitle>
@@ -196,8 +197,8 @@ export function GeneratedReportView({ open, onOpenChange, reportData }: Generate
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-xl">
                   <AlertCircle className="h-5 w-5 text-primary" />
                   Key Insights & Recommendations
                 </CardTitle>
