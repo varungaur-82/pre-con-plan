@@ -378,7 +378,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 <TabsContent value="overview" className="mt-0">
               <div className="container px-6 py-8">
                 {/* Welcome Banner */}
-                <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-6 mb-6">
+                <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-6 mb-4">
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-semibold flex-shrink-0">
                       SC
@@ -396,7 +396,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 </div>
 
                 {/* What Changed This Period */}
-                <Card className="mb-6">
+                <Card className="mb-4">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -564,15 +564,15 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 </Card>
 
                 {/* Main Content Grid */}
-                <div className="grid lg:grid-cols-2 gap-6 mb-6">
+                <div className="grid lg:grid-cols-2 gap-4 mb-4">
                   {/* Left Column - Project Details & Status */}
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {/* Project Details */}
                     <Card>
-                      <CardHeader>
+                      <CardHeader className="pb-3">
                         <CardTitle>Project Details</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-0">
+                      <CardContent className="space-y-1 pt-0">
                         <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Name:</span>
                           <span className="font-semibold">Downtown Office Complex</span>
@@ -602,10 +602,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
                     {/* Project Status */}
                     <Card>
-                      <CardHeader>
+                      <CardHeader className="pb-3">
                         <CardTitle>Project Status</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-0">
+                      <CardContent className="space-y-1 pt-0">
                         <div className="flex justify-between py-0.5">
                           <span className="text-muted-foreground">Overall Health:</span>
                           <Badge className="bg-green-100 text-green-700 hover:bg-green-100">On Track</Badge>
@@ -624,11 +624,11 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
                   {/* Right Column - Executive Summary */}
                   <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
+                    <CardHeader className="flex flex-row items-center justify-between pb-3">
                       <CardTitle>Executive Summary</CardTitle>
                       <span className="text-sm text-muted-foreground">↗ Last updated 2024-01-15</span>
                     </CardHeader>
-                    <CardContent className="space-y-0 text-sm">
+                    <CardContent className="space-y-2 text-sm pt-0">
                       <div className="flex justify-between py-0.5">
                         <span className="text-muted-foreground">Cost & Schedule:</span>
                         <span className="text-right font-medium">Under budget by $2.1M; Running 5 days behind schedule</span>
@@ -666,7 +666,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 </div>
 
                 {/* Schedule and Cost Overview */}
-                <div className="grid lg:grid-cols-3 gap-6 mb-6">
+                <div className="grid lg:grid-cols-3 gap-4 mb-4">
                   {/* Schedule Overview */}
                   <Card>
                     <CardHeader>
@@ -1436,8 +1436,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     <CardHeader>
                       <CardTitle>Risks</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="grid lg:grid-cols-2 gap-6">
+                    <CardContent className="space-y-4">
+                      <div className="grid lg:grid-cols-2 gap-4">
                         {/* Risk Heat Map */}
                         <div>
                           <h4 className="font-semibold mb-3">Risk Heat Map</h4>
@@ -1554,9 +1554,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   </Card>
 
                   {/* Activity, Notes, Recent Files and Quick Actions */}
-                  <div className="grid lg:grid-cols-3 gap-6">
+                  <div className="grid lg:grid-cols-3 gap-4">
                     <div className="lg:col-span-2">
-                      <div className="grid md:grid-cols-2 gap-6 mb-6">
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
                       {/* Activity */}
                       <Card>
                         <CardHeader className="pb-3">
