@@ -493,102 +493,132 @@ export function DataEngine() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const folderNames = initialFolderData.map(f => f.name);
+  // Build folder structure including subfolders
+  const folderOptions: Array<{ value: string; label: string; isSubfolder: boolean }> = [];
+  initialFolderData.forEach(folder => {
+    // Add main folder
+    folderOptions.push({ value: folder.name, label: folder.name, isSubfolder: false });
+    // Add subfolders
+    if (folder.files) {
+      folder.files.forEach(item => {
+        if (item.type === "Folder") {
+          folderOptions.push({
+            value: `${folder.name}/${item.name}`,
+            label: `${folder.name} > ${item.name}`,
+            isSubfolder: true
+          });
+        }
+      });
+    }
+  });
 
-  // Enhanced AI mapping logic with broader pattern matching
+  // Enhanced AI mapping logic with broader pattern matching to specific subfolders
   const mapFileToFolder = (fileName: string): string => {
     const lowerName = fileName.toLowerCase();
     const extension = fileName.split('.').pop()?.toLowerCase() || '';
 
-    // Drawings - CAD files, architectural plans, engineering drawings
-    if (extension === 'dwg' || extension === 'dxf' || extension === 'rvt' || 
-        lowerName.includes('drawing') || lowerName.includes('plan') || 
-        lowerName.includes('architectural') || lowerName.includes('mep') || 
-        lowerName.includes('structural') || lowerName.includes('blueprint') ||
-        lowerName.includes('floor') || lowerName.includes('elevation') ||
-        lowerName.includes('section') || lowerName.includes('detail') ||
-        lowerName.includes('site') && (extension === 'pdf' || extension === 'dwg')) {
-      return 'Drawings';
-    }
-
-    // Financials - Financial documents, budgets, invoices
-    if (extension === 'xlsx' || extension === 'xls' || extension === 'csv' || 
-        lowerName.includes('budget') || lowerName.includes('cost') || 
-        lowerName.includes('invoice') || lowerName.includes('payment') ||
-        lowerName.includes('financial') || lowerName.includes('accounting') ||
-        lowerName.includes('expense') || lowerName.includes('billing') ||
-        lowerName.includes('quote') || lowerName.includes('estimate') && extension === 'xlsx') {
-      return 'Financials';
-    }
-
-    // Contracts & Legal - Must check before Reports to avoid PDF conflicts
+    // Admin subfolders
     if (lowerName.includes('contract') || lowerName.includes('agreement') || 
-        lowerName.includes('legal') || lowerName.includes('nda') ||
-        lowerName.includes('terms') || lowerName.includes('conditions') ||
-        lowerName.includes('addendum') || lowerName.includes('amendment') ||
-        lowerName.includes('bond') || lowerName.includes('insurance')) {
-      return 'Contracts & Legal';
+        lowerName.includes('terms') || lowerName.includes('nda')) {
+      return 'Admin/Contracts';
+    }
+    if (lowerName.includes('permit') || lowerName.includes('license') || 
+        lowerName.includes('approval')) {
+      return 'Admin/Permits';
     }
 
-    // Reports - Various report types
-    if (lowerName.includes('report') || lowerName.includes('analysis') || 
-        lowerName.includes('summary') || lowerName.includes('review') ||
-        lowerName.includes('assessment') || lowerName.includes('evaluation') ||
-        lowerName.includes('inspection') || lowerName.includes('survey') ||
-        lowerName.includes('findings') || lowerName.includes('results')) {
-      return 'Reports';
+    // Financials subfolders
+    if (lowerName.includes('budget') || lowerName.includes('forecast')) {
+      return 'Financials/Budgets';
+    }
+    if (lowerName.includes('invoice') || lowerName.includes('billing') || 
+        lowerName.includes('payment')) {
+      return 'Financials/Invoices';
     }
 
-    // Schedules - Project schedules and timelines
-    if (lowerName.includes('schedule') || lowerName.includes('timeline') || 
-        lowerName.includes('gantt') || extension === 'mpp' ||
-        lowerName.includes('milestone') || lowerName.includes('program') ||
-        lowerName.includes('planning') || lowerName.includes('calendar')) {
-      return 'Schedules';
+    // Drawings subfolders
+    if (lowerName.includes('architectural') || lowerName.includes('floor') || 
+        lowerName.includes('elevation') || lowerName.includes('section')) {
+      return 'Drawings/Architectural';
+    }
+    if (lowerName.includes('structural') || lowerName.includes('foundation') || 
+        lowerName.includes('steel') || lowerName.includes('load')) {
+      return 'Drawings/Structural';
     }
 
-    // Correspondence - Communications
-    if (lowerName.includes('email') || lowerName.includes('letter') || 
-        lowerName.includes('memo') || lowerName.includes('correspondence') ||
-        lowerName.includes('message') || lowerName.includes('communication') ||
-        lowerName.includes('notification') || lowerName.includes('notice') ||
+    // Reports subfolders
+    if (lowerName.includes('progress') || lowerName.includes('weekly') || 
+        lowerName.includes('monthly') || lowerName.includes('status')) {
+      return 'Reports/Progress';
+    }
+    if (lowerName.includes('quality') || lowerName.includes('inspection') || 
+        lowerName.includes('testing') || lowerName.includes('ncr')) {
+      return 'Reports/Quality';
+    }
+
+    // Correspondence subfolders
+    if (lowerName.includes('email') || lowerName.includes('message') || 
         extension === 'msg' || extension === 'eml') {
-      return 'Correspondence';
+      return 'Correspondence/Emails';
+    }
+    if (lowerName.includes('letter') || lowerName.includes('formal') || 
+        lowerName.includes('transmittal')) {
+      return 'Correspondence/Letters';
     }
 
-    // Procurement - Purchasing and vendor documents
-    if (lowerName.includes('purchase') || lowerName.includes('procurement') || 
-        lowerName.includes('rfq') || lowerName.includes('vendor') ||
-        lowerName.includes('supplier') || lowerName.includes('order') ||
-        lowerName.includes('requisition') || lowerName.includes('bid') ||
-        lowerName.includes('proposal') || lowerName.includes('quotation')) {
-      return 'Procurement';
+    // Contracts subfolders
+    if (lowerName.includes('agreement') && !lowerName.includes('contract')) {
+      return 'Contracts/Agreements';
+    }
+    if (lowerName.includes('legal') || lowerName.includes('liability') || 
+        lowerName.includes('insurance') && !lowerName.includes('contract')) {
+      return 'Contracts/Legal Documents';
     }
 
-    // Closeout - Project closeout documents
-    if (lowerName.includes('closeout') || lowerName.includes('warranty') || 
-        lowerName.includes('manual') || lowerName.includes('commissioning') ||
-        lowerName.includes('handover') || lowerName.includes('completion') ||
-        lowerName.includes('certificate') || lowerName.includes('as-built') ||
-        lowerName.includes('o&m') || lowerName.includes('operation')) {
-      return 'Closeout';
+    // Schedules subfolders
+    if (lowerName.includes('schedule') || lowerName.includes('timeline') || 
+        lowerName.includes('gantt')) {
+      return 'Schedules/Project Schedules';
+    }
+    if (lowerName.includes('milestone') || lowerName.includes('critical path')) {
+      return 'Schedules/Milestones';
     }
 
-    // Change Management - Change orders and modifications
-    if (lowerName.includes('change') || lowerName.includes('rfi') || 
-        lowerName.includes('modification') || lowerName.includes('variation') ||
-        lowerName.includes('amendment') && !lowerName.includes('contract') ||
-        lowerName.includes('revision') || lowerName.includes('update')) {
-      return 'Change Management';
+    // Procurement subfolders
+    if (lowerName.includes('purchase') || lowerName.includes('po') || 
+        lowerName.includes('order')) {
+      return 'Procurement/Purchase Orders';
+    }
+    if (lowerName.includes('supplier') || lowerName.includes('vendor') || 
+        lowerName.includes('certificate')) {
+      return 'Procurement/Supplier Documents';
     }
 
-    // Smart categorization by file type when name doesn't match
+    // Closeout subfolders
+    if (lowerName.includes('final') || lowerName.includes('completion') || 
+        lowerName.includes('closeout')) {
+      return 'Closeout/Final Reports';
+    }
+    if (lowerName.includes('warrant') || lowerName.includes('guarantee')) {
+      return 'Closeout/Warranties';
+    }
+
+    // Change Management subfolders
+    if (lowerName.includes('change order') || lowerName.includes('co_')) {
+      return 'Change Management/Change Orders';
+    }
+    if (lowerName.includes('variation') || lowerName.includes('rfi') || 
+        lowerName.includes('modification')) {
+      return 'Change Management/Variations';
+    }
+
+    // Fallback to main folders based on file type
     if (extension === 'pdf') return 'Reports';
     if (extension === 'xlsx' || extension === 'xls') return 'Financials';
     if (extension === 'docx' || extension === 'doc') return 'Correspondence';
-    if (extension === 'jpg' || extension === 'jpeg' || extension === 'png') return 'Drawings';
+    if (extension === 'dwg' || extension === 'dxf') return 'Drawings';
 
-    // Default to Admin for unrecognized files
+    // Default to Admin
     return 'Admin';
   };
 
@@ -647,26 +677,51 @@ export function DataEngine() {
     const currentDate = new Date().toLocaleDateString('en-GB');
 
     pendingMappings.forEach(mapping => {
-      const folderIndex = newFolderData.findIndex(f => f.name === mapping.selectedFolder);
+      const folderPath = mapping.selectedFolder.split('/');
+      const mainFolderName = folderPath[0];
+      const subfolderName = folderPath[1];
+
+      const folderIndex = newFolderData.findIndex(f => f.name === mainFolderName);
 
       if (folderIndex !== -1) {
         const newFile: FileItem = {
           name: mapping.file.name,
           type: mapping.fileType,
-          tags: [mapping.selectedFolder.toLowerCase().replace(/ /g, '-')],
+          tags: [mainFolderName.toLowerCase().replace(/ /g, '-')],
           version: 'v1.0',
           date: currentDate,
           owner: 'You',
           folderPath: mapping.selectedFolder,
         };
 
-        if (!newFolderData[folderIndex].files) {
-          newFolderData[folderIndex].files = [];
-        }
-        newFolderData[folderIndex].files!.push(newFile);
+        // If subfolder is specified, add to subfolder
+        if (subfolderName) {
+          const subfolder = newFolderData[folderIndex].files?.find(
+            item => item.type === "Folder" && item.name === subfolderName
+          ) as FolderItem | undefined;
 
-        // Auto-expand the folder
-        setExpandedFolders(prev => new Set(prev).add(mapping.selectedFolder));
+          if (subfolder) {
+            if (!subfolder.files) {
+              subfolder.files = [];
+            }
+            subfolder.files.push(newFile);
+            // Auto-expand both main folder and subfolder
+            setExpandedFolders(prev => {
+              const newSet = new Set(prev);
+              newSet.add(mainFolderName);
+              newSet.add(`${mainFolderName}/${subfolderName}`);
+              return newSet;
+            });
+          }
+        } else {
+          // Add to main folder
+          if (!newFolderData[folderIndex].files) {
+            newFolderData[folderIndex].files = [];
+          }
+          newFolderData[folderIndex].files!.push(newFile);
+          // Auto-expand the main folder
+          setExpandedFolders(prev => new Set(prev).add(mainFolderName));
+        }
       }
     });
 
@@ -758,15 +813,17 @@ export function DataEngine() {
                         value={mapping.selectedFolder}
                         onValueChange={(value) => updateMapping(index, value)}
                       >
-                        <SelectTrigger className="w-[200px]">
+                        <SelectTrigger className="w-[250px]">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
-                          {folderNames.map((folderName) => (
-                            <SelectItem key={folderName} value={folderName}>
+                        <SelectContent className="bg-background z-50">
+                          {folderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
                               <div className="flex items-center gap-2">
-                                <Folder className="h-4 w-4 text-blue-500" />
-                                {folderName}
+                                <Folder className={`h-4 w-4 ${option.isSubfolder ? 'text-blue-400' : 'text-blue-500'}`} />
+                                <span className={option.isSubfolder ? 'text-sm' : 'font-medium'}>
+                                  {option.label}
+                                </span>
                               </div>
                             </SelectItem>
                           ))}
