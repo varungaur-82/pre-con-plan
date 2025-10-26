@@ -24,8 +24,6 @@ import {
   Folder,
   Search,
   Upload,
-  LayoutGrid,
-  List,
   FolderOpen,
   Eye,
   Link as LinkIcon,
@@ -33,6 +31,10 @@ import {
   FileText,
   Sparkles,
   ArrowRight,
+  Download,
+  Edit,
+  Clock,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   Table,
@@ -484,12 +486,12 @@ const recentFiles = [
 export function DataEngine() {
   const [expandedFolder, setExpandedFolder] = useState(true);
   const [aiSmart, setAiSmart] = useState(true);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [folderData, setFolderData] = useState<FolderItem[]>(initialFolderData);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
   const [showMappingDialog, setShowMappingDialog] = useState(false);
   const [pendingMappings, setPendingMappings] = useState<PendingFileMapping[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -770,6 +772,60 @@ export function DataEngine() {
     });
   };
 
+  const expandAllFolders = () => {
+    const allFolders = new Set<string>();
+    folderData.forEach(folder => {
+      allFolders.add(folder.name);
+      if (folder.files) {
+        folder.files.forEach(item => {
+          if (item.type === "Folder") {
+            allFolders.add(`${folder.name}/${item.name}`);
+          }
+        });
+      }
+    });
+    setExpandedFolders(allFolders);
+    setExpandedFolder(true);
+  };
+
+  const filterFiles = (items: (FileItem | FolderItem)[]): (FileItem | FolderItem)[] => {
+    if (!searchQuery) return items;
+    
+    const query = searchQuery.toLowerCase();
+    return items.filter(item => {
+      // Check if it's a folder
+      if (item.type === "Folder") {
+        const folder = item as FolderItem;
+        // Check folder name or if any child files match
+        if (folder.name.toLowerCase().includes(query)) return true;
+        if (folder.files) {
+          return filterFiles(folder.files).length > 0;
+        }
+        return false;
+      }
+      // For files, check name, type, tags, and owner
+      return item.name.toLowerCase().includes(query) ||
+             item.type.toLowerCase().includes(query) ||
+             item.tags.some(tag => tag.toLowerCase().includes(query)) ||
+             item.owner.toLowerCase().includes(query);
+    });
+  };
+
+  const getFilteredFolderData = () => {
+    if (!searchQuery) return folderData;
+    
+    return folderData.map(folder => {
+      const filteredFiles = folder.files ? filterFiles(folder.files) : [];
+      return {
+        ...folder,
+        files: filteredFiles
+      };
+    }).filter(folder => 
+      folder.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      (folder.files && folder.files.length > 0)
+    );
+  };
+
   return (
     <>
       {/* AI Mapping Dialog */}
@@ -861,7 +917,12 @@ export function DataEngine() {
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-sm">File Explorer</h3>
-            <Button variant="ghost" size="sm" className="h-6 text-xs">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-6 text-xs"
+              onClick={expandAllFolders}
+            >
               Expand All
             </Button>
           </div>
@@ -941,11 +1002,11 @@ export function DataEngine() {
           </div>
         </div>
 
-        {/* Missing Design Files */}
+        {/* Missing Files */}
         <div className="p-4 border-t">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-4 w-4 text-orange-500" />
-            <h3 className="font-semibold text-sm text-orange-500">Missing Design Files</h3>
+            <h3 className="font-semibold text-sm text-orange-500">Missing Files</h3>
           </div>
           <div className="space-y-2">
             {missingFiles.map((file, idx) => (
@@ -993,8 +1054,10 @@ export function DataEngine() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search files semantically... (e.g., 'Find all structural drawings after Jan 2024')"
+              placeholder="Search files by name, type, tags, or owner..."
               className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
@@ -1004,32 +1067,34 @@ export function DataEngine() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">Data Repository Contents</h2>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  toast({
+                    title: "New Folder",
+                    description: "Folder creation feature coming soon!",
+                  });
+                }}
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 New Folder
               </Button>
-              <Button variant="default" size="sm">
+              <Button 
+                variant="default" 
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 Upload Files
               </Button>
-              <div className="flex items-center gap-1 ml-2">
-                <Button
-                  variant={viewMode === "list" ? "secondary" : "ghost"}
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => setViewMode("list")}
-                >
-                  <List className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "grid" ? "secondary" : "ghost"}
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => setViewMode("grid")}
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                </Button>
-              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                className="hidden"
+                onChange={handleFileInputChange}
+              />
             </div>
           </div>
 
@@ -1048,7 +1113,7 @@ export function DataEngine() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {folderData.map((folder) => {
+                  {getFilteredFolderData().map((folder) => {
                     const isExpanded = expandedFolders.has(folder.name);
                     return (
                       <>
@@ -1084,14 +1149,7 @@ export function DataEngine() {
                           <TableCell>{folder.date}</TableCell>
                           <TableCell>{folder.owner}</TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                <Eye className="h-4 w-4 text-muted-foreground" />
-                              </Button>
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                <LinkIcon className="h-4 w-4 text-muted-foreground" />
-                              </Button>
-                            </div>
+                            {/* No actions for folders */}
                           </TableCell>
                         </TableRow>
                         {isExpanded && folder.files?.map((item) => {
@@ -1133,14 +1191,7 @@ export function DataEngine() {
                                   <TableCell>{subfolder.date}</TableCell>
                                   <TableCell>{subfolder.owner}</TableCell>
                                   <TableCell>
-                                    <div className="flex items-center gap-2">
-                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                        <Eye className="h-4 w-4 text-muted-foreground" />
-                                      </Button>
-                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                        <LinkIcon className="h-4 w-4 text-muted-foreground" />
-                                      </Button>
-                                    </div>
+                                    {/* No actions for folders */}
                                   </TableCell>
                                 </TableRow>
                                 {isSubfolderExpanded && subfolder.files?.map((file) => (
@@ -1168,12 +1219,21 @@ export function DataEngine() {
                                     <TableCell>{file.date}</TableCell>
                                     <TableCell>{file.owner}</TableCell>
                                     <TableCell>
-                                      <div className="flex items-center gap-2">
+                                      <div className="flex items-center gap-1">
                                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                                           <Eye className="h-4 w-4 text-muted-foreground" />
                                         </Button>
                                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                          <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                          <Download className="h-4 w-4 text-muted-foreground" />
+                                        </Button>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                          <Edit className="h-4 w-4 text-muted-foreground" />
+                                        </Button>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                          <Clock className="h-4 w-4 text-muted-foreground" />
+                                        </Button>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
                                         </Button>
                                       </div>
                                     </TableCell>
@@ -1202,12 +1262,21 @@ export function DataEngine() {
                                 <TableCell>{file.date}</TableCell>
                                 <TableCell>{file.owner}</TableCell>
                                 <TableCell>
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-1">
                                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                                       <Eye className="h-4 w-4 text-muted-foreground" />
                                     </Button>
                                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                      <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                      <Download className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <Edit className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <Clock className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
                                     </Button>
                                   </div>
                                 </TableCell>
