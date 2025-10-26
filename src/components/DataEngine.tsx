@@ -53,6 +53,7 @@ interface FileItem {
   date: string;
   owner: string;
   folderPath?: string;
+  status?: string;
 }
 
 interface PendingFileMapping {
@@ -64,20 +65,370 @@ interface PendingFileMapping {
 
 interface FolderItem extends FileItem {
   type: "Folder";
-  files?: FileItem[];
+  files?: (FileItem | FolderItem)[];
 }
 
 const initialFolderData: FolderItem[] = [
-  { name: "Admin", type: "Folder", tags: ["folder"], version: "–", date: "15/01/2024", owner: "System", files: [] },
-  { name: "Financials", type: "Folder", tags: ["folder"], version: "–", date: "14/01/2024", owner: "System", files: [] },
-  { name: "Drawings", type: "Folder", tags: ["folder"], version: "–", date: "16/01/2024", owner: "System", files: [] },
-  { name: "Reports", type: "Folder", tags: ["folder"], version: "–", date: "17/01/2024", owner: "System", files: [] },
-  { name: "Correspondence", type: "Folder", tags: ["folder"], version: "–", date: "18/01/2024", owner: "System", files: [] },
-  { name: "Contracts & Legal", type: "Folder", tags: ["folder"], version: "–", date: "19/01/2024", owner: "System", files: [] },
-  { name: "Schedules", type: "Folder", tags: ["folder"], version: "–", date: "20/01/2024", owner: "System", files: [] },
-  { name: "Procurement", type: "Folder", tags: ["folder"], version: "–", date: "21/01/2024", owner: "System", files: [] },
-  { name: "Closeout", type: "Folder", tags: ["folder"], version: "–", date: "22/01/2024", owner: "System", files: [] },
-  { name: "Change Management", type: "Folder", tags: ["folder"], version: "–", date: "23/01/2024", owner: "System", files: [] },
+  { 
+    name: "Admin", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "15/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Contracts",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "08/01/2024",
+        owner: "Legal Team",
+        files: [
+          { name: "Main_Contract_Agreement.pdf", type: "PDF", tags: ["contract", "agreement", "main"], version: "1.0", date: "08/01/2024", owner: "Legal Team" },
+          { name: "Subcontractor_Agreements.pdf", type: "PDF", tags: ["contract", "subcontractor", "agreement"], version: "1.1", date: "09/01/2024", owner: "Legal Team", status: "pending" },
+          { name: "Contract_Terms_Summary.docx", type: "Word Document", tags: ["contract", "summary"], version: "1.0", date: "08/01/2024", owner: "Legal Team" },
+        ]
+      },
+      {
+        name: "Permits",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "10/01/2024",
+        owner: "Admin Team",
+        files: [
+          { name: "Building_Permit_Application.pdf", type: "PDF", tags: ["permit", "building"], version: "2.0", date: "10/01/2024", owner: "Admin Team" },
+          { name: "Environmental_Permits.pdf", type: "PDF", tags: ["permit", "environmental"], version: "1.0", date: "11/01/2024", owner: "Admin Team" },
+          { name: "Permit_Checklist.docx", type: "Word Document", tags: ["permit", "checklist"], version: "1.0", date: "10/01/2024", owner: "Admin Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Financials", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "14/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Budgets",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "12/01/2024",
+        owner: "Finance Team",
+        files: [
+          { name: "Project_Master_Budget.pdf", type: "PDF", tags: ["budget", "master"], version: "3.2", date: "12/01/2024", owner: "Finance Team" },
+          { name: "Monthly_Budget_Report.pdf", type: "PDF", tags: ["budget", "monthly"], version: "1.5", date: "15/01/2024", owner: "Finance Team" },
+          { name: "Budget_Forecast_Q1.docx", type: "Word Document", tags: ["budget", "forecast"], version: "1.0", date: "13/01/2024", owner: "Finance Team" },
+        ]
+      },
+      {
+        name: "Invoices",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "16/01/2024",
+        owner: "Finance Team",
+        files: [
+          { name: "Vendor_Invoice_2024_001.pdf", type: "PDF", tags: ["invoice", "vendor"], version: "1.0", date: "16/01/2024", owner: "Finance Team" },
+          { name: "Subcontractor_Invoice_Summary.pdf", type: "PDF", tags: ["invoice", "subcontractor"], version: "1.0", date: "17/01/2024", owner: "Finance Team" },
+          { name: "Invoice_Tracking_Log.docx", type: "Word Document", tags: ["invoice", "tracking"], version: "2.1", date: "16/01/2024", owner: "Finance Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Drawings", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "16/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Architectural",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "18/01/2024",
+        owner: "Design Team",
+        files: [
+          { name: "Floor_Plans_Level_1.pdf", type: "PDF", tags: ["architectural", "floor plan"], version: "4.0", date: "18/01/2024", owner: "Design Team" },
+          { name: "Elevation_Drawings_North.pdf", type: "PDF", tags: ["architectural", "elevation"], version: "3.5", date: "19/01/2024", owner: "Design Team" },
+          { name: "Section_Details_A.docx", type: "Word Document", tags: ["architectural", "section"], version: "2.0", date: "18/01/2024", owner: "Design Team" },
+        ]
+      },
+      {
+        name: "Structural",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "20/01/2024",
+        owner: "Engineering Team",
+        files: [
+          { name: "Foundation_Design.pdf", type: "PDF", tags: ["structural", "foundation"], version: "2.8", date: "20/01/2024", owner: "Engineering Team" },
+          { name: "Steel_Frame_Details.pdf", type: "PDF", tags: ["structural", "steel"], version: "3.1", date: "21/01/2024", owner: "Engineering Team" },
+          { name: "Load_Calculations.docx", type: "Word Document", tags: ["structural", "calculations"], version: "1.5", date: "20/01/2024", owner: "Engineering Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Reports", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "17/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Progress",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "22/01/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Weekly_Progress_Report_W04.pdf", type: "PDF", tags: ["progress", "weekly"], version: "1.0", date: "22/01/2024", owner: "Project Manager" },
+          { name: "Monthly_Progress_Summary.pdf", type: "PDF", tags: ["progress", "monthly"], version: "2.0", date: "25/01/2024", owner: "Project Manager" },
+          { name: "Progress_Photos_January.docx", type: "Word Document", tags: ["progress", "photos"], version: "1.0", date: "23/01/2024", owner: "Project Manager" },
+        ]
+      },
+      {
+        name: "Quality",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "24/01/2024",
+        owner: "QA Team",
+        files: [
+          { name: "Quality_Inspection_Report.pdf", type: "PDF", tags: ["quality", "inspection"], version: "1.2", date: "24/01/2024", owner: "QA Team" },
+          { name: "Material_Testing_Results.pdf", type: "PDF", tags: ["quality", "testing"], version: "1.0", date: "26/01/2024", owner: "QA Team" },
+          { name: "Non_Conformance_Report.docx", type: "Word Document", tags: ["quality", "ncr"], version: "1.1", date: "25/01/2024", owner: "QA Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Correspondence", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "18/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Emails",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "26/01/2024",
+        owner: "Admin Team",
+        files: [
+          { name: "Client_Communication_Thread.pdf", type: "PDF", tags: ["email", "client"], version: "1.0", date: "26/01/2024", owner: "Admin Team" },
+          { name: "Contractor_Email_Summary.pdf", type: "PDF", tags: ["email", "contractor"], version: "1.0", date: "27/01/2024", owner: "Admin Team" },
+          { name: "Internal_Team_Updates.docx", type: "Word Document", tags: ["email", "internal"], version: "1.0", date: "26/01/2024", owner: "Admin Team" },
+        ]
+      },
+      {
+        name: "Letters",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "28/01/2024",
+        owner: "Admin Team",
+        files: [
+          { name: "Formal_Notice_Letter.pdf", type: "PDF", tags: ["letter", "formal"], version: "1.0", date: "28/01/2024", owner: "Admin Team" },
+          { name: "Award_Letter_Subcontractor.pdf", type: "PDF", tags: ["letter", "award"], version: "1.0", date: "29/01/2024", owner: "Admin Team" },
+          { name: "Transmittal_Letter_Template.docx", type: "Word Document", tags: ["letter", "transmittal"], version: "2.0", date: "28/01/2024", owner: "Admin Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Contracts", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "19/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Agreements",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "30/01/2024",
+        owner: "Legal Team",
+        files: [
+          { name: "Master_Service_Agreement.pdf", type: "PDF", tags: ["agreement", "master"], version: "2.0", date: "30/01/2024", owner: "Legal Team" },
+          { name: "Non_Disclosure_Agreement.pdf", type: "PDF", tags: ["agreement", "nda"], version: "1.0", date: "31/01/2024", owner: "Legal Team" },
+          { name: "Partnership_Agreement.docx", type: "Word Document", tags: ["agreement", "partnership"], version: "1.5", date: "30/01/2024", owner: "Legal Team" },
+        ]
+      },
+      {
+        name: "Legal Documents",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "01/02/2024",
+        owner: "Legal Team",
+        files: [
+          { name: "Legal_Opinion_Letter.pdf", type: "PDF", tags: ["legal", "opinion"], version: "1.0", date: "01/02/2024", owner: "Legal Team" },
+          { name: "Liability_Waiver_Forms.pdf", type: "PDF", tags: ["legal", "waiver"], version: "1.0", date: "02/02/2024", owner: "Legal Team" },
+          { name: "Insurance_Requirements.docx", type: "Word Document", tags: ["legal", "insurance"], version: "1.2", date: "01/02/2024", owner: "Legal Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Schedules", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "20/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Project Schedules",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "03/02/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Master_Project_Schedule.pdf", type: "PDF", tags: ["schedule", "master"], version: "5.0", date: "03/02/2024", owner: "Project Manager" },
+          { name: "Phase_1_Construction_Schedule.pdf", type: "PDF", tags: ["schedule", "phase 1"], version: "3.2", date: "04/02/2024", owner: "Project Manager" },
+          { name: "Updated_Timeline_Q1.docx", type: "Word Document", tags: ["schedule", "timeline"], version: "2.1", date: "03/02/2024", owner: "Project Manager" },
+        ]
+      },
+      {
+        name: "Milestones",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "05/02/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Key_Milestones_Tracker.pdf", type: "PDF", tags: ["milestone", "tracker"], version: "2.5", date: "05/02/2024", owner: "Project Manager" },
+          { name: "Milestone_Achievement_Report.pdf", type: "PDF", tags: ["milestone", "report"], version: "1.0", date: "06/02/2024", owner: "Project Manager" },
+          { name: "Critical_Path_Analysis.docx", type: "Word Document", tags: ["milestone", "critical path"], version: "1.3", date: "05/02/2024", owner: "Project Manager" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Procurement", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "21/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Purchase Orders",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "07/02/2024",
+        owner: "Procurement Team",
+        files: [
+          { name: "PO_2024_001_Steel_Materials.pdf", type: "PDF", tags: ["purchase order", "steel"], version: "1.0", date: "07/02/2024", owner: "Procurement Team" },
+          { name: "PO_2024_002_Concrete_Supply.pdf", type: "PDF", tags: ["purchase order", "concrete"], version: "1.0", date: "08/02/2024", owner: "Procurement Team" },
+          { name: "Purchase_Order_Log.docx", type: "Word Document", tags: ["purchase order", "log"], version: "3.0", date: "07/02/2024", owner: "Procurement Team" },
+        ]
+      },
+      {
+        name: "Supplier Documents",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "09/02/2024",
+        owner: "Procurement Team",
+        files: [
+          { name: "Supplier_Qualification_Package.pdf", type: "PDF", tags: ["supplier", "qualification"], version: "1.5", date: "09/02/2024", owner: "Procurement Team" },
+          { name: "Material_Certificates.pdf", type: "PDF", tags: ["supplier", "certificates"], version: "1.0", date: "10/02/2024", owner: "Procurement Team" },
+          { name: "Vendor_Performance_Review.docx", type: "Word Document", tags: ["supplier", "performance"], version: "2.0", date: "09/02/2024", owner: "Procurement Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Closeout", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "22/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Final Reports",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "11/02/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Project_Completion_Report.pdf", type: "PDF", tags: ["final", "completion"], version: "1.0", date: "11/02/2024", owner: "Project Manager" },
+          { name: "Lessons_Learned_Summary.pdf", type: "PDF", tags: ["final", "lessons learned"], version: "1.0", date: "12/02/2024", owner: "Project Manager" },
+          { name: "Final_Cost_Report.docx", type: "Word Document", tags: ["final", "cost"], version: "1.0", date: "11/02/2024", owner: "Project Manager" },
+        ]
+      },
+      {
+        name: "Warranties",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "13/02/2024",
+        owner: "Admin Team",
+        files: [
+          { name: "Equipment_Warranty_Documentation.pdf", type: "PDF", tags: ["warranty", "equipment"], version: "1.0", date: "13/02/2024", owner: "Admin Team" },
+          { name: "Contractor_Warranty_Certificate.pdf", type: "PDF", tags: ["warranty", "contractor"], version: "1.0", date: "14/02/2024", owner: "Admin Team" },
+          { name: "Warranty_Registry.docx", type: "Word Document", tags: ["warranty", "registry"], version: "1.0", date: "13/02/2024", owner: "Admin Team" },
+        ]
+      }
+    ] 
+  },
+  { 
+    name: "Change Management", 
+    type: "Folder", 
+    tags: ["folder"], 
+    version: "–", 
+    date: "23/01/2024", 
+    owner: "System", 
+    files: [
+      {
+        name: "Change Orders",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "15/02/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Change_Order_001_Design_Revision.pdf", type: "PDF", tags: ["change order", "design"], version: "1.0", date: "15/02/2024", owner: "Project Manager" },
+          { name: "Change_Order_002_Scope_Addition.pdf", type: "PDF", tags: ["change order", "scope"], version: "1.0", date: "16/02/2024", owner: "Project Manager" },
+          { name: "Change_Order_Log.docx", type: "Word Document", tags: ["change order", "log"], version: "4.2", date: "15/02/2024", owner: "Project Manager" },
+        ]
+      },
+      {
+        name: "Variations",
+        type: "Folder",
+        tags: ["subfolder"],
+        version: "–",
+        date: "17/02/2024",
+        owner: "Project Manager",
+        files: [
+          { name: "Variation_Request_Form.pdf", type: "PDF", tags: ["variation", "request"], version: "1.0", date: "17/02/2024", owner: "Project Manager" },
+          { name: "Approved_Variations_Summary.pdf", type: "PDF", tags: ["variation", "approved"], version: "2.0", date: "18/02/2024", owner: "Project Manager" },
+          { name: "Variation_Impact_Analysis.docx", type: "Word Document", tags: ["variation", "analysis"], version: "1.1", date: "17/02/2024", owner: "Project Manager" },
+        ]
+      }
+    ] 
+  },
 ];
 
 const sidebarFolders = [
@@ -86,7 +437,7 @@ const sidebarFolders = [
   "Drawings",
   "Reports",
   "Correspondence",
-  "Contracts & Legal",
+  "Contracts",
   "Schedules",
   "Procurement",
   "Closeout",
@@ -478,25 +829,53 @@ export function DataEngine() {
                 <div className="ml-4 mt-1 space-y-1">
                   {folderData.map((folder) => {
                     const fileCount = folder.files?.length || 0;
+                    const isFolderExpanded = expandedFolders.has(folder.name);
                     return (
-                      <button
-                        key={folder.name}
-                        className="flex items-center gap-2 w-full text-sm hover:bg-muted/50 rounded p-1"
-                        onClick={() => toggleFolderExpansion(folder.name)}
-                      >
-                        {expandedFolders.has(folder.name) ? (
-                          <ChevronDown className="h-3 w-3" />
-                        ) : (
-                          <ChevronRight className="h-3 w-3" />
+                      <div key={folder.name}>
+                        <button
+                          className="flex items-center gap-2 w-full text-sm hover:bg-muted/50 rounded p-1"
+                          onClick={() => toggleFolderExpansion(folder.name)}
+                        >
+                          {isFolderExpanded ? (
+                            <ChevronDown className="h-3 w-3" />
+                          ) : (
+                            <ChevronRight className="h-3 w-3" />
+                          )}
+                          <Folder className="h-4 w-4 text-blue-500" />
+                          <span className="text-sm">{folder.name}</span>
+                          {fileCount > 0 && (
+                            <Badge variant="secondary" className="ml-auto h-4 px-1 text-xs">
+                              {fileCount}
+                            </Badge>
+                          )}
+                        </button>
+                        {isFolderExpanded && folder.files && (
+                          <div className="ml-6 mt-1 space-y-1">
+                            {folder.files.map((item) => {
+                              if (item.type === "Folder") {
+                                const subfolder = item as FolderItem;
+                                const subfolderFileCount = subfolder.files?.length || 0;
+                                return (
+                                  <button
+                                    key={subfolder.name}
+                                    className="flex items-center gap-2 w-full text-xs hover:bg-muted/50 rounded p-1"
+                                    onClick={() => toggleFolderExpansion(`${folder.name}/${subfolder.name}`)}
+                                  >
+                                    <Folder className="h-3 w-3 text-blue-400" />
+                                    <span>{subfolder.name}</span>
+                                    {subfolderFileCount > 0 && (
+                                      <Badge variant="secondary" className="ml-auto h-3 px-1 text-[10px]">
+                                        {subfolderFileCount}
+                                      </Badge>
+                                    )}
+                                  </button>
+                                );
+                              }
+                              return null;
+                            })}
+                          </div>
                         )}
-                        <Folder className="h-4 w-4 text-blue-500" />
-                        <span className="text-sm">{folder.name}</span>
-                        {fileCount > 0 && (
-                          <Badge variant="secondary" className="ml-auto h-4 px-1 text-xs">
-                            {fileCount}
-                          </Badge>
-                        )}
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -658,35 +1037,127 @@ export function DataEngine() {
                             </div>
                           </TableCell>
                         </TableRow>
-                        {isExpanded && folder.files?.map((file) => (
-                          <TableRow key={`${folder.name}-${file.name}`} className="bg-muted/20">
-                            <TableCell className="pl-12">
-                              <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4 text-muted-foreground" />
-                                <span>{file.name}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell>{file.type}</TableCell>
-                            <TableCell>
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                {file.tags[0]}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-muted-foreground">{file.version}</TableCell>
-                            <TableCell>{file.date}</TableCell>
-                            <TableCell>{file.owner}</TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                  <Eye className="h-4 w-4 text-muted-foreground" />
-                                </Button>
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                  <LinkIcon className="h-4 w-4 text-muted-foreground" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {isExpanded && folder.files?.map((item) => {
+                          // Check if item is a subfolder
+                          if (item.type === "Folder") {
+                            const subfolder = item as FolderItem;
+                            const isSubfolderExpanded = expandedFolders.has(`${folder.name}/${subfolder.name}`);
+                            return (
+                              <>
+                                <TableRow key={`${folder.name}-${subfolder.name}`} className="bg-muted/20">
+                                  <TableCell className="pl-12">
+                                    <div className="flex items-center gap-2">
+                                      <button 
+                                        onClick={() => toggleFolderExpansion(`${folder.name}/${subfolder.name}`)}
+                                        className="hover:bg-muted/50 rounded p-0.5"
+                                      >
+                                        {isSubfolderExpanded ? (
+                                          <ChevronDown className="h-3 w-3" />
+                                        ) : (
+                                          <ChevronRight className="h-3 w-3" />
+                                        )}
+                                      </button>
+                                      <Folder className="h-4 w-4 text-blue-500" />
+                                      <span className="font-medium">{subfolder.name}</span>
+                                      {subfolder.files && subfolder.files.length > 0 && (
+                                        <Badge variant="secondary" className="ml-2 text-xs">
+                                          {subfolder.files.length}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </TableCell>
+                                  <TableCell>{subfolder.type}</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                                      {subfolder.tags[0]}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell className="text-muted-foreground">{subfolder.version}</TableCell>
+                                  <TableCell>{subfolder.date}</TableCell>
+                                  <TableCell>{subfolder.owner}</TableCell>
+                                  <TableCell>
+                                    <div className="flex items-center gap-2">
+                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                        <Eye className="h-4 w-4 text-muted-foreground" />
+                                      </Button>
+                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                        <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                      </Button>
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                                {isSubfolderExpanded && subfolder.files?.map((file) => (
+                                  <TableRow key={`${folder.name}-${subfolder.name}-${file.name}`} className="bg-muted/30">
+                                    <TableCell className="pl-24">
+                                      <div className="flex items-center gap-2">
+                                        <FileText className="h-4 w-4 text-muted-foreground" />
+                                        <span>{file.name}</span>
+                                        {file.status === "pending" && (
+                                          <AlertTriangle className="h-3 w-3 text-orange-500 ml-1" />
+                                        )}
+                                      </div>
+                                    </TableCell>
+                                    <TableCell>{file.type}</TableCell>
+                                    <TableCell>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {file.tags.slice(0, 2).map((tag, idx) => (
+                                          <Badge key={idx} variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
+                                            {tag}
+                                          </Badge>
+                                        ))}
+                                      </div>
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground">{file.version}</TableCell>
+                                    <TableCell>{file.date}</TableCell>
+                                    <TableCell>{file.owner}</TableCell>
+                                    <TableCell>
+                                      <div className="flex items-center gap-2">
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                          <Eye className="h-4 w-4 text-muted-foreground" />
+                                        </Button>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                          <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                        </Button>
+                                      </div>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </>
+                            );
+                          } else {
+                            // It's a file
+                            const file = item as FileItem;
+                            return (
+                              <TableRow key={`${folder.name}-${file.name}`} className="bg-muted/20">
+                                <TableCell className="pl-12">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="h-4 w-4 text-muted-foreground" />
+                                    <span>{file.name}</span>
+                                  </div>
+                                </TableCell>
+                                <TableCell>{file.type}</TableCell>
+                                <TableCell>
+                                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                    {file.tags[0]}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground">{file.version}</TableCell>
+                                <TableCell>{file.date}</TableCell>
+                                <TableCell>{file.owner}</TableCell>
+                                <TableCell>
+                                  <div className="flex items-center gap-2">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <Eye className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <LinkIcon className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                        })}
                       </>
                     );
                   })}
