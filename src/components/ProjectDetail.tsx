@@ -1554,7 +1554,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   </Card>
 
                   {/* Activity, Notes, Recent Files and Quick Actions */}
-                  <div className="grid lg:grid-cols-3 gap-4">
+                  <div className="grid lg:grid-cols-3 gap-4 mt-6">
                     <div className="lg:col-span-2">
                       <div className="grid md:grid-cols-2 gap-4 mb-4">
                       {/* Activity */}
