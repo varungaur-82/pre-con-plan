@@ -2378,6 +2378,74 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                             </AccordionItem>
                           </Card>
 
+                          {/* Story of Market Fit */}
+                          <Card>
+                            <AccordionItem value="market-fit" className="border-0">
+                              <AccordionTrigger className="px-6 hover:no-underline">
+                                <div className="flex items-center gap-3">
+                                  <TrendingUp className="h-5 w-5 text-green-600" />
+                                  <span className="text-lg font-semibold">Story of Market Fit</span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <CardContent className="pt-4">
+                                  <p className="text-sm text-muted-foreground mb-6">
+                                    How does our estimate compare to market benchmarks and peer projects
+                                  </p>
+
+                                  <div className="grid grid-cols-2 gap-8">
+                                    {/* Left: Market Comparison */}
+                                    <Card className="border">
+                                      <CardHeader>
+                                        <CardTitle className="text-base">Market Comparison</CardTitle>
+                                      </CardHeader>
+                                      <CardContent className="space-y-4">
+                                        <div className="flex items-center justify-between py-2">
+                                          <span className="text-sm font-medium">Our $/SF</span>
+                                          <span className="text-lg font-bold text-green-600">$425/SF</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-t">
+                                          <span className="text-sm font-medium">Metro Median</span>
+                                          <span className="text-lg font-bold">$395/SF</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-t">
+                                          <span className="text-sm font-medium">Variance</span>
+                                          <span className="text-lg font-bold text-orange-600">+7.6%</span>
+                                        </div>
+                                        <div className="pt-4 border-t">
+                                          <p className="text-xs text-muted-foreground">
+                                            Driven by premium finishes and jurisdictional requirements; largely regional variance.
+                                          </p>
+                                        </div>
+                                      </CardContent>
+                                    </Card>
+
+                                    {/* Right: Benchmark Sources */}
+                                    <Card className="border">
+                                      <CardHeader>
+                                        <CardTitle className="text-base">Benchmark Sources</CardTitle>
+                                      </CardHeader>
+                                      <CardContent className="space-y-3">
+                                        <div className="flex items-center justify-between py-2">
+                                          <span className="text-sm font-medium">RSMeans</span>
+                                          <span className="text-xs text-muted-foreground">As of Jan 15, 2024</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-t">
+                                          <span className="text-sm font-medium">Marshall & Swift</span>
+                                          <span className="text-xs text-muted-foreground">As of Jan 30, 2024</span>
+                                        </div>
+                                        <div className="flex items-center justify-between py-2 border-t">
+                                          <span className="text-sm font-medium">Local GCs</span>
+                                          <span className="text-xs text-muted-foreground">As of Feb 14, 2024</span>
+                                        </div>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+                                </CardContent>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Card>
+
                           {/* Story of Next Steps */}
                           <Card>
                             <AccordionItem value="next-steps" className="border-0">
