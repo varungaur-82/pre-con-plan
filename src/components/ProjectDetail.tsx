@@ -2457,160 +2457,89 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                               </AccordionTrigger>
                               <AccordionContent>
                                 <CardContent className="pt-4">
-                                  {/* KPI Summary */}
-                                  <div className="grid grid-cols-3 gap-4 mb-6">
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">5</div>
-                                        <div className="text-sm text-muted-foreground">Critical Areas</div>
-                                        <div className="text-sm text-red-600 mt-1">Need completion</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">6 weeks</div>
-                                        <div className="text-sm text-muted-foreground">Target Timeline</div>
-                                        <div className="text-sm text-muted-foreground mt-1">To CD completion</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">$21.9M</div>
-                                        <div className="text-sm text-muted-foreground">Value at Risk</div>
-                                        <div className="text-sm text-red-600 mt-1">21.4% of budget</div>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-6">
+                                    Design completion status and recommended actions to improve reliability
+                                  </p>
 
-                                  {/* Priority Action Items */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-4">Priority Action Items</h3>
-                                    <div className="space-y-3">
-                                      {[
-                                        { 
-                                          item: 'Complete Structural Steel Drawings', 
-                                          status: 'In Progress', 
-                                          priority: 'High',
-                                          completion: 65,
-                                          impact: '$8.2M',
-                                          dueDate: '2 weeks'
-                                        },
-                                        { 
-                                          item: 'Finalize Electrical/HVAC Specifications', 
-                                          status: 'Not Started', 
-                                          priority: 'High',
-                                          completion: 35,
-                                          impact: '$6.8M',
-                                          dueDate: '3 weeks'
-                                        },
-                                        { 
-                                          item: 'Lock Interior Finishes Schedule', 
-                                          status: 'In Progress', 
-                                          priority: 'Medium',
-                                          completion: 50,
-                                          impact: '$3.2M',
-                                          dueDate: '4 weeks'
-                                        },
-                                        { 
-                                          item: 'Curtainwall Shop Drawing Review', 
-                                          status: 'Not Started', 
-                                          priority: 'Medium',
-                                          completion: 20,
-                                          impact: '$2.5M',
-                                          dueDate: '5 weeks'
-                                        },
-                                        { 
-                                          item: 'MEP Coordination Completion', 
-                                          status: 'Planning', 
-                                          priority: 'High',
-                                          completion: 40,
-                                          impact: '$1.2M',
-                                          dueDate: '6 weeks'
-                                        }
-                                      ].map((action, idx) => (
-                                        <Card key={idx} className="border-l-4" style={{ borderLeftColor: action.priority === 'High' ? '#ef4444' : '#f59e0b' }}>
-                                          <CardContent className="pt-4">
-                                            <div className="flex items-start justify-between mb-2">
-                                              <div className="flex-1">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                  <span className="font-medium">{action.item}</span>
-                                                  <Badge variant={action.priority === 'High' ? 'destructive' : 'default'} className="text-xs">
-                                                    {action.priority}
-                                                  </Badge>
-                                                </div>
-                                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                                  <span>Status: {action.status}</span>
-                                                  <span>Impact: {action.impact}</span>
-                                                  <span>Due: {action.dueDate}</span>
-                                                </div>
-                                              </div>
-                                              <div className="text-right">
-                                                <div className="text-lg font-bold">{action.completion}%</div>
-                                              </div>
-                                            </div>
-                                            <Progress value={action.completion} className="h-2" />
-                                          </CardContent>
-                                        </Card>
-                                      ))}
+                                  {/* Design Completion Status */}
+                                  <div className="mb-8">
+                                    <h3 className="text-base font-semibold mb-4">Design Completion Status</h3>
+                                    <div className="space-y-4">
+                                      {/* Structural Steel */}
+                                      <div className="flex items-start justify-between py-3 border-b">
+                                        <div className="flex-1">
+                                          <div className="font-medium mb-1">Structural Steel</div>
+                                          <p className="text-sm text-muted-foreground">Design Development complete</p>
+                                        </div>
+                                        <div className="text-right">
+                                          <div className="text-xl font-bold text-green-600">85%</div>
+                                          <div className="text-sm text-green-600">Ready</div>
+                                        </div>
+                                      </div>
+
+                                      {/* Electrical/HVAC Systems */}
+                                      <div className="flex items-start justify-between py-3 border-b">
+                                        <div className="flex-1">
+                                          <div className="font-medium mb-1">Electrical/HVAC Systems</div>
+                                          <p className="text-sm text-muted-foreground">Schematic Design phase</p>
+                                        </div>
+                                        <div className="text-right">
+                                          <div className="text-xl font-bold text-red-600">40%</div>
+                                          <div className="text-sm text-red-600">Critical</div>
+                                        </div>
+                                      </div>
+
+                                      {/* Interior Finishes */}
+                                      <div className="flex items-start justify-between py-3">
+                                        <div className="flex-1">
+                                          <div className="font-medium mb-1">Interior Finishes</div>
+                                          <p className="text-sm text-muted-foreground">Concept Design phase</p>
+                                        </div>
+                                        <div className="text-right">
+                                          <div className="text-xl font-bold text-orange-600">45%</div>
+                                          <div className="text-sm text-orange-600">Pending</div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-
-                                  {/* Timeline Chart */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-4">Completion Timeline (Next 6 Weeks)</h3>
-                                    <ResponsiveContainer width="100%" height={250}>
-                                      <BarChart data={[
-                                        { week: 'Week 1-2', planned: 15, actual: 12 },
-                                        { week: 'Week 3-4', planned: 25, actual: 0 },
-                                        { week: 'Week 5-6', planned: 20, actual: 0 }
-                                      ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="week" />
-                                        <YAxis label={{ value: 'Progress (%)', angle: -90, position: 'insideLeft' }} />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Bar dataKey="planned" fill="#94a3b8" name="Planned Progress" />
-                                        <Bar dataKey="actual" fill="#3b82f6" name="Actual Progress" />
-                                      </BarChart>
-                                    </ResponsiveContainer>
                                   </div>
 
                                   {/* Recommended Actions */}
                                   <div>
-                                    <h3 className="text-sm font-semibold mb-3">Recommended Actions</h3>
-                                    <div className="space-y-2">
-                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                                        <div className="flex items-start gap-2">
-                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
-                                          <div className="flex-1">
-                                            <div className="font-medium text-sm">Expedite MEP Design Reviews</div>
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                              Schedule daily coordination sessions with MEP teams to accelerate completion
-                                            </p>
-                                          </div>
-                                        </div>
+                                    <h3 className="text-base font-semibold mb-4">Recommended Actions</h3>
+                                    <div className="space-y-4">
+                                      <div>
+                                        <div className="font-medium mb-1">1. Finalize Structural Steel Drawings</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Complete structural drawings to lock steel quantities and improve cost accuracy.
+                                        </p>
                                       </div>
-                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                                        <div className="flex items-start gap-2">
-                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
-                                          <div className="flex-1">
-                                            <div className="font-medium text-sm">Lock Steel Pricing Early</div>
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                              Given current market volatility, secure steel pricing commitments within 2 weeks
-                                            </p>
-                                          </div>
-                                        </div>
+
+                                      <div>
+                                        <div className="font-medium mb-1">2. Complete Electrical/HVAC Specifications</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Finalize equipment specifications and drawings to improve design confidence.
+                                        </p>
                                       </div>
-                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                                        <div className="flex items-start gap-2">
-                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
-                                          <div className="flex-1">
-                                            <div className="font-medium text-sm">Increase Contingency Buffer</div>
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                              Consider increasing contingency from 12% to 15% to align with DD phase standards
-                                            </p>
-                                          </div>
-                                        </div>
+
+                                      <div>
+                                        <div className="font-medium mb-1">3. Standardize Interior Specifications</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Define finish standards to improve budget accuracy.
+                                        </p>
+                                      </div>
+
+                                      <div>
+                                        <div className="font-medium mb-1">4. Finalize Curtainwall Profiles</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Complete curtainwall details to confirm fabrication costs.
+                                        </p>
+                                      </div>
+
+                                      <div>
+                                        <div className="font-medium mb-1">5. Complete MEP Coordination</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Finalize coordination drawings for installation cost clarity.
+                                        </p>
                                       </div>
                                     </div>
                                   </div>
