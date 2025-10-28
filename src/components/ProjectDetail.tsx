@@ -23,7 +23,7 @@ import {
   TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File,
   CalendarIcon, ChevronRight, ChevronUp, ChevronDown, ChevronLeft
 } from "lucide-react";
-import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
@@ -1940,102 +1940,177 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                               </AccordionTrigger>
                               <AccordionContent>
                                 <CardContent className="pt-4">
-                                  {/* KPI Summary */}
-                                  <div className="grid grid-cols-3 gap-4 mb-6">
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">$102.6M</div>
-                                        <div className="text-sm text-muted-foreground">Current Estimate</div>
-                                        <div className="text-sm text-green-600 mt-1">+4.2% from DD</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">75% / 25%</div>
-                                        <div className="text-sm text-muted-foreground">Hard / Soft Cost</div>
-                                        <div className="text-sm text-muted-foreground mt-1">$76.9M / $25.7M</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">$349/SF</div>
-                                        <div className="text-sm text-muted-foreground">Cost per Square Foot</div>
-                                        <div className="text-sm text-blue-600 mt-1">294k SF Total</div>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-6">
+                                    Current budget status, changes since last phase, and how much is finalized vs still estimated
+                                  </p>
 
-                                  {/* Cost Evolution Chart */}
+                                  {/* Cost Evolution by Phase */}
                                   <div className="mb-6">
                                     <h3 className="text-sm font-semibold mb-4">Cost Evolution by Phase</h3>
-                                    <ResponsiveContainer width="100%" height={300}>
+                                    <ResponsiveContainer width="100%" height={280}>
                                       <AreaChart data={[
-                                        { phase: 'Concept', total: 95.2, hard: 71.4, soft: 23.8, perSF: 324 },
-                                        { phase: 'SD', total: 98.4, hard: 74.1, soft: 24.3, perSF: 335 },
-                                        { phase: 'DD', total: 101.2, hard: 76.0, soft: 25.2, perSF: 344 },
-                                        { phase: 'CD', total: 102.6, hard: 76.9, soft: 25.7, perSF: 349 }
+                                        { phase: 'SD', hard: 74.1, soft: 24.3, perSF: 335 },
+                                        { phase: 'DD', hard: 76.0, soft: 25.2, perSF: 344 },
+                                        { phase: 'CD', hard: 76.9, soft: 25.7, perSF: 349 }
                                       ]}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="phase" />
-                                        <YAxis yAxisId="left" label={{ value: 'Cost ($M)', angle: -90, position: 'insideLeft' }} />
-                                        <YAxis yAxisId="right" orientation="right" label={{ value: '$/SF', angle: 90, position: 'insideRight' }} />
+                                        <YAxis yAxisId="left" label={{ value: '$120M', position: 'top' }} domain={[0, 120]} />
+                                        <YAxis yAxisId="right" orientation="right" label={{ value: '$600/SF', position: 'top' }} domain={[0, 600]} />
                                         <Tooltip />
-                                        <Legend />
-                                        <Area yAxisId="left" type="monotone" dataKey="hard" stackId="1" stroke="#2563eb" fill="#3b82f6" name="Hard Cost" />
-                                        <Area yAxisId="left" type="monotone" dataKey="soft" stackId="1" stroke="#10b981" fill="#34d399" name="Soft Cost" />
-                                        <Line yAxisId="right" type="monotone" dataKey="perSF" stroke="#f59e0b" strokeWidth={2} name="$/SF" />
+                                        <Legend verticalAlign="bottom" />
+                                        <Area yAxisId="left" type="monotone" dataKey="hard" stackId="1" stroke="#3b82f6" fill="#3b82f6" name="Hard Cost" />
+                                        <Area yAxisId="left" type="monotone" dataKey="soft" stackId="1" stroke="#10b981" fill="#10b981" name="Soft Cost" />
+                                        <Line yAxisId="right" type="monotone" dataKey="perSF" stroke="#f59e0b" strokeWidth={2} dot={{ fill: '#f59e0b', r: 4 }} name="$/SF" />
                                       </AreaChart>
                                     </ResponsiveContainer>
                                   </div>
 
-                                  {/* Phase Breakdown */}
-                                  <div className="space-y-3">
-                                    <h3 className="text-sm font-semibold mb-3">Phase-by-Phase Changes</h3>
-                                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                  {/* Phase Details */}
+                                  <div className="space-y-4 mb-6">
+                                    <div className="flex items-start justify-between border-b pb-3">
                                       <div className="flex-1">
-                                        <div className="font-medium">SD → DD</div>
-                                        <p className="text-sm text-muted-foreground mt-1">
-                                          +$2.8M increase mostly from clarified quantities, not scope creep. Envelope spec locked.
+                                        <div className="font-semibold mb-1">SD</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Jump from Concept → SD driven by code-required egress core and added generator redundancy.
                                         </p>
                                       </div>
-                                      <div className="text-right">
-                                        <div className="font-bold text-orange-600">+2.8%</div>
-                                        <div className="text-xs text-muted-foreground">$98.4M → $101.2M</div>
+                                      <div className="text-right ml-8">
+                                        <div className="text-xl font-bold">$98.4M</div>
+                                        <div className="text-xs text-muted-foreground">Hard: $74.1M | Soft: $24.3M</div>
                                       </div>
                                     </div>
-                                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                    
+                                    <div className="flex items-start justify-between border-b pb-3">
                                       <div className="flex-1">
-                                        <div className="font-medium">DD → CD</div>
-                                        <p className="text-sm text-muted-foreground mt-1">
-                                          +$1.4M delta is &lt;1.5%. Now behaving like a controllable GMP candidate.
+                                        <div className="font-semibold mb-1">DD</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Increase is mostly clarified quantities, not scope creep. Envelope spec locked.
                                         </p>
                                       </div>
-                                      <div className="text-right">
-                                        <div className="font-bold text-green-600">+1.4%</div>
-                                        <div className="text-xs text-muted-foreground">$101.2M → $102.6M</div>
+                                      <div className="text-right ml-8">
+                                        <div className="text-xl font-bold">$101.2M</div>
+                                        <div className="text-xs text-muted-foreground">Hard: $76.0M | Soft: $25.2M</div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="flex items-start justify-between pb-3">
+                                      <div className="flex-1">
+                                        <div className="font-semibold mb-1">CD</div>
+                                        <p className="text-sm text-muted-foreground">
+                                          Delta vs DD is &lt;1.5%. Now behaving like a controllable GMP candidate.
+                                        </p>
+                                      </div>
+                                      <div className="text-right ml-8">
+                                        <div className="text-xl font-bold">$102.6M</div>
+                                        <div className="text-xs text-muted-foreground">Hard: $76.9M | Soft: $25.7M</div>
                                       </div>
                                     </div>
                                   </div>
 
-                                  {/* Cost Breakdown by System */}
-                                  <div className="mt-6">
-                                    <h3 className="text-sm font-semibold mb-4">Cost Distribution by Major System</h3>
-                                    <ResponsiveContainer width="100%" height={250}>
-                                      <BarChart data={[
-                                        { system: 'Structure', cost: 28.5, percentage: 27.8 },
-                                        { system: 'Envelope', cost: 18.2, percentage: 17.7 },
-                                        { system: 'MEP', cost: 22.4, percentage: 21.8 },
-                                        { system: 'Interiors', cost: 15.8, percentage: 15.4 },
-                                        { system: 'Site', cost: 8.9, percentage: 8.7 },
-                                        { system: 'Soft Costs', cost: 8.8, percentage: 8.6 }
-                                      ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="system" />
-                                        <YAxis label={{ value: 'Cost ($M)', angle: -90, position: 'insideLeft' }} />
-                                        <Tooltip />
-                                        <Bar dataKey="cost" fill="#3b82f6" name="Cost ($M)" />
-                                      </BarChart>
-                                    </ResponsiveContainer>
+                                  {/* Two Column Layout */}
+                                  <div className="grid grid-cols-2 gap-6">
+                                    {/* Left: Waterfall Chart */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">This Phase Change (Waterfall)</h3>
+                                      <ResponsiveContainer width="100%" height={280}>
+                                        <BarChart 
+                                          data={[
+                                            { category: 'Scope Adds\n(Owner)', value: 0.72, fill: '#10b981' },
+                                            { category: 'Code / Compliance', value: 0.58, fill: '#10b981' },
+                                            { category: 'Clarified\nQuantities', value: 0.48, fill: '#10b981' },
+                                            { category: 'Market Escalation', value: 0.35, fill: '#10b981' },
+                                            { category: 'Value\nEngineering', value: -0.73, fill: '#ef4444' }
+                                          ]}
+                                          layout="vertical"
+                                          margin={{ left: 80, right: 20 }}
+                                        >
+                                          <CartesianGrid strokeDasharray="3 3" />
+                                          <XAxis type="number" domain={[-1.2, 1.2]} tickFormatter={(value) => `$${value}M`} />
+                                          <YAxis type="category" dataKey="category" width={100} tick={{ fontSize: 11 }} />
+                                          <Tooltip formatter={(value) => `$${value}M`} />
+                                          <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                                            {[
+                                              { category: 'Scope Adds\n(Owner)', value: 0.72, fill: '#10b981' },
+                                              { category: 'Code / Compliance', value: 0.58, fill: '#10b981' },
+                                              { category: 'Clarified\nQuantities', value: 0.48, fill: '#10b981' },
+                                              { category: 'Market Escalation', value: 0.35, fill: '#10b981' },
+                                              { category: 'Value\nEngineering', value: -0.73, fill: '#ef4444' }
+                                            ].map((entry, index) => (
+                                              <rect key={`cell-${index}`} fill={entry.fill} />
+                                            ))}
+                                          </Bar>
+                                        </BarChart>
+                                      </ResponsiveContainer>
+                                    </div>
+
+                                    {/* Right: Budget Breakdown Donut Charts */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">Budget Breakdown by Phase</h3>
+                                      <div className="grid grid-cols-3 gap-4">
+                                        {[
+                                          { phase: 'SD', defined: 55, allowance: 28, contingency: 17 },
+                                          { phase: 'DD', defined: 67, allowance: 22, contingency: 11 },
+                                          { phase: 'CD', defined: 78, allowance: 14, contingency: 8 }
+                                        ].map((data) => (
+                                          <div key={data.phase} className="text-center">
+                                            <div className="font-medium mb-2">{data.phase}</div>
+                                            <ResponsiveContainer width="100%" height={120}>
+                                              <PieChart>
+                                                <Pie
+                                                  data={[
+                                                    { name: 'Defined', value: data.defined, fill: '#10b981' },
+                                                    { name: 'Allowance', value: data.allowance, fill: '#3b82f6' },
+                                                    { name: 'Contingency', value: data.contingency, fill: '#f59e0b' }
+                                                  ]}
+                                                  cx="50%"
+                                                  cy="50%"
+                                                  innerRadius={25}
+                                                  outerRadius={45}
+                                                  dataKey="value"
+                                                />
+                                              </PieChart>
+                                            </ResponsiveContainer>
+                                            <div className="text-xs text-muted-foreground">
+                                              {data.defined}% / {data.allowance}% / {data.contingency}%
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      
+                                      {/* Legend */}
+                                      <div className="flex items-center justify-center gap-4 mt-4 text-xs">
+                                        <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                          <span>Defined</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                                          <span>Allowance</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                                          <span>Contingency</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* AI Summary and Status */}
+                                  <div className="grid grid-cols-2 gap-6 mt-6 pt-6 border-t">
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-2">AI Summary</h3>
+                                      <p className="text-sm text-muted-foreground">
+                                        Cost increased 1.4% since DD phase. Main causes: electrical quantity updates and code-required stair modifications. 
+                                        This is normal project progression, not uncontrolled scope changes.
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm text-muted-foreground">
+                                        Construction Documents are 78% finalized. Typical completion at this stage is 75-80%. We're on track, but Interior 
+                                        finishes and IT equipment still need final specifications.
+                                      </p>
+                                    </div>
                                   </div>
                                 </CardContent>
                               </AccordionContent>
