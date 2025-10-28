@@ -45,6 +45,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [designOptionsGenerated, setDesignOptionsGenerated] = useState(false);
   const [expandedDesignOption, setExpandedDesignOption] = useState<number | null>(null);
   const [selectedView, setSelectedView] = useState<{[key: number]: string}>({});
+  const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1773,20 +1774,37 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                 </div>
 
                 {/* Right Sidebar - Design Options */}
-                <div className="w-96 bg-card border-l overflow-y-auto">
-                  <div className="p-6 border-b flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-foreground">Design Options</h2>
-                    <Button variant="ghost" size="icon">
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
-                  </div>
+                <div className={`${isDesignSidebarCollapsed ? 'w-14' : 'w-96'} bg-card border-l overflow-y-auto transition-all duration-300`}>
+                  {isDesignSidebarCollapsed ? (
+                    <div className="p-3">
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        onClick={() => setIsDesignSidebarCollapsed(false)}
+                        className="w-full"
+                      >
+                        <PanelRightOpen className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="p-6 border-b flex items-center justify-between">
+                        <h2 className="text-xl font-bold text-foreground">Design Options</h2>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => setIsDesignSidebarCollapsed(true)}
+                        >
+                          <ChevronRight className="h-5 w-5" />
+                        </Button>
+                      </div>
 
-                  <div className="p-4 space-y-3">
-                    {!designOptionsGenerated ? (
-                      <p className="text-sm text-muted-foreground text-center py-8">
-                        Upload a design and generate options to see them here.
-                      </p>
-                    ) : (
+                      <div className="p-4 space-y-3">
+                        {!designOptionsGenerated ? (
+                          <p className="text-sm text-muted-foreground text-center py-8">
+                            Upload a design and generate options to see them here.
+                          </p>
+                        ) : (
                       [
                         { 
                           id: 1, 
@@ -1912,6 +1930,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       ))
                     )}
                   </div>
+                    </>
+                  )}
                 </div>
               </div>
             </TabsContent>
