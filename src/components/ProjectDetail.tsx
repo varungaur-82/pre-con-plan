@@ -28,6 +28,7 @@ import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
 import { EstimateGenerator } from "./EstimateGenerator";
+import { CompareBudgets } from "./CompareBudgets";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -1818,9 +1819,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                       {activeEstimationModule === "generator" ? (
                         <EstimateGenerator />
                       ) : activeEstimationModule === "compare" ? (
-                        <div className="flex-1 flex items-center justify-center p-6">
-                          <p className="text-muted-foreground">Compare Budgets - Coming Soon</p>
-                        </div>
+                        <CompareBudgets />
                       ) : (
                         <>
                       {/* Main Content - with scroll */}
