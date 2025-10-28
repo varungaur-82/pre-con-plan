@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { 
@@ -1926,110 +1927,512 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </Card>
                         </div>
 
-                        {/* Story of Estimate Value */}
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-lg flex items-center gap-2">
-                              📊 Story of Estimate Value
-                              <ChevronDown className="h-4 w-4 ml-auto" />
-                            </CardTitle>
-                            <CardDescription>
-                              Current budget status, changes since last phase, and how much is finalized vs still estimated
-                            </CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="space-y-6">
-                              <div>
-                                <h3 className="text-sm font-medium mb-4">Cost Evolution by Phase</h3>
-                                <div className="relative h-48 flex items-end gap-8">
-                                  {/* SD Phase */}
-                                  <div className="flex-1 flex flex-col items-center">
-                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
-                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
-                                    </div>
-                                    <span className="text-sm mt-2">SD</span>
-                                  </div>
-                                  {/* DD Phase */}
-                                  <div className="flex-1 flex flex-col items-center">
-                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
-                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
-                                    </div>
-                                    <span className="text-sm mt-2">DD</span>
-                                  </div>
-                                  {/* CD Phase */}
-                                  <div className="flex-1 flex flex-col items-center">
-                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
-                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
-                                    </div>
-                                    <span className="text-sm mt-2">CD</span>
-                                  </div>
+                        {/* Stories Accordions */}
+                        <Accordion type="single" collapsible className="space-y-4">
+                          {/* Story of Estimate Value */}
+                          <Card>
+                            <AccordionItem value="estimate-value" className="border-0">
+                              <AccordionTrigger className="px-6 hover:no-underline">
+                                <div className="flex items-center gap-3">
+                                  <BarChart3 className="h-5 w-5 text-blue-600" />
+                                  <span className="text-lg font-semibold">Story of Estimate Value</span>
                                 </div>
-                                <div className="flex items-center justify-center gap-4 mt-4 text-xs">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-yellow-500">◆</span>
-                                    <span>$/SF</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <CardContent className="pt-4">
+                                  {/* KPI Summary */}
+                                  <div className="grid grid-cols-3 gap-4 mb-6">
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">$102.6M</div>
+                                        <div className="text-sm text-muted-foreground">Current Estimate</div>
+                                        <div className="text-sm text-green-600 mt-1">+4.2% from DD</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">75% / 25%</div>
+                                        <div className="text-sm text-muted-foreground">Hard / Soft Cost</div>
+                                        <div className="text-sm text-muted-foreground mt-1">$76.9M / $25.7M</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">$349/SF</div>
+                                        <div className="text-sm text-muted-foreground">Cost per Square Foot</div>
+                                        <div className="text-sm text-blue-600 mt-1">294k SF Total</div>
+                                      </CardContent>
+                                    </Card>
                                   </div>
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-blue-600"></div>
-                                    <span>Hard Cost</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-green-500"></div>
-                                    <span>Soft Cost</span>
-                                  </div>
-                                </div>
-                              </div>
 
-                              {/* Phase Breakdown */}
-                              <div className="space-y-4">
-                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                                  <div>
-                                    <div className="font-medium">SD</div>
+                                  {/* Cost Evolution Chart */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Cost Evolution by Phase</h3>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                      <AreaChart data={[
+                                        { phase: 'Concept', total: 95.2, hard: 71.4, soft: 23.8, perSF: 324 },
+                                        { phase: 'SD', total: 98.4, hard: 74.1, soft: 24.3, perSF: 335 },
+                                        { phase: 'DD', total: 101.2, hard: 76.0, soft: 25.2, perSF: 344 },
+                                        { phase: 'CD', total: 102.6, hard: 76.9, soft: 25.7, perSF: 349 }
+                                      ]}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="phase" />
+                                        <YAxis yAxisId="left" label={{ value: 'Cost ($M)', angle: -90, position: 'insideLeft' }} />
+                                        <YAxis yAxisId="right" orientation="right" label={{ value: '$/SF', angle: 90, position: 'insideRight' }} />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Area yAxisId="left" type="monotone" dataKey="hard" stackId="1" stroke="#2563eb" fill="#3b82f6" name="Hard Cost" />
+                                        <Area yAxisId="left" type="monotone" dataKey="soft" stackId="1" stroke="#10b981" fill="#34d399" name="Soft Cost" />
+                                        <Line yAxisId="right" type="monotone" dataKey="perSF" stroke="#f59e0b" strokeWidth={2} name="$/SF" />
+                                      </AreaChart>
+                                    </ResponsiveContainer>
                                   </div>
-                                  <div className="flex-1 mx-8">
-                                    <p className="text-sm text-muted-foreground">
-                                      Jump from Concept → SD driven by code-required egress core and added generator redundancy.
-                                    </p>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="font-bold">$98.4M</div>
-                                    <div className="text-xs text-muted-foreground">Hard: $74.1M | Soft: $24.3M</div>
-                                  </div>
-                                </div>
 
-                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                                  <div>
-                                    <div className="font-medium">DD</div>
+                                  {/* Phase Breakdown */}
+                                  <div className="space-y-3">
+                                    <h3 className="text-sm font-semibold mb-3">Phase-by-Phase Changes</h3>
+                                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                      <div className="flex-1">
+                                        <div className="font-medium">SD → DD</div>
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                          +$2.8M increase mostly from clarified quantities, not scope creep. Envelope spec locked.
+                                        </p>
+                                      </div>
+                                      <div className="text-right">
+                                        <div className="font-bold text-orange-600">+2.8%</div>
+                                        <div className="text-xs text-muted-foreground">$98.4M → $101.2M</div>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                      <div className="flex-1">
+                                        <div className="font-medium">DD → CD</div>
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                          +$1.4M delta is &lt;1.5%. Now behaving like a controllable GMP candidate.
+                                        </p>
+                                      </div>
+                                      <div className="text-right">
+                                        <div className="font-bold text-green-600">+1.4%</div>
+                                        <div className="text-xs text-muted-foreground">$101.2M → $102.6M</div>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="flex-1 mx-8">
-                                    <p className="text-sm text-muted-foreground">
-                                      Increase is mostly clarified quantities, not scope creep. Envelope spec locked.
-                                    </p>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="font-bold">$101.2M</div>
-                                    <div className="text-xs text-muted-foreground">Hard: $76.0M | Soft: $25.2M</div>
-                                  </div>
-                                </div>
 
-                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                                  <div>
-                                    <div className="font-medium">CD</div>
+                                  {/* Cost Breakdown by System */}
+                                  <div className="mt-6">
+                                    <h3 className="text-sm font-semibold mb-4">Cost Distribution by Major System</h3>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                      <BarChart data={[
+                                        { system: 'Structure', cost: 28.5, percentage: 27.8 },
+                                        { system: 'Envelope', cost: 18.2, percentage: 17.7 },
+                                        { system: 'MEP', cost: 22.4, percentage: 21.8 },
+                                        { system: 'Interiors', cost: 15.8, percentage: 15.4 },
+                                        { system: 'Site', cost: 8.9, percentage: 8.7 },
+                                        { system: 'Soft Costs', cost: 8.8, percentage: 8.6 }
+                                      ]}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="system" />
+                                        <YAxis label={{ value: 'Cost ($M)', angle: -90, position: 'insideLeft' }} />
+                                        <Tooltip />
+                                        <Bar dataKey="cost" fill="#3b82f6" name="Cost ($M)" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
                                   </div>
-                                  <div className="flex-1 mx-8">
-                                    <p className="text-sm text-muted-foreground">
-                                      Delta vs DD is &lt;1.5%. Now behaving like a controllable GMP candidate.
-                                    </p>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="font-bold">$102.6M</div>
-                                    <div className="text-xs text-muted-foreground">Hard: $76.9M | Soft: $25.7M</div>
-                                  </div>
+                                </CardContent>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Card>
+
+                          {/* Story of Confidence */}
+                          <Card>
+                            <AccordionItem value="confidence" className="border-0">
+                              <AccordionTrigger className="px-6 hover:no-underline">
+                                <div className="flex items-center gap-3">
+                                  <Target className="h-5 w-5 text-amber-600" />
+                                  <span className="text-lg font-semibold">Story of Confidence</span>
                                 </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <CardContent className="pt-4">
+                                  {/* KPI Summary */}
+                                  <div className="grid grid-cols-3 gap-4 mb-6">
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">78%</div>
+                                        <div className="text-sm text-muted-foreground">Overall Confidence</div>
+                                        <div className="text-sm text-amber-600 mt-1">Medium Risk</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">68%</div>
+                                        <div className="text-sm text-muted-foreground">Design Completion</div>
+                                        <div className="text-sm text-muted-foreground mt-1">Target: 80% for DD</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">12%</div>
+                                        <div className="text-sm text-muted-foreground">Contingency</div>
+                                        <div className="text-sm text-red-600 mt-1">Below 15% target</div>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+
+                                  {/* Design Completion by System */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Design Completion by Major System</h3>
+                                    <div className="space-y-3">
+                                      {[
+                                        { system: 'Structural', completion: 85, status: 'On Track' },
+                                        { system: 'Architectural', completion: 75, status: 'On Track' },
+                                        { system: 'Mechanical', completion: 60, status: 'Needs Attention' },
+                                        { system: 'Electrical', completion: 58, status: 'Needs Attention' },
+                                        { system: 'Plumbing', completion: 70, status: 'On Track' },
+                                        { system: 'Fire Protection', completion: 65, status: 'On Track' }
+                                      ].map((item) => (
+                                        <div key={item.system} className="space-y-1">
+                                          <div className="flex items-center justify-between text-sm">
+                                            <span className="font-medium">{item.system}</span>
+                                            <span className={item.completion < 65 ? 'text-red-600' : 'text-green-600'}>
+                                              {item.completion}% • {item.status}
+                                            </span>
+                                          </div>
+                                          <Progress value={item.completion} className="h-2" />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Risk Heat Map */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Cost Risk Distribution</h3>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                      <BarChart data={[
+                                        { category: 'Low Risk', amount: 42.5, percentage: 41.4 },
+                                        { category: 'Medium Risk', amount: 38.2, percentage: 37.2 },
+                                        { category: 'High Risk', amount: 21.9, percentage: 21.4 }
+                                      ]} layout="vertical">
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis type="number" label={{ value: 'Amount ($M)', position: 'bottom' }} />
+                                        <YAxis type="category" dataKey="category" />
+                                        <Tooltip />
+                                        <Bar dataKey="amount" fill="#f59e0b" name="Cost at Risk ($M)" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+
+                                  {/* Top Risk Items */}
+                                  <div>
+                                    <h3 className="text-sm font-semibold mb-3">Top Risk Drivers</h3>
+                                    <div className="space-y-2">
+                                      <div className="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <div className="font-medium">MEP Design Incomplete (40%)</div>
+                                            <p className="text-sm text-muted-foreground mt-1">
+                                              Electrical and HVAC systems are 30% of budget but only 60% designed
+                                            </p>
+                                          </div>
+                                          <Badge variant="destructive">High</Badge>
+                                        </div>
+                                      </div>
+                                      <div className="p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <div className="font-medium">Structural Steel Lead Times</div>
+                                            <p className="text-sm text-muted-foreground mt-1">
+                                              Current market conditions show 16-20 week lead times
+                                            </p>
+                                          </div>
+                                          <Badge className="bg-amber-500 hover:bg-amber-600">Medium</Badge>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Card>
+
+                          {/* Story of Market Fit */}
+                          <Card>
+                            <AccordionItem value="market-fit" className="border-0">
+                              <AccordionTrigger className="px-6 hover:no-underline">
+                                <div className="flex items-center gap-3">
+                                  <TrendingUp className="h-5 w-5 text-green-600" />
+                                  <span className="text-lg font-semibold">Story of Market Fit</span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <CardContent className="pt-4">
+                                  {/* KPI Summary */}
+                                  <div className="grid grid-cols-3 gap-4 mb-6">
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold text-green-600">+7.6%</div>
+                                        <div className="text-sm text-muted-foreground">vs Metro Median</div>
+                                        <div className="text-sm text-muted-foreground mt-1">Above avg premium</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">$349/SF</div>
+                                        <div className="text-sm text-muted-foreground">Project Cost/SF</div>
+                                        <div className="text-sm text-muted-foreground mt-1">Metro avg: $324/SF</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">18</div>
+                                        <div className="text-sm text-muted-foreground">Comparable Projects</div>
+                                        <div className="text-sm text-muted-foreground mt-1">Last 24 months</div>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+
+                                  {/* Market Comparison Chart */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Cost Comparison: This Project vs Market</h3>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                      <BarChart data={[
+                                        { system: 'Structure', project: 97, market: 92, variance: 5 },
+                                        { system: 'Envelope', project: 62, market: 58, variance: 4 },
+                                        { system: 'MEP', project: 76, market: 66, variance: 10 },
+                                        { system: 'Interiors', project: 54, market: 52, variance: 2 },
+                                        { system: 'Site', project: 30, market: 28, variance: 2 }
+                                      ]}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="system" />
+                                        <YAxis label={{ value: 'Cost ($/SF)', angle: -90, position: 'insideLeft' }} />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="project" fill="#3b82f6" name="This Project" />
+                                        <Bar dataKey="market" fill="#94a3b8" name="Market Average" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+
+                                  {/* Regional Factors */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-3">Regional Cost Drivers</h3>
+                                    <div className="space-y-2">
+                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                                        <span className="text-sm font-medium">Labor Rate Premium</span>
+                                        <span className="text-sm font-bold text-orange-600">+12%</span>
+                                      </div>
+                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                                        <span className="text-sm font-medium">Material Escalation (Steel)</span>
+                                        <span className="text-sm font-bold text-red-600">+18%</span>
+                                      </div>
+                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                                        <span className="text-sm font-medium">Jurisdictional Requirements</span>
+                                        <span className="text-sm font-bold text-amber-600">+8%</span>
+                                      </div>
+                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                                        <span className="text-sm font-medium">Sustainability Premium</span>
+                                        <span className="text-sm font-bold text-green-600">+5%</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Peer Projects */}
+                                  <div>
+                                    <h3 className="text-sm font-semibold mb-4">Comparable Projects ($/SF)</h3>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                      <LineChart data={[
+                                        { project: 'Proj A', cost: 298, type: 'Office' },
+                                        { project: 'Proj B', cost: 315, type: 'Mixed Use' },
+                                        { project: 'Proj C', cost: 342, type: 'Office' },
+                                        { project: 'This Project', cost: 349, type: 'Office' },
+                                        { project: 'Proj D', cost: 365, type: 'Residential' },
+                                        { project: 'Proj E', cost: 382, type: 'Mixed Use' }
+                                      ]}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="project" />
+                                        <YAxis label={{ value: 'Cost ($/SF)', angle: -90, position: 'insideLeft' }} />
+                                        <Tooltip />
+                                        <Line type="monotone" dataKey="cost" stroke="#3b82f6" strokeWidth={2} />
+                                      </LineChart>
+                                    </ResponsiveContainer>
+                                  </div>
+                                </CardContent>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Card>
+
+                          {/* Story of Next Steps */}
+                          <Card>
+                            <AccordionItem value="next-steps" className="border-0">
+                              <AccordionTrigger className="px-6 hover:no-underline">
+                                <div className="flex items-center gap-3">
+                                  <AlertCircle className="h-5 w-5 text-red-600" />
+                                  <span className="text-lg font-semibold">Story of Next Steps</span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <CardContent className="pt-4">
+                                  {/* KPI Summary */}
+                                  <div className="grid grid-cols-3 gap-4 mb-6">
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">5</div>
+                                        <div className="text-sm text-muted-foreground">Critical Areas</div>
+                                        <div className="text-sm text-red-600 mt-1">Need completion</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">6 weeks</div>
+                                        <div className="text-sm text-muted-foreground">Target Timeline</div>
+                                        <div className="text-sm text-muted-foreground mt-1">To CD completion</div>
+                                      </CardContent>
+                                    </Card>
+                                    <Card className="bg-muted/30">
+                                      <CardContent className="pt-6">
+                                        <div className="text-2xl font-bold">$21.9M</div>
+                                        <div className="text-sm text-muted-foreground">Value at Risk</div>
+                                        <div className="text-sm text-red-600 mt-1">21.4% of budget</div>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+
+                                  {/* Priority Action Items */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Priority Action Items</h3>
+                                    <div className="space-y-3">
+                                      {[
+                                        { 
+                                          item: 'Complete Structural Steel Drawings', 
+                                          status: 'In Progress', 
+                                          priority: 'High',
+                                          completion: 65,
+                                          impact: '$8.2M',
+                                          dueDate: '2 weeks'
+                                        },
+                                        { 
+                                          item: 'Finalize Electrical/HVAC Specifications', 
+                                          status: 'Not Started', 
+                                          priority: 'High',
+                                          completion: 35,
+                                          impact: '$6.8M',
+                                          dueDate: '3 weeks'
+                                        },
+                                        { 
+                                          item: 'Lock Interior Finishes Schedule', 
+                                          status: 'In Progress', 
+                                          priority: 'Medium',
+                                          completion: 50,
+                                          impact: '$3.2M',
+                                          dueDate: '4 weeks'
+                                        },
+                                        { 
+                                          item: 'Curtainwall Shop Drawing Review', 
+                                          status: 'Not Started', 
+                                          priority: 'Medium',
+                                          completion: 20,
+                                          impact: '$2.5M',
+                                          dueDate: '5 weeks'
+                                        },
+                                        { 
+                                          item: 'MEP Coordination Completion', 
+                                          status: 'Planning', 
+                                          priority: 'High',
+                                          completion: 40,
+                                          impact: '$1.2M',
+                                          dueDate: '6 weeks'
+                                        }
+                                      ].map((action, idx) => (
+                                        <Card key={idx} className="border-l-4" style={{ borderLeftColor: action.priority === 'High' ? '#ef4444' : '#f59e0b' }}>
+                                          <CardContent className="pt-4">
+                                            <div className="flex items-start justify-between mb-2">
+                                              <div className="flex-1">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                  <span className="font-medium">{action.item}</span>
+                                                  <Badge variant={action.priority === 'High' ? 'destructive' : 'default'} className="text-xs">
+                                                    {action.priority}
+                                                  </Badge>
+                                                </div>
+                                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                                  <span>Status: {action.status}</span>
+                                                  <span>Impact: {action.impact}</span>
+                                                  <span>Due: {action.dueDate}</span>
+                                                </div>
+                                              </div>
+                                              <div className="text-right">
+                                                <div className="text-lg font-bold">{action.completion}%</div>
+                                              </div>
+                                            </div>
+                                            <Progress value={action.completion} className="h-2" />
+                                          </CardContent>
+                                        </Card>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Timeline Chart */}
+                                  <div className="mb-6">
+                                    <h3 className="text-sm font-semibold mb-4">Completion Timeline (Next 6 Weeks)</h3>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                      <BarChart data={[
+                                        { week: 'Week 1-2', planned: 15, actual: 12 },
+                                        { week: 'Week 3-4', planned: 25, actual: 0 },
+                                        { week: 'Week 5-6', planned: 20, actual: 0 }
+                                      ]}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="week" />
+                                        <YAxis label={{ value: 'Progress (%)', angle: -90, position: 'insideLeft' }} />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="planned" fill="#94a3b8" name="Planned Progress" />
+                                        <Bar dataKey="actual" fill="#3b82f6" name="Actual Progress" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+
+                                  {/* Recommended Actions */}
+                                  <div>
+                                    <h3 className="text-sm font-semibold mb-3">Recommended Actions</h3>
+                                    <div className="space-y-2">
+                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                        <div className="flex items-start gap-2">
+                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
+                                          <div className="flex-1">
+                                            <div className="font-medium text-sm">Expedite MEP Design Reviews</div>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                              Schedule daily coordination sessions with MEP teams to accelerate completion
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                        <div className="flex items-start gap-2">
+                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
+                                          <div className="flex-1">
+                                            <div className="font-medium text-sm">Lock Steel Pricing Early</div>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                              Given current market volatility, secure steel pricing commitments within 2 weeks
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                        <div className="flex items-start gap-2">
+                                          <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5" />
+                                          <div className="flex-1">
+                                            <div className="font-medium text-sm">Increase Contingency Buffer</div>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                              Consider increasing contingency from 12% to 15% to align with DD phase standards
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Card>
+                        </Accordion>
                       </div>
                     </>
                   )}
