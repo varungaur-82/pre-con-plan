@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { 
@@ -19,7 +20,7 @@ import {
   Target, AlertCircle, CheckCircle2, Upload, Send,
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
   TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File,
-  CalendarIcon
+  CalendarIcon, ChevronRight, ChevronUp, ChevronDown
 } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
@@ -41,6 +42,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [timePeriod, setTimePeriod] = useState<"7d" | "30d" | "quarter" | "custom">("30d");
   const [customDateRange, setCustomDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
   const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
+  const [designOptionsGenerated, setDesignOptionsGenerated] = useState(false);
+  const [expandedDesignOption, setExpandedDesignOption] = useState<number | null>(null);
+  const [selectedView, setSelectedView] = useState<{[key: number]: string}>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1701,10 +1705,214 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
             </TabsContent>
 
             {/* 5D Tab */}
-            <TabsContent value="5d" className="mt-0">
-              <div className="container px-6 py-16 text-center">
-                <h2 className="text-2xl font-bold text-muted-foreground mb-4">5D</h2>
-                <p className="text-muted-foreground">Content coming soon...</p>
+            <TabsContent value="5d" className="mt-0 h-full">
+              <div className="flex h-full">
+                {/* Main Content */}
+                <div className="flex-1 flex flex-col">
+                  {/* Upload Band */}
+                  <div className="border-b bg-card px-8 py-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        Upload a design (DWG, IFC, PDF, DXF, RVT) to start.
+                      </p>
+                      <div className="flex gap-3">
+                        <Button 
+                          variant="outline"
+                          onClick={() => document.getElementById('5d-file-input')?.click()}
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload Design
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                            const fileInput = document.getElementById('5d-file-input') as HTMLInputElement;
+                            if (!fileInput?.files?.length) {
+                              toast({
+                                title: "No File Uploaded",
+                                description: "Please upload a design file first.",
+                                variant: "destructive",
+                              });
+                            } else {
+                              setDesignOptionsGenerated(true);
+                              toast({
+                                title: "Options Generated",
+                                description: "Generated 3 design options successfully.",
+                              });
+                            }
+                          }}
+                          className="bg-construction-success hover:bg-construction-success/90"
+                        >
+                          Generate Options
+                        </Button>
+                        <input
+                          id="5d-file-input"
+                          type="file"
+                          accept=".dwg,.ifc,.pdf,.dxf,.rvt"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              toast({
+                                title: "File Uploaded",
+                                description: `${file.name} has been uploaded successfully.`,
+                              });
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content Area */}
+                  <div className="flex-1 p-8 overflow-y-auto">
+                    <h2 className="text-2xl font-bold text-foreground mb-2">5D Cost Management</h2>
+                    <p className="text-muted-foreground mb-6">
+                      Upload design files and generate cost estimates with multiple options.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Sidebar - Design Options */}
+                <div className="w-96 bg-card border-l overflow-y-auto">
+                  <div className="p-6 border-b flex items-center justify-between">
+                    <h2 className="text-xl font-bold text-foreground">Design Options</h2>
+                    <Button variant="ghost" size="icon">
+                      <ChevronRight className="h-5 w-5" />
+                    </Button>
+                  </div>
+
+                  <div className="p-4 space-y-3">
+                    {!designOptionsGenerated ? (
+                      <p className="text-sm text-muted-foreground text-center py-8">
+                        Upload a design and generate options to see them here.
+                      </p>
+                    ) : (
+                      [
+                        { 
+                          id: 1, 
+                          title: "Option 1",
+                          view: "2D",
+                          codeCompliant: true,
+                          cost: "$33.8M",
+                          schedule: "13 mo",
+                          gfa: "120k sf",
+                          sustainability: "92%"
+                        },
+                        { 
+                          id: 2, 
+                          title: "Option 2",
+                          view: "2D",
+                          codeCompliant: true,
+                          cost: "$35.2M",
+                          schedule: "14 mo",
+                          gfa: "125k sf",
+                          sustainability: "88%"
+                        },
+                        { 
+                          id: 3, 
+                          title: "Option 3",
+                          view: "2D",
+                          codeCompliant: false,
+                          cost: "$31.5M",
+                          schedule: "12 mo",
+                          gfa: "115k sf",
+                          sustainability: "95%"
+                        }
+                      ].map((option, index) => (
+                        <Collapsible 
+                          key={option.id}
+                          open={expandedDesignOption === option.id}
+                          onOpenChange={() => setExpandedDesignOption(expandedDesignOption === option.id ? null : option.id)}
+                        >
+                          <Card className="overflow-hidden">
+                            <CollapsibleTrigger className="w-full">
+                              <div className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors">
+                                <h3 className="text-lg font-semibold text-foreground">
+                                  {option.title}
+                                </h3>
+                                {expandedDesignOption === option.id ? (
+                                  <ChevronUp className="h-5 w-5" />
+                                ) : (
+                                  <ChevronDown className="h-5 w-5" />
+                                )}
+                              </div>
+                            </CollapsibleTrigger>
+                            
+                            <CollapsibleContent>
+                              <div className="px-4 pb-4 space-y-4">
+                                {/* View Selector */}
+                                <div>
+                                  <p className="text-sm font-medium mb-2">View:</p>
+                                  <div className="flex gap-2">
+                                    {["2D", "3D", "Render"].map((view) => (
+                                      <button
+                                        key={view}
+                                        onClick={() => setSelectedView(prev => ({ ...prev, [option.id]: view }))}
+                                        className={`px-3 py-1.5 text-sm rounded ${
+                                          (selectedView[option.id] || option.view) === view
+                                            ? "bg-foreground text-background"
+                                            : "bg-muted text-foreground hover:bg-muted/80"
+                                        }`}
+                                      >
+                                        {(selectedView[option.id] || option.view) === view && "✓ "}
+                                        {view}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Design Preview */}
+                                <div className="bg-muted rounded border p-4 h-32 flex items-center justify-center">
+                                  <span className="text-xs text-muted-foreground">
+                                    {selectedView[option.id] || option.view} View Preview
+                                  </span>
+                                </div>
+
+                                {/* Details */}
+                                <div className="space-y-2">
+                                  {option.codeCompliant && (
+                                    <div className="flex items-center gap-2 text-construction-success">
+                                      <CheckCircle2 className="h-4 w-4" />
+                                      <span className="text-sm font-medium">100% Code Compliant</span>
+                                    </div>
+                                  )}
+                                  <p className="text-sm"><strong>Cost:</strong> {option.cost}</p>
+                                  <p className="text-sm"><strong>Schedule:</strong> {option.schedule}</p>
+                                  <p className="text-sm"><strong>GFA:</strong> {option.gfa}</p>
+                                  <p className="text-sm"><strong>Sustainability:</strong> {option.sustainability}</p>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex gap-2 pt-2">
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    className="flex-1"
+                                  >
+                                    Select
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    className="flex-1"
+                                  >
+                                    View / Modify
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    className="flex-1 bg-construction-success hover:bg-construction-success/90"
+                                  >
+                                    Save
+                                  </Button>
+                                </div>
+                              </div>
+                            </CollapsibleContent>
+                          </Card>
+                        </Collapsible>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
             </TabsContent>
 
