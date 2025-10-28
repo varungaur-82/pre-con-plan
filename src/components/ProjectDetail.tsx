@@ -1948,7 +1948,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                   <div className="mb-6">
                                     <h3 className="text-sm font-semibold mb-4">Cost Evolution by Phase</h3>
                                     <ResponsiveContainer width="100%" height={280}>
-                                      <AreaChart data={[
+                                      <BarChart data={[
                                         { phase: 'SD', hard: 74.1, soft: 24.3, perSF: 335 },
                                         { phase: 'DD', hard: 76.0, soft: 25.2, perSF: 344 },
                                         { phase: 'CD', hard: 76.9, soft: 25.7, perSF: 349 }
@@ -1959,10 +1959,10 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                         <YAxis yAxisId="right" orientation="right" label={{ value: '$600/SF', position: 'top' }} domain={[0, 600]} />
                                         <Tooltip />
                                         <Legend verticalAlign="bottom" />
-                                        <Area yAxisId="left" type="monotone" dataKey="hard" stackId="1" stroke="#3b82f6" fill="#3b82f6" name="Hard Cost" />
-                                        <Area yAxisId="left" type="monotone" dataKey="soft" stackId="1" stroke="#10b981" fill="#10b981" name="Soft Cost" />
+                                        <Bar yAxisId="left" dataKey="hard" fill="#3b82f6" name="Hard Cost" />
+                                        <Bar yAxisId="left" dataKey="soft" fill="#10b981" name="Soft Cost" />
                                         <Line yAxisId="right" type="monotone" dataKey="perSF" stroke="#f59e0b" strokeWidth={2} dot={{ fill: '#f59e0b', r: 4 }} name="$/SF" />
-                                      </AreaChart>
+                                      </BarChart>
                                     </ResponsiveContainer>
                                   </div>
 
