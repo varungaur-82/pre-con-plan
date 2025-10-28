@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mic, Send } from "lucide-react";
+import { Mic, Send, Upload, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useToast } from "@/hooks/use-toast";
 
 const menuItems = [
   { id: "overview", label: "Design Overview" },
@@ -12,15 +14,84 @@ const menuItems = [
   { id: "presentation", label: "Client Presentation" },
 ];
 
-const designOptions = [
-  { id: 1, title: "Option 1" },
-  { id: 2, title: "Option 2" },
-  { id: 3, title: "Option 3" },
+const initialDesignOptions = [
+  { 
+    id: 1, 
+    title: "Option 1",
+    view: "2D",
+    codeCompliant: true,
+    cost: "$33.8M",
+    schedule: "13 mo",
+    gfa: "120k sf",
+    sustainability: "92%"
+  },
+  { 
+    id: 2, 
+    title: "Option 2",
+    view: "2D",
+    codeCompliant: true,
+    cost: "$35.2M",
+    schedule: "14 mo",
+    gfa: "125k sf",
+    sustainability: "88%"
+  },
+  { 
+    id: 3, 
+    title: "Option 3",
+    view: "2D",
+    codeCompliant: false,
+    cost: "$31.5M",
+    schedule: "12 mo",
+    gfa: "115k sf",
+    sustainability: "95%"
+  },
 ];
 
 export function DesignStudio() {
   const [activeMenuItem, setActiveMenuItem] = useState("overview");
   const [aiQuery, setAiQuery] = useState("");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [designOptions, setDesignOptions] = useState<typeof initialDesignOptions>([]);
+  const [expandedOption, setExpandedOption] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<{[key: number]: string}>({});
+  const { toast } = useToast();
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      toast({
+        title: "File Uploaded",
+        description: `${file.name} has been uploaded successfully.`,
+      });
+    }
+  };
+
+  const handleGenerateOptions = () => {
+    if (!uploadedFile) {
+      toast({
+        title: "No File Uploaded",
+        description: "Please upload a design file first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setDesignOptions(initialDesignOptions);
+    setExpandedOption(1);
+    toast({
+      title: "Options Generated",
+      description: `Generated ${initialDesignOptions.length} design options.`,
+    });
+  };
+
+  const toggleOption = (optionId: number) => {
+    setExpandedOption(expandedOption === optionId ? null : optionId);
+  };
+
+  const handleViewChange = (optionId: number, view: string) => {
+    setViewMode({ ...viewMode, [optionId]: view });
+  };
 
   return (
     <div className="flex h-[calc(100vh-120px)] bg-background">
@@ -43,6 +114,38 @@ export function DesignStudio() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
+        {/* Upload Band */}
+        <div className="border-b bg-card px-8 py-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Upload a design (DWG, IFC, PDF, DXF, RVT) to start.
+            </p>
+            <div className="flex gap-3">
+              <Button 
+                variant="outline"
+                onClick={() => document.getElementById('design-file-input')?.click()}
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Design
+              </Button>
+              <Button 
+                onClick={handleGenerateOptions}
+                className="bg-construction-success hover:bg-construction-success/90"
+                disabled={!uploadedFile}
+              >
+                Generate Options
+              </Button>
+              <input
+                id="design-file-input"
+                type="file"
+                accept=".dwg,.ifc,.pdf,.dxf,.rvt"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-4xl">
             <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -101,57 +204,113 @@ export function DesignStudio() {
       </div>
 
       {/* Right Sidebar - Design Options */}
-      <div className="w-80 bg-card border-l p-6 overflow-y-auto">
-        <h2 className="text-lg font-semibold text-foreground mb-6">Design Options</h2>
-
-        <div className="space-y-6">
-          {designOptions.map((option) => (
-            <Card key={option.id} className="p-4">
-              <h3 className="text-sm font-medium text-foreground mb-3">
-                {option.title}
-              </h3>
-              
-              {/* Placeholder for design thumbnails */}
-              <div className="flex gap-2 mb-3">
-                <div className="flex-1 h-20 bg-muted rounded border flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">Floor Plan</span>
-                </div>
-                <div className="w-20 h-20 bg-muted rounded border flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">3D</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button 
-                  size="sm" 
-                  className="flex-1 bg-construction-success hover:bg-construction-success/90"
-                >
-                  Select
-                </Button>
-                <Button size="sm" variant="outline" className="flex-1">
-                  View
-                </Button>
-              </div>
-            </Card>
-          ))}
+      <div className="w-96 bg-card border-l overflow-y-auto">
+        <div className="p-6 border-b flex items-center justify-between">
+          <h2 className="text-xl font-bold text-foreground">Design Options</h2>
+          <Button variant="ghost" size="icon">
+            →
+          </Button>
         </div>
 
-        {/* Upload Section */}
-        <div className="mt-8 pt-6 border-t">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Upload Design</h3>
-          <div className="space-y-3">
-            <div className="relative">
-              <Input
-                type="file"
-                className="cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-muted file:text-foreground hover:file:bg-muted/80"
-              />
-            </div>
-            <Button 
-              className="w-full bg-construction-success hover:bg-construction-success/90"
-            >
-              Generate Options
-            </Button>
-          </div>
+        <div className="p-4 space-y-3">
+          {designOptions.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              Upload a design and generate options to see them here.
+            </p>
+          ) : (
+            designOptions.map((option) => (
+              <Collapsible 
+                key={option.id}
+                open={expandedOption === option.id}
+                onOpenChange={() => toggleOption(option.id)}
+              >
+                <Card className="overflow-hidden">
+                  <CollapsibleTrigger className="w-full">
+                    <div className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors">
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {option.title}
+                      </h3>
+                      {expandedOption === option.id ? (
+                        <ChevronUp className="h-5 w-5" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5" />
+                      )}
+                    </div>
+                  </CollapsibleTrigger>
+                  
+                  <CollapsibleContent>
+                    <div className="px-4 pb-4 space-y-4">
+                      {/* View Selector */}
+                      <div>
+                        <p className="text-sm font-medium mb-2">View:</p>
+                        <div className="flex gap-2">
+                          {["2D", "3D", "Render"].map((view) => (
+                            <button
+                              key={view}
+                              onClick={() => handleViewChange(option.id, view)}
+                              className={`px-3 py-1.5 text-sm rounded ${
+                                (viewMode[option.id] || option.view) === view
+                                  ? "bg-foreground text-background"
+                                  : "bg-muted text-foreground hover:bg-muted/80"
+                              }`}
+                            >
+                              {(viewMode[option.id] || option.view) === view && "✓ "}
+                              {view}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Design Preview */}
+                      <div className="bg-muted rounded border p-4 h-32 flex items-center justify-center">
+                        <span className="text-xs text-muted-foreground">
+                          {viewMode[option.id] || option.view} View Preview
+                        </span>
+                      </div>
+
+                      {/* Details */}
+                      <div className="space-y-2">
+                        {option.codeCompliant && (
+                          <div className="flex items-center gap-2 text-construction-success">
+                            <CheckCircle2 className="h-4 w-4" />
+                            <span className="text-sm font-medium">100% Code Compliant</span>
+                          </div>
+                        )}
+                        <p className="text-sm"><strong>Cost:</strong> {option.cost}</p>
+                        <p className="text-sm"><strong>Schedule:</strong> {option.schedule}</p>
+                        <p className="text-sm"><strong>GFA:</strong> {option.gfa}</p>
+                        <p className="text-sm"><strong>Sustainability:</strong> {option.sustainability}</p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          Select
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          View / Modify
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-construction-success hover:bg-construction-success/90"
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
+            ))
+          )}
         </div>
       </div>
     </div>
