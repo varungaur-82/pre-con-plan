@@ -23,7 +23,7 @@ import {
   TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File,
   CalendarIcon, ChevronRight, ChevronUp, ChevronDown, ChevronLeft
 } from "lucide-react";
-import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, ScatterChart, Scatter } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
@@ -2128,207 +2128,250 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                               </AccordionTrigger>
                               <AccordionContent>
                                 <CardContent className="pt-4">
-                                  {/* KPI Summary */}
-                                  <div className="grid grid-cols-3 gap-4 mb-6">
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">78%</div>
-                                        <div className="text-sm text-muted-foreground">Overall Confidence</div>
-                                        <div className="text-sm text-amber-600 mt-1">Medium Risk</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">68%</div>
-                                        <div className="text-sm text-muted-foreground">Design Completion</div>
-                                        <div className="text-sm text-muted-foreground mt-1">Target: 80% for DD</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">12%</div>
-                                        <div className="text-sm text-muted-foreground">Contingency</div>
-                                        <div className="text-sm text-red-600 mt-1">Below 15% target</div>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
+                                  <p className="text-sm text-muted-foreground mb-6">
+                                    How reliable is the estimate, where could it still swing, and what scares us the most
+                                  </p>
 
-                                  {/* Design Completion by System */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-4">Design Completion by Major System</h3>
-                                    <div className="space-y-3">
-                                      {[
-                                        { system: 'Structural', completion: 85, status: 'On Track' },
-                                        { system: 'Architectural', completion: 75, status: 'On Track' },
-                                        { system: 'Mechanical', completion: 60, status: 'Needs Attention' },
-                                        { system: 'Electrical', completion: 58, status: 'Needs Attention' },
-                                        { system: 'Plumbing', completion: 70, status: 'On Track' },
-                                        { system: 'Fire Protection', completion: 65, status: 'On Track' }
-                                      ].map((item) => (
-                                        <div key={item.system} className="space-y-1">
-                                          <div className="flex items-center justify-between text-sm">
-                                            <span className="font-medium">{item.system}</span>
-                                            <span className={item.completion < 65 ? 'text-red-600' : 'text-green-600'}>
-                                              {item.completion}% • {item.status}
-                                            </span>
+                                  {/* Top Row: System Risk Analysis & Contingency Buffer */}
+                                  <div className="grid grid-cols-2 gap-6 mb-6">
+                                    {/* Left: System Risk Analysis */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">System Risk Analysis</h3>
+                                      <ResponsiveContainer width="100%" height={280}>
+                                        <ScatterChart margin={{ top: 20, right: 20, bottom: 40, left: 60 }}>
+                                          <CartesianGrid strokeDasharray="3 3" />
+                                          <XAxis 
+                                            type="number" 
+                                            dataKey="completion" 
+                                            name="Design Completion %" 
+                                            domain={[0, 100]}
+                                            label={{ value: 'Design Completion %', position: 'bottom', offset: 20 }}
+                                            tickFormatter={(value) => `${value}%`}
+                                          />
+                                          <YAxis 
+                                            type="number" 
+                                            dataKey="costPercent" 
+                                            name="% of Total Project Cost"
+                                            domain={[0, 25]}
+                                            label={{ value: '% of Total Project Cost', angle: -90, position: 'left', offset: 40 }}
+                                            tickFormatter={(value) => `${value}%`}
+                                          />
+                                          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                          <Scatter 
+                                            name="Systems" 
+                                            data={[
+                                              { system: 'Electrical', completion: 40, costPercent: 18, risk: 'High', fill: '#ef4444' },
+                                              { system: 'HVAC', completion: 50, costPercent: 14, risk: 'Medium', fill: '#f59e0b' },
+                                              { system: 'Interiors', completion: 65, costPercent: 12, risk: 'Medium', fill: '#f59e0b' },
+                                              { system: 'Curtainwall', completion: 60, costPercent: 10, risk: 'Low', fill: '#14b8a6' },
+                                              { system: 'Site', completion: 75, costPercent: 7, risk: 'Low', fill: '#14b8a6' }
+                                            ]}
+                                          >
+                                            {[
+                                              { system: 'Electrical', completion: 40, costPercent: 18, risk: 'High', fill: '#ef4444' },
+                                              { system: 'HVAC', completion: 50, costPercent: 14, risk: 'Medium', fill: '#f59e0b' },
+                                              { system: 'Interiors', completion: 65, costPercent: 12, risk: 'Medium', fill: '#f59e0b' },
+                                              { system: 'Curtainwall', completion: 60, costPercent: 10, risk: 'Low', fill: '#14b8a6' },
+                                              { system: 'Site', completion: 75, costPercent: 7, risk: 'Low', fill: '#14b8a6' }
+                                            ].map((entry, index) => (
+                                              <Cell key={`cell-${index}`} fill={entry.fill} />
+                                            ))}
+                                          </Scatter>
+                                        </ScatterChart>
+                                      </ResponsiveContainer>
+                                      
+                                      {/* Legend */}
+                                      <div className="mt-4">
+                                        <div className="text-xs font-semibold mb-2">System Risk Legend</div>
+                                        <div className="flex flex-wrap gap-4 text-xs">
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                            <span>Electrical</span>
+                                            <span className="text-muted-foreground">(High)</span>
                                           </div>
-                                          <Progress value={item.completion} className="h-2" />
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+                                            <span>Curtainwall</span>
+                                            <span className="text-muted-foreground">(Low)</span>
+                                          </div>
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                                            <span>HVAC</span>
+                                            <span className="text-muted-foreground">(Medium)</span>
+                                          </div>
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                                            <span>Interiors</span>
+                                            <span className="text-muted-foreground">(Medium)</span>
+                                          </div>
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+                                            <span>Site</span>
+                                            <span className="text-muted-foreground">(Low)</span>
+                                          </div>
                                         </div>
-                                      ))}
-                                    </div>
-                                  </div>
+                                      </div>
 
-                                  {/* Risk Heat Map */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-4">Cost Risk Distribution</h3>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                      <BarChart data={[
-                                        { category: 'Low Risk', amount: 42.5, percentage: 41.4 },
-                                        { category: 'Medium Risk', amount: 38.2, percentage: 37.2 },
-                                        { category: 'High Risk', amount: 21.9, percentage: 21.4 }
-                                      ]} layout="vertical">
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis type="number" label={{ value: 'Amount ($M)', position: 'bottom' }} />
-                                        <YAxis type="category" dataKey="category" />
-                                        <Tooltip />
-                                        <Bar dataKey="amount" fill="#f59e0b" name="Cost at Risk ($M)" />
-                                      </BarChart>
-                                    </ResponsiveContainer>
-                                  </div>
-
-                                  {/* Top Risk Items */}
-                                  <div>
-                                    <h3 className="text-sm font-semibold mb-3">Top Risk Drivers</h3>
-                                    <div className="space-y-2">
-                                      <div className="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
-                                        <div className="flex items-start justify-between">
+                                      {/* Critical Risk Callout */}
+                                      <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                                        <div className="flex items-start gap-2">
+                                          <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                                           <div className="flex-1">
-                                            <div className="font-medium">MEP Design Incomplete (40%)</div>
-                                            <p className="text-sm text-muted-foreground mt-1">
-                                              Electrical and HVAC systems are 30% of budget but only 60% designed
+                                            <div className="text-sm font-semibold mb-1">Critical Risk</div>
+                                            <p className="text-xs text-muted-foreground">
+                                              Electrical systems represent 18% of total cost but are only 40% designed. This creates the highest cost uncertainty. 
+                                              Need to complete electrical drawings and equipment specifications.
                                             </p>
                                           </div>
-                                          <Badge variant="destructive">High</Badge>
                                         </div>
                                       </div>
-                                      <div className="p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                                        <div className="flex items-start justify-between">
-                                          <div className="flex-1">
-                                            <div className="font-medium">Structural Steel Lead Times</div>
-                                            <p className="text-sm text-muted-foreground mt-1">
-                                              Current market conditions show 16-20 week lead times
-                                            </p>
+                                    </div>
+
+                                    {/* Right: Contingency Buffer Tracking */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">Contingency Buffer Tracking</h3>
+                                      <ResponsiveContainer width="100%" height={280}>
+                                        <LineChart 
+                                          data={[
+                                            { phase: 'SD', contingency: 12.5 },
+                                            { phase: 'DD', contingency: 9.2 },
+                                            { phase: 'CD', contingency: 7.8 }
+                                          ]}
+                                          margin={{ top: 20, right: 30, bottom: 20, left: 10 }}
+                                        >
+                                          <CartesianGrid strokeDasharray="3 3" />
+                                          <XAxis dataKey="phase" />
+                                          <YAxis 
+                                            domain={[0, 16]} 
+                                            tickFormatter={(value) => `${value}%`}
+                                            ticks={[0, 4, 8, 12, 16]}
+                                          />
+                                          <Tooltip formatter={(value) => `${value}%`} />
+                                          <Line 
+                                            type="monotone" 
+                                            dataKey="contingency" 
+                                            stroke="#ef4444" 
+                                            strokeWidth={2}
+                                            dot={{ fill: '#ef4444', r: 6, strokeWidth: 2, stroke: '#fff' }}
+                                            name="Contingency %"
+                                          />
+                                        </LineChart>
+                                      </ResponsiveContainer>
+
+                                      {/* Contingency Details */}
+                                      <div className="mt-4 space-y-2 text-sm">
+                                        <div className="flex items-center justify-between">
+                                          <span className="font-medium">SD</span>
+                                          <span className="font-bold">12.5%</span>
+                                          <span className="text-muted-foreground text-xs">Normal SD range is 10-15%</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                          <span className="font-medium">DD</span>
+                                          <span className="font-bold">9.2%</span>
+                                          <span className="text-muted-foreground text-xs">Normal DD range is 7-10%</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                          <span className="font-medium">CD</span>
+                                          <span className="font-bold">7.8%</span>
+                                          <span className="text-muted-foreground text-xs">Normal CD range is 5-7% (we're high due to Interiors not frozen)</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Bottom Row: Cost Impact Analysis & Decisions Look Ahead */}
+                                  <div className="grid grid-cols-2 gap-6">
+                                    {/* Left: Cost Impact Analysis */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">Cost Impact Analysis</h3>
+                                      <ResponsiveContainer width="100%" height={240}>
+                                        <BarChart 
+                                          data={[
+                                            { category: 'UPS Redundancy (N vs N+1)', value: 4.8 },
+                                            { category: 'ISOT Cleanroom in Phase', value: 3.2 },
+                                            { category: 'Curtainwall Custom Profile', value: 2.8 },
+                                            { category: 'Steel Rate Escalation', value: 1.8 },
+                                            { category: 'Import Duty on Switchgear', value: 1.2 }
+                                          ]}
+                                          layout="vertical"
+                                          margin={{ left: 150, right: 20 }}
+                                        >
+                                          <CartesianGrid strokeDasharray="3 3" />
+                                          <XAxis type="number" tickFormatter={(value) => `$${value}M`} />
+                                          <YAxis type="category" dataKey="category" width={140} tick={{ fontSize: 10 }} />
+                                          <Tooltip formatter={(value) => `$${value}M`} />
+                                          <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                                        </BarChart>
+                                      </ResponsiveContainer>
+
+                                      {/* Chart Summary */}
+                                      <div className="mt-4 text-xs text-muted-foreground">
+                                        <span className="font-semibold">Chart Summary:</span> This analysis shows 5 key factors that could impact project costs by a total of ±$12.2M. 
+                                        The top 3 factors (UPS redundancy, cleanroom specs, curtainwall) account for 79% of total cost sensitivity. Market factors like 
+                                        steel rates and import duties represent smaller but still significant impacts.
+                                      </div>
+                                    </div>
+
+                                    {/* Right: Decisions Look Ahead */}
+                                    <div>
+                                      <h3 className="text-sm font-semibold mb-4">Decisions Look Ahead</h3>
+                                      <div className="space-y-3">
+                                        {[
+                                          { 
+                                            title: 'Structural Steel Quantities',
+                                            description: 'Finalize structural drawings to lock steel quantities',
+                                            completion: '85% complete',
+                                            budget: '12% of budget',
+                                            status: 'Uncertain',
+                                            color: 'text-amber-600'
+                                          },
+                                          { 
+                                            title: 'Electrical/HVAC Specifications',
+                                            description: 'Complete electrical drawings and equipment specifications',
+                                            completion: '40% complete',
+                                            budget: '18% of budget',
+                                            status: 'Risky',
+                                            color: 'text-red-600'
+                                          },
+                                          { 
+                                            title: 'Interior Finishes Specifications',
+                                            description: 'Standardize interior specifications to improve budget accuracy',
+                                            completion: '45% complete',
+                                            budget: '8% of budget',
+                                            status: 'Risky',
+                                            color: 'text-red-600'
+                                          },
+                                          { 
+                                            title: 'Curtainwall Details',
+                                            description: 'Finalize curtainwall profiles to confirm fabrication costs',
+                                            completion: '65% complete',
+                                            budget: '12% of budget',
+                                            status: 'Uncertain',
+                                            color: 'text-amber-600'
+                                          },
+                                          { 
+                                            title: 'MEP Systems Coordination',
+                                            description: 'Complete MEP coordination drawings for installation clarity',
+                                            completion: '60% complete',
+                                            budget: '30% of budget',
+                                            status: 'Uncertain',
+                                            color: 'text-amber-600'
+                                          }
+                                        ].map((item, idx) => (
+                                          <div key={idx} className="border-b pb-3 last:border-0">
+                                            <div className="font-medium text-sm mb-1">{item.title}</div>
+                                            <p className="text-xs text-muted-foreground mb-2">{item.description}</p>
+                                            <div className="flex items-center gap-3 text-xs">
+                                              <span className="text-muted-foreground">{item.completion}</span>
+                                              <span className="text-muted-foreground">•</span>
+                                              <span className="text-muted-foreground">{item.budget}</span>
+                                              <span className="text-muted-foreground">•</span>
+                                              <span className={item.color}>{item.status}</span>
+                                            </div>
                                           </div>
-                                          <Badge className="bg-amber-500 hover:bg-amber-600">Medium</Badge>
-                                        </div>
+                                        ))}
                                       </div>
                                     </div>
-                                  </div>
-                                </CardContent>
-                              </AccordionContent>
-                            </AccordionItem>
-                          </Card>
-
-                          {/* Story of Market Fit */}
-                          <Card>
-                            <AccordionItem value="market-fit" className="border-0">
-                              <AccordionTrigger className="px-6 hover:no-underline">
-                                <div className="flex items-center gap-3">
-                                  <TrendingUp className="h-5 w-5 text-green-600" />
-                                  <span className="text-lg font-semibold">Story of Market Fit</span>
-                                </div>
-                              </AccordionTrigger>
-                              <AccordionContent>
-                                <CardContent className="pt-4">
-                                  {/* KPI Summary */}
-                                  <div className="grid grid-cols-3 gap-4 mb-6">
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold text-green-600">+7.6%</div>
-                                        <div className="text-sm text-muted-foreground">vs Metro Median</div>
-                                        <div className="text-sm text-muted-foreground mt-1">Above avg premium</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">$349/SF</div>
-                                        <div className="text-sm text-muted-foreground">Project Cost/SF</div>
-                                        <div className="text-sm text-muted-foreground mt-1">Metro avg: $324/SF</div>
-                                      </CardContent>
-                                    </Card>
-                                    <Card className="bg-muted/30">
-                                      <CardContent className="pt-6">
-                                        <div className="text-2xl font-bold">18</div>
-                                        <div className="text-sm text-muted-foreground">Comparable Projects</div>
-                                        <div className="text-sm text-muted-foreground mt-1">Last 24 months</div>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-
-                                  {/* Market Comparison Chart */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-4">Cost Comparison: This Project vs Market</h3>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                      <BarChart data={[
-                                        { system: 'Structure', project: 97, market: 92, variance: 5 },
-                                        { system: 'Envelope', project: 62, market: 58, variance: 4 },
-                                        { system: 'MEP', project: 76, market: 66, variance: 10 },
-                                        { system: 'Interiors', project: 54, market: 52, variance: 2 },
-                                        { system: 'Site', project: 30, market: 28, variance: 2 }
-                                      ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="system" />
-                                        <YAxis label={{ value: 'Cost ($/SF)', angle: -90, position: 'insideLeft' }} />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Bar dataKey="project" fill="#3b82f6" name="This Project" />
-                                        <Bar dataKey="market" fill="#94a3b8" name="Market Average" />
-                                      </BarChart>
-                                    </ResponsiveContainer>
-                                  </div>
-
-                                  {/* Regional Factors */}
-                                  <div className="mb-6">
-                                    <h3 className="text-sm font-semibold mb-3">Regional Cost Drivers</h3>
-                                    <div className="space-y-2">
-                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                                        <span className="text-sm font-medium">Labor Rate Premium</span>
-                                        <span className="text-sm font-bold text-orange-600">+12%</span>
-                                      </div>
-                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                                        <span className="text-sm font-medium">Material Escalation (Steel)</span>
-                                        <span className="text-sm font-bold text-red-600">+18%</span>
-                                      </div>
-                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                                        <span className="text-sm font-medium">Jurisdictional Requirements</span>
-                                        <span className="text-sm font-bold text-amber-600">+8%</span>
-                                      </div>
-                                      <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                                        <span className="text-sm font-medium">Sustainability Premium</span>
-                                        <span className="text-sm font-bold text-green-600">+5%</span>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Peer Projects */}
-                                  <div>
-                                    <h3 className="text-sm font-semibold mb-4">Comparable Projects ($/SF)</h3>
-                                    <ResponsiveContainer width="100%" height={250}>
-                                      <LineChart data={[
-                                        { project: 'Proj A', cost: 298, type: 'Office' },
-                                        { project: 'Proj B', cost: 315, type: 'Mixed Use' },
-                                        { project: 'Proj C', cost: 342, type: 'Office' },
-                                        { project: 'This Project', cost: 349, type: 'Office' },
-                                        { project: 'Proj D', cost: 365, type: 'Residential' },
-                                        { project: 'Proj E', cost: 382, type: 'Mixed Use' }
-                                      ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="project" />
-                                        <YAxis label={{ value: 'Cost ($/SF)', angle: -90, position: 'insideLeft' }} />
-                                        <Tooltip />
-                                        <Line type="monotone" dataKey="cost" stroke="#3b82f6" strokeWidth={2} />
-                                      </LineChart>
-                                    </ResponsiveContainer>
                                   </div>
                                 </CardContent>
                               </AccordionContent>
