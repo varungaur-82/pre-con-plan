@@ -27,6 +27,7 @@ import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, Cartesia
 import { useTabContext } from "@/contexts/TabContext";
 import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
+import { EstimateGenerator } from "./EstimateGenerator";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -48,6 +49,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [selectedView, setSelectedView] = useState<{[key: number]: string}>({});
   const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
   const [selectedDesignOption, setSelectedDesignOption] = useState<number | null>(null);
+  const [activeEstimationModule, setActiveEstimationModule] = useState<"overview" | "generator" | "compare">("overview");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1788,12 +1790,39 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </Button>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="default" size="sm">Executive Overview</Button>
-                          <Button variant="ghost" size="sm">Estimate Generator</Button>
-                          <Button variant="ghost" size="sm">Compare Budgets</Button>
+                          <Button 
+                            variant={activeEstimationModule === "overview" ? "default" : "ghost"} 
+                            size="sm"
+                            onClick={() => setActiveEstimationModule("overview")}
+                          >
+                            Executive Overview
+                          </Button>
+                          <Button 
+                            variant={activeEstimationModule === "generator" ? "default" : "ghost"} 
+                            size="sm"
+                            onClick={() => setActiveEstimationModule("generator")}
+                          >
+                            Estimate Generator
+                          </Button>
+                          <Button 
+                            variant={activeEstimationModule === "compare" ? "default" : "ghost"} 
+                            size="sm"
+                            onClick={() => setActiveEstimationModule("compare")}
+                          >
+                            Compare Budgets
+                          </Button>
                         </div>
                       </div>
 
+                      {/* Conditionally render based on active module */}
+                      {activeEstimationModule === "generator" ? (
+                        <EstimateGenerator />
+                      ) : activeEstimationModule === "compare" ? (
+                        <div className="flex-1 flex items-center justify-center p-6">
+                          <p className="text-muted-foreground">Compare Budgets - Coming Soon</p>
+                        </div>
+                      ) : (
+                        <>
                       {/* Main Content - with scroll */}
                       <div className="flex-1 overflow-y-auto p-6 space-y-6">
                         {/* Filters and Stats Bar */}
@@ -2549,6 +2578,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           </Card>
                         </Accordion>
                       </div>
+                      </>
+                      )}
                     </>
                   )}
                 </div>
