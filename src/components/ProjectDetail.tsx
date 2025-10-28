@@ -1,6 +1,6 @@
 import { DataEngine } from "./DataEngine";
 import { useState, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ import {
   Target, AlertCircle, CheckCircle2, Upload, Send,
   FileText, BarChart3, Clock, Users, PanelRightClose, PanelRightOpen,
   TrendingDown, Flag, Banknote, Scale, Clipboard, Wrench, Zap, StickyNote, FolderOpen, File,
-  CalendarIcon, ChevronRight, ChevronUp, ChevronDown
+  CalendarIcon, ChevronRight, ChevronUp, ChevronDown, ChevronLeft
 } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useTabContext } from "@/contexts/TabContext";
@@ -46,6 +46,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [expandedDesignOption, setExpandedDesignOption] = useState<number | null>(null);
   const [selectedView, setSelectedView] = useState<{[key: number]: string}>({});
   const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
+  const [selectedDesignOption, setSelectedDesignOption] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1705,72 +1706,333 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               <DesignStudio />
             </TabsContent>
 
-            {/* 5D Tab */}
+             {/* 5D Tab */}
             <TabsContent value="5d" className="mt-0 h-full">
               <div className="flex h-full">
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col">
-                  {/* Upload Band */}
-                  <div className="border-b bg-card px-8 py-4">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">
-                        Upload a design (DWG, IFC, PDF, DXF, RVT) to start.
-                      </p>
-                      <div className="flex gap-3">
-                        <Button 
-                          variant="outline"
-                          onClick={() => document.getElementById('5d-file-input')?.click()}
-                        >
-                          <Upload className="h-4 w-4 mr-2" />
-                          Upload Design
-                        </Button>
-                        <Button 
-                          onClick={() => {
-                            const fileInput = document.getElementById('5d-file-input') as HTMLInputElement;
-                            if (!fileInput?.files?.length) {
-                              toast({
-                                title: "No File Uploaded",
-                                description: "Please upload a design file first.",
-                                variant: "destructive",
-                              });
-                            } else {
-                              setDesignOptionsGenerated(true);
-                              toast({
-                                title: "Options Generated",
-                                description: "Generated 3 design options successfully.",
-                              });
-                            }
-                          }}
-                          className="bg-construction-success hover:bg-construction-success/90"
-                        >
-                          Generate Options
-                        </Button>
-                        <input
-                          id="5d-file-input"
-                          type="file"
-                          accept=".dwg,.ifc,.pdf,.dxf,.rvt"
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              toast({
-                                title: "File Uploaded",
-                                description: `${file.name} has been uploaded successfully.`,
-                              });
-                            }
-                          }}
-                        />
+                  {!selectedDesignOption ? (
+                    <>
+                      {/* Upload Band */}
+                      <div className="border-b bg-card px-8 py-4">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-muted-foreground">
+                            Upload a design (DWG, IFC, PDF, DXF, RVT) to start.
+                          </p>
+                          <div className="flex gap-3">
+                            <Button 
+                              variant="outline"
+                              onClick={() => document.getElementById('5d-file-input')?.click()}
+                            >
+                              <Upload className="h-4 w-4 mr-2" />
+                              Upload Design
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                const fileInput = document.getElementById('5d-file-input') as HTMLInputElement;
+                                if (!fileInput?.files?.length) {
+                                  toast({
+                                    title: "No File Uploaded",
+                                    description: "Please upload a design file first.",
+                                    variant: "destructive",
+                                  });
+                                } else {
+                                  setDesignOptionsGenerated(true);
+                                  toast({
+                                    title: "Options Generated",
+                                    description: "Generated 3 design options successfully.",
+                                  });
+                                }
+                              }}
+                              className="bg-construction-success hover:bg-construction-success/90"
+                            >
+                              Generate Options
+                            </Button>
+                            <input
+                              id="5d-file-input"
+                              type="file"
+                              accept=".dwg,.ifc,.pdf,.dxf,.rvt"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  toast({
+                                    title: "File Uploaded",
+                                    description: `${file.name} has been uploaded successfully.`,
+                                  });
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
 
-                  {/* Content Area */}
-                  <div className="flex-1 p-8 overflow-y-auto">
-                    <h2 className="text-2xl font-bold text-foreground mb-2">5D Cost Management</h2>
-                    <p className="text-muted-foreground mb-6">
-                      Upload design files and generate cost estimates with multiple options.
-                    </p>
-                  </div>
+                      {/* Content Area */}
+                      <div className="flex-1 p-8 overflow-y-auto">
+                        <h2 className="text-2xl font-bold text-foreground mb-2">5D Cost Management</h2>
+                        <p className="text-muted-foreground mb-6">
+                          Upload design files and generate cost estimates with multiple options.
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* 5D Estimation Modules Header */}
+                      <div className="p-6 border-b bg-card">
+                        <div className="flex items-center justify-between mb-4">
+                          <h1 className="text-2xl font-bold">5D Estimation Modules</h1>
+                          <Button variant="ghost" size="sm" onClick={() => setSelectedDesignOption(null)}>
+                            <ChevronLeft className="h-4 w-4 mr-2" />
+                            Back to Options
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="default" size="sm">Executive Overview</Button>
+                          <Button variant="ghost" size="sm">Estimate Generator</Button>
+                          <Button variant="ghost" size="sm">Compare Budgets</Button>
+                        </div>
+                      </div>
+
+                      {/* Main Content - with scroll */}
+                      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        {/* Filters and Stats Bar */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Scenario:</span>
+                              <select className="px-3 py-1 border rounded-md text-sm bg-background">
+                                <option>Baseline</option>
+                              </select>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Version:</span>
+                              <select className="px-3 py-1 border rounded-md text-sm bg-background">
+                                <option>DD-S04</option>
+                              </select>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm">
+                              <span>📍 Metro</span>
+                              <span className="text-muted-foreground">AACE Class 4</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-8">
+                            <div className="text-right">
+                              <div className="text-3xl font-bold">$12,500,000</div>
+                              <div className="text-sm text-muted-foreground">Total</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-3xl font-bold">$425/SF</div>
+                              <div className="text-sm text-muted-foreground">Per SF</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-3xl font-bold">🟡 78%</div>
+                              <div className="text-sm text-muted-foreground">Confidence</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Key Metrics Cards */}
+                        <div className="grid grid-cols-4 gap-4">
+                          {/* Estimate Value Card */}
+                          <Card>
+                            <CardHeader className="pb-3">
+                              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                                💵 Estimate Value
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-2">
+                                <div className="text-2xl font-bold">$12,500,000 (425/SF)</div>
+                                <div className="text-sm text-green-600 flex items-center gap-1">
+                                  <span>↑ 8.2% since DD-S02</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  Change mainly from Scope Adds and Market conditions; Hard/Soft 75% / 25%.
+                                </p>
+                                <a href="#" className="text-xs text-primary">Scope Adds drove 45% of change. Open Waterfall →</a>
+                                <p className="text-xs text-muted-foreground mt-2">Source: Cost Database • Baseline • DD-S04</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Estimate Confidence Card */}
+                          <Card>
+                            <CardHeader className="pb-3">
+                              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                                🎯 Estimate Confidence
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-2">
+                                <div className="text-2xl font-bold">78%</div>
+                                <div className="relative h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
+                                  <div className="absolute top-0 left-[78%] w-3 h-3 bg-foreground rounded-full -mt-0.5"></div>
+                                </div>
+                                <div className="flex justify-between text-xs text-muted-foreground">
+                                  <span>Low Risk</span>
+                                  <span>High Risk</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  Design completion: 68% • Contingency: 12% (below 15% DD target)
+                                </p>
+                                <a href="#" className="text-xs text-primary">
+                                  Electrical/HVAC systems need design completion – they're 30% of budget but only 60% finished. View Risk Map →
+                                </a>
+                                <p className="text-xs text-muted-foreground mt-2">Source: Cost Database • Baseline • DD-S04</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Market Fit Card */}
+                          <Card>
+                            <CardHeader className="pb-3">
+                              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                                🟢 Market Fit
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-2">
+                                <div className="text-2xl font-bold text-green-600">+7.6% vs Metro median</div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  Driven by premium finishes and jurisdictional requirements; largely regional.
+                                </p>
+                                <a href="#" className="text-xs text-primary">
+                                  Electrical/HVAC costs are 15% higher than similar projects. View Comparison →
+                                </a>
+                                <p className="text-xs text-muted-foreground mt-2">Source: Cost Database • Baseline • DD-S04</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Next Steps Card */}
+                          <Card>
+                            <CardHeader className="pb-3">
+                              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                                🔴 Next Steps
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-2">
+                                <div className="text-2xl font-bold">5 design areas need completion</div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  Structural Steel drawings • Electrical/HVAC specifications • Interior finishes • Curtainwall details • MEP coordination
+                                </p>
+                                <a href="#" className="text-xs text-primary">
+                                  Complete structural drawings and finalize Electrical/HVAC specifications to improve design confidence. View Details →
+                                </a>
+                                <p className="text-xs text-muted-foreground mt-2">Source: Cost Database • Baseline • DD-S04</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        {/* Story of Estimate Value */}
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg flex items-center gap-2">
+                              📊 Story of Estimate Value
+                              <ChevronDown className="h-4 w-4 ml-auto" />
+                            </CardTitle>
+                            <CardDescription>
+                              Current budget status, changes since last phase, and how much is finalized vs still estimated
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-6">
+                              <div>
+                                <h3 className="text-sm font-medium mb-4">Cost Evolution by Phase</h3>
+                                <div className="relative h-48 flex items-end gap-8">
+                                  {/* SD Phase */}
+                                  <div className="flex-1 flex flex-col items-center">
+                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
+                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
+                                    </div>
+                                    <span className="text-sm mt-2">SD</span>
+                                  </div>
+                                  {/* DD Phase */}
+                                  <div className="flex-1 flex flex-col items-center">
+                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
+                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
+                                    </div>
+                                    <span className="text-sm mt-2">DD</span>
+                                  </div>
+                                  {/* CD Phase */}
+                                  <div className="flex-1 flex flex-col items-center">
+                                    <div className="w-full h-40 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t relative">
+                                      <div className="absolute top-0 left-0 right-0 h-8 bg-green-500"></div>
+                                    </div>
+                                    <span className="text-sm mt-2">CD</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-center gap-4 mt-4 text-xs">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-yellow-500">◆</span>
+                                    <span>$/SF</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-blue-600"></div>
+                                    <span>Hard Cost</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-green-500"></div>
+                                    <span>Soft Cost</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Phase Breakdown */}
+                              <div className="space-y-4">
+                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                  <div>
+                                    <div className="font-medium">SD</div>
+                                  </div>
+                                  <div className="flex-1 mx-8">
+                                    <p className="text-sm text-muted-foreground">
+                                      Jump from Concept → SD driven by code-required egress core and added generator redundancy.
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-bold">$98.4M</div>
+                                    <div className="text-xs text-muted-foreground">Hard: $74.1M | Soft: $24.3M</div>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                  <div>
+                                    <div className="font-medium">DD</div>
+                                  </div>
+                                  <div className="flex-1 mx-8">
+                                    <p className="text-sm text-muted-foreground">
+                                      Increase is mostly clarified quantities, not scope creep. Envelope spec locked.
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-bold">$101.2M</div>
+                                    <div className="text-xs text-muted-foreground">Hard: $76.0M | Soft: $25.2M</div>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                                  <div>
+                                    <div className="font-medium">CD</div>
+                                  </div>
+                                  <div className="flex-1 mx-8">
+                                    <p className="text-sm text-muted-foreground">
+                                      Delta vs DD is &lt;1.5%. Now behaving like a controllable GMP candidate.
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-bold">$102.6M</div>
+                                    <div className="text-xs text-muted-foreground">Hard: $76.9M | Soft: $25.7M</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Right Sidebar - Design Options */}
@@ -1906,6 +2168,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                     size="sm" 
                                     variant="outline"
                                     className="flex-1"
+                                    onClick={() => setSelectedDesignOption(option.id)}
                                   >
                                     Select
                                   </Button>
@@ -1913,6 +2176,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                     size="sm" 
                                     variant="outline"
                                     className="flex-1"
+                                    onClick={() => setSelectedDesignOption(option.id)}
                                   >
                                     View / Modify
                                   </Button>
