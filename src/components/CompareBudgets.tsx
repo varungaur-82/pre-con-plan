@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, FileText, RefreshCw } from "lucide-react";
+import { ChevronDown, ChevronRight, FileText, RefreshCw, AlertCircle, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -519,6 +519,87 @@ export function CompareBudgets() {
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Validation Issues Section */}
+      <div className="border-t bg-card">
+        {/* Summary Bar */}
+        <div className="flex items-center justify-between p-4 border-b bg-muted/20">
+          <div className="flex items-center gap-8">
+            <div>
+              <div className="text-sm text-muted-foreground mb-1">Net Delta vs Baseline</div>
+              <div className="text-xl font-bold text-red-600">
+                -{formatCurrency(32730236)}
+              </div>
+              <div className="text-sm text-muted-foreground">-327.30/SF</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-muted-foreground">Validation Issues</div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1">
+                  <XCircle className="h-5 w-5 text-red-600" />
+                  <span className="font-semibold">0</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <AlertCircle className="h-5 w-5 text-yellow-600" />
+                  <span className="font-semibold">31</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span className="font-semibold">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="default" className="bg-blue-600 hover:bg-blue-700">
+              Resolve All (31)
+            </Button>
+            <Button variant="default" className="bg-green-600 hover:bg-green-700">
+              Save Budget Updates
+            </Button>
+          </div>
+        </div>
+
+        {/* Issues List */}
+        <div className="divide-y max-h-[200px] overflow-auto">
+          <div className="flex items-center justify-between p-4 hover:bg-muted/30">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+              <span className="text-sm">
+                <span className="font-medium">Concrete Footings:</span> No cost source specified
+                <span className="text-muted-foreground"> • Assign cost source</span>
+              </span>
+            </div>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700">
+              Fix
+            </Button>
+          </div>
+          <div className="flex items-center justify-between p-4 hover:bg-muted/30">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+              <span className="text-sm">
+                <span className="font-medium">Foundation Walls:</span> No cost source specified
+                <span className="text-muted-foreground"> • Assign cost source</span>
+              </span>
+            </div>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700">
+              Fix
+            </Button>
+          </div>
+          <div className="flex items-center justify-between p-4 hover:bg-muted/30">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+              <span className="text-sm">
+                <span className="font-medium">Basement Slab:</span> No cost source specified
+                <span className="text-muted-foreground"> • Assign cost source</span>
+              </span>
+            </div>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700">
+              Fix
+            </Button>
           </div>
         </div>
       </div>
