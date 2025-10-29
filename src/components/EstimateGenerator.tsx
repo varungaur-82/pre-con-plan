@@ -469,7 +469,11 @@ const spacesData: EstimateItem[] = [
   },
 ];
 
-export function EstimateGenerator() {
+interface EstimateGeneratorProps {
+  selectedDesignOption?: number;
+}
+
+export function EstimateGenerator({ selectedDesignOption = 2 }: EstimateGeneratorProps) {
   const [activeView, setActiveView] = useState<'csi' | 'spaces'>('csi');
   const [expandedRowsCSI, setExpandedRowsCSI] = useState<Set<string>>(new Set());
   const [expandedRowsSpaces, setExpandedRowsSpaces] = useState<Set<string>>(new Set());
@@ -513,6 +517,33 @@ export function EstimateGenerator() {
   };
 
   const totalProject = currentData.reduce((sum, item) => sum + item.total, 0);
+
+  // Filter data based on search query
+  const filterEstimateData = (items: EstimateItem[], query: string): EstimateItem[] => {
+    if (!query.trim()) return items;
+    
+    const lowerQuery = query.toLowerCase();
+    return items.map(item => {
+      const matchesCode = item.code.toLowerCase().includes(lowerQuery);
+      const matchesDescription = item.description.toLowerCase().includes(lowerQuery);
+      const matchesBidPackage = item.bidPackage.toLowerCase().includes(lowerQuery);
+      
+      if (matchesCode || matchesDescription || matchesBidPackage) {
+        return item;
+      }
+      
+      if (item.subItems) {
+        const filteredSubItems = filterEstimateData(item.subItems, query);
+        if (filteredSubItems.length > 0) {
+          return { ...item, subItems: filteredSubItems };
+        }
+      }
+      
+      return null;
+    }).filter((item): item is EstimateItem => item !== null);
+  };
+
+  const filteredData = filterEstimateData(currentData, searchQuery);
 
   // Recursive function to render rows
   const renderEstimateRow = (item: EstimateItem, level: number = 0): React.ReactNode => {
@@ -586,8 +617,8 @@ export function EstimateGenerator() {
       <div className="border-b bg-card p-4">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl font-semibold">Estimated Budget - Option 2</h2>
-            <p className="text-sm text-muted-foreground">Design Option B</p>
+            <h2 className="text-xl font-semibold">Estimated Budget - Option {selectedDesignOption}</h2>
+            <p className="text-sm text-muted-foreground">Design Option {String.fromCharCode(64 + selectedDesignOption)}</p>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
@@ -596,15 +627,28 @@ export function EstimateGenerator() {
             <Button variant="default" size="sm">
               Save Revision
             </Button>
-            <Button variant="ghost" size="sm">
-              History
-            </Button>
+            <select 
+              className="px-3 py-1.5 border rounded-md text-sm bg-background cursor-pointer"
+              defaultValue="current"
+            >
+              <option value="current">History</option>
+              <option value="v10">Version 1.0 - Initial Estimate (Jan 2025)</option>
+              <option value="v11">Version 1.1 - Scope Refinement (Feb 2025)</option>
+              <option value="v12">Version 1.2 - Market Adjustment (Feb 2025)</option>
+              <option value="v20">Version 2.0 - Design Development (Mar 2025)</option>
+              <option value="v21">Version 2.1 - Value Engineering (Mar 2025)</option>
+              <option value="v22">Version 2.2 - Code Compliance (Apr 2025)</option>
+              <option value="v30">Version 3.0 - DD Submittal (May 2025)</option>
+              <option value="v31">Version 3.1 - Client Revisions (Jun 2025)</option>
+              <option value="v32">Version 3.2 - Final DD (Jul 2025)</option>
+              <option value="v40">Version 4.0 - CD Phase (Aug 2025)</option>
+            </select>
           </div>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h3 className="font-medium">Master Estimate - Option 2</h3>
+            <h3 className="font-medium">Master Estimate - Option {selectedDesignOption}</h3>
             <Tabs value={activeView} onValueChange={(v) => setActiveView(v as 'csi' | 'spaces')}>
               <TabsList>
                 <TabsTrigger value="csi">CSI</TabsTrigger>
@@ -658,7 +702,15 @@ export function EstimateGenerator() {
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item) => renderEstimateRow(item, 0))}
+            {filteredData.length > 0 ? (
+              filteredData.map((item) => renderEstimateRow(item, 0))
+            ) : (
+              <tr>
+                <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                  No results found for "{searchQuery}"
+                </td>
+              </tr>
+            )}
 
             {/* Total Row */}
             <tr className="border-t-2 bg-muted/30 font-semibold">

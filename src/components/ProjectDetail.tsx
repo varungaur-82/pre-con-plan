@@ -1825,7 +1825,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
                       {/* Conditionally render based on active module */}
                       {activeEstimationModule === "generator" ? (
-                        <EstimateGenerator />
+                        <EstimateGenerator selectedDesignOption={selectedDesignOption} />
                       ) : activeEstimationModule === "compare" ? (
                         <CompareBudgets />
                       ) : activeEstimationModule === "basis" ? (
@@ -1841,12 +1841,16 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                               <span className="text-sm text-muted-foreground">Scenario:</span>
                               <select className="px-3 py-1 border rounded-md text-sm bg-background">
                                 <option>Baseline</option>
+                                <option>Option A</option>
+                                <option>Option B</option>
                               </select>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="text-sm text-muted-foreground">Version:</span>
                               <select className="px-3 py-1 border rounded-md text-sm bg-background">
                                 <option>DD-S04</option>
+                                <option>SD-S02</option>
+                                <option>CD-S01</option>
                               </select>
                             </div>
                             <div className="flex items-center gap-2 text-sm">
@@ -1987,9 +1991,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                     <h3 className="text-sm font-semibold mb-4">Cost Evolution by Phase</h3>
                                     <ResponsiveContainer width="100%" height={280}>
                                       <BarChart data={[
-                                        { phase: 'SD', hard: 74.1, soft: 24.3, perSF: 335 },
-                                        { phase: 'DD', hard: 76.0, soft: 25.2, perSF: 344 },
-                                        { phase: 'CD', hard: 76.9, soft: 25.7, perSF: 349 }
+                                        { phase: 'SD', hard: 60, soft: 30, perSF: 300 },
+                                        { phase: 'DD', hard: 75, soft: 30, perSF: 350 },
+                                        { phase: 'CD', hard: 75, soft: 30, perSF: 350 }
                                       ]}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="phase" />
@@ -1997,8 +2001,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                                         <YAxis yAxisId="right" orientation="right" label={{ value: '$600/SF', position: 'top' }} domain={[0, 600]} />
                                         <Tooltip />
                                         <Legend verticalAlign="bottom" />
-                                        <Bar yAxisId="left" dataKey="hard" fill="#3b82f6" name="Hard Cost" />
-                                        <Bar yAxisId="left" dataKey="soft" fill="#10b981" name="Soft Cost" />
+                                        <Bar yAxisId="left" dataKey="hard" stackId="cost" fill="#3b82f6" name="Hard Cost" />
+                                        <Bar yAxisId="left" dataKey="soft" stackId="cost" fill="#10b981" name="Soft Cost" />
                                         <Line yAxisId="right" type="monotone" dataKey="perSF" stroke="#f59e0b" strokeWidth={2} dot={{ fill: '#f59e0b', r: 4 }} name="$/SF" />
                                       </BarChart>
                                     </ResponsiveContainer>
