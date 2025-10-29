@@ -544,7 +544,7 @@ export function CompareBudgets() {
         </TabsContent>
 
         {/* Delta Analysis Tab */}
-        <TabsContent value="delta" className="flex-1 m-0 overflow-auto p-6 space-y-6">
+        <TabsContent value="delta" className="flex-1 m-0 overflow-auto px-6 pt-4 pb-6 space-y-6">
             {/* Version Selection */}
             <Card className="p-6">
               <h3 className="text-sm font-medium mb-4">Select Versions for Delta Analysis</h3>
