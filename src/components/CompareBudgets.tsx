@@ -753,9 +753,7 @@ export function CompareBudgets() {
                   </table>
                 </div>
               </Card>
-              </Card>
             </div>
-          </div>
         </TabsContent>
       </Tabs>
     </div>
