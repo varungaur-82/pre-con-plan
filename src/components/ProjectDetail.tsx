@@ -29,6 +29,7 @@ import { DesignStudio } from "./DesignStudio";
 import { AutomationHub } from "./AutomationHub";
 import { EstimateGenerator } from "./EstimateGenerator";
 import { CompareBudgets } from "./CompareBudgets";
+import { BasisOfEstimate } from "./BasisOfEstimate";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -50,7 +51,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [selectedView, setSelectedView] = useState<{[key: number]: string}>({});
   const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
   const [selectedDesignOption, setSelectedDesignOption] = useState<number | null>(null);
-  const [activeEstimationModule, setActiveEstimationModule] = useState<"overview" | "generator" | "compare">("overview");
+  const [activeEstimationModule, setActiveEstimationModule] = useState<"overview" | "generator" | "compare" | "basis">("overview");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1812,6 +1813,13 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                           >
                             Compare Budgets
                           </Button>
+                          <Button 
+                            variant={activeEstimationModule === "basis" ? "default" : "ghost"} 
+                            size="sm"
+                            onClick={() => setActiveEstimationModule("basis")}
+                          >
+                            Basis of Estimate
+                          </Button>
                         </div>
                       </div>
 
@@ -1820,6 +1828,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                         <EstimateGenerator />
                       ) : activeEstimationModule === "compare" ? (
                         <CompareBudgets />
+                      ) : activeEstimationModule === "basis" ? (
+                        <BasisOfEstimate />
                       ) : (
                         <>
                       {/* Main Content - with scroll */}
