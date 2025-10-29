@@ -9,16 +9,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Database, FileText, AlertTriangle, Receipt, ArrowRight, Download } from "lucide-react";
+import { Database, FileText, AlertTriangle, Receipt, ArrowRight, Download, Calendar } from "lucide-react";
 import { SourcesIndicesDetail } from "./SourcesIndicesDetail";
 import { AssumptionsAllowancesDetail } from "./AssumptionsAllowancesDetail";
 import { RiskRegisterDetail } from "./RiskRegisterDetail";
 import { CommercialMarkupsDetail } from "./CommercialMarkupsDetail";
 
+interface BudgetVersion {
+  id: string;
+  name: string;
+  date: string;
+  icon?: string;
+}
+
+const budgetVersions: BudgetVersion[] = [
+  { id: "option-1", name: "Generated Option 1", date: "", icon: "🔄" },
+  { id: "dd-s04", name: "DD-S04", date: "15/01/2024", icon: "💾" },
+  { id: "dd-s04-b01", name: "DD-S04.B01", date: "22/01/2024", icon: "💾" },
+  { id: "dd-s04-b02", name: "DD-S04.B02", date: "29/01/2024", icon: "💾" },
+  { id: "dd-s04-b03", name: "DD-S04.B03", date: "05/02/2024", icon: "💾" },
+  { id: "delta-budget", name: "Delta Budget", date: "29/10/2025", icon: "💾" },
+];
+
 type DetailView = "main" | "sources" | "assumptions" | "risks" | "commercial";
 
 export function BasisOfEstimate() {
   const [detailView, setDetailView] = useState<DetailView>("main");
+  const [selectedEstimate, setSelectedEstimate] = useState("dd-s04-b01");
 
   if (detailView === "sources") {
     return <SourcesIndicesDetail onBack={() => setDetailView("main")} />;
@@ -43,12 +60,28 @@ export function BasisOfEstimate() {
         <div className="flex items-center justify-between mb-4">
           <div className="space-y-1">
             <h2 className="text-lg font-semibold">Selected Estimate</h2>
-            <Select defaultValue="estimate-1">
-              <SelectTrigger className="w-[300px]">
-                <SelectValue />
+            <Select value={selectedEstimate} onValueChange={setSelectedEstimate}>
+              <SelectTrigger className="w-[300px] bg-background">
+                <SelectValue placeholder="Select baseline..." />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="estimate-1">Select Estimate...</SelectItem>
+              <SelectContent className="bg-background z-50">
+                {budgetVersions.map((version) => (
+                  <SelectItem key={version.id} value={version.id} className="cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      {version.date ? (
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <span className="text-base">{version.icon}</span>
+                      )}
+                      <div>
+                        <div className="font-medium">
+                          {version.name}
+                          {version.date && ` - ${version.date}`}
+                        </div>
+                      </div>
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
