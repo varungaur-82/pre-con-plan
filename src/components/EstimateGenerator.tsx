@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface EstimateItem {
   code: string;
@@ -22,6 +23,7 @@ interface EstimateItem {
   unitCost: string;
   total: number;
   subItems?: EstimateItem[];
+  note?: string;
 }
 
 const estimateData: EstimateItem[] = [
@@ -259,10 +261,224 @@ const estimateData: EstimateItem[] = [
   },
 ];
 
+// Spaces-based data structure
+const spacesData: EstimateItem[] = [
+  {
+    code: "Main Building",
+    description: "Main Building",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1052607,
+    subItems: [
+      {
+        code: "LEVEL5",
+        description: "Level 5",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 73096,
+        subItems: [
+          {
+            code: "OFFICE",
+            description: "Office (Tenant, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 55156,
+            subItems: [
+              {
+                code: "Office",
+                description: "Office Suite 501 - 2500 SF",
+                bidPackage: "—",
+                qty: "—",
+                unit: "—",
+                unitCost: "—",
+                total: 55156,
+                note: "84% vs benchmark",
+                subItems: [
+                  { code: "09 26 13", description: "Gypsum Board Walls", bidPackage: "Interior", qty: "1,250", unit: "SF", unitCost: "US$2.50", total: 3125 },
+                  { code: "09 51 13", description: "Acoustical Ceiling", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "US$3.75", total: 9375 },
+                  { code: "09 68 16", description: "Carpet Flooring", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "US$8.50", total: 21250 },
+                  { code: "26 51 13", description: "Lighting Fixtures", bidPackage: "Electrical", qty: "25", unit: "EA", unitCost: "US$450.00", total: 11250 },
+                  { code: "23 37 13", description: "Supply Air Diffusers", bidPackage: "HVAC", qty: "31.25", unit: "EA", unitCost: "US$325.00", total: 10156 },
+                ],
+              },
+            ],
+          },
+          {
+            code: "Restroom",
+            description: "Restroom (Owner, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 17940,
+            subItems: [
+              { code: "09 30 13", description: "Ceramic Tile Walls", bidPackage: "Interior", qty: "450", unit: "SF", unitCost: "US$12.50", total: 5625 },
+              { code: "09 65 13", description: "Resilient Flooring", bidPackage: "Interior", qty: "350", unit: "SF", unitCost: "US$6.75", total: 2363 },
+              { code: "22 41 13", description: "Plumbing Fixtures", bidPackage: "Plumbing", qty: "8", unit: "EA", unitCost: "US$875.00", total: 7000 },
+              { code: "26 56 13", description: "Emergency Lighting", bidPackage: "Electrical", qty: "6", unit: "EA", unitCost: "US$325.50", total: 1953 },
+              { code: "23 34 13", description: "Exhaust Fans", bidPackage: "HVAC", qty: "4", unit: "EA", unitCost: "US$249.75", total: 999 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "LEVEL6",
+        description: "Level 6",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 79715,
+        subItems: [
+          {
+            code: "Lobby",
+            description: "Lobby",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 79715,
+            subItems: [
+              { code: "09 30 23", description: "Stone Tile Flooring", bidPackage: "Interior", qty: "600", unit: "SF", unitCost: "US$35.00", total: 21000 },
+              { code: "09 90 13", description: "Feature Wall Finish", bidPackage: "Interior", qty: "250", unit: "SF", unitCost: "US$38.00", total: 9500 },
+              { code: "09 51 23", description: "Premium Acoustical Ceiling", bidPackage: "Interior", qty: "2,800", unit: "SF", unitCost: "US$5.25", total: 14700 },
+              { code: "26 51 19", description: "LED Lighting Fixtures", bidPackage: "Electrical", qty: "30", unit: "EA", unitCost: "US$575.00", total: 17250 },
+              { code: "12 48 13", description: "Custom Reception Desk", bidPackage: "Millwork", qty: "1", unit: "EA", unitCost: "US$17,265.00", total: 17265 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "LEVEL7",
+        description: "Level 7",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 66188,
+        subItems: [
+          {
+            code: "Core",
+            description: "Core",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 10887,
+            subItems: [
+              { code: "14 21 13", description: "Elevator Finishes", bidPackage: "Vertical Transport", qty: "2", unit: "EA", unitCost: "US$3,250.00", total: 6500 },
+              { code: "10 14 13", description: "Signage", bidPackage: "Specialties", qty: "12", unit: "EA", unitCost: "US$365.58", total: 4387 },
+            ],
+          },
+          {
+            code: "Mechanical",
+            description: "Mechanical Room",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 24801,
+            subItems: [
+              { code: "23 81 13", description: "HVAC Equipment", bidPackage: "HVAC", qty: "1", unit: "LS", unitCost: "US$18,500.00", total: 18500 },
+              { code: "26 24 13", description: "Panel Boards", bidPackage: "Electrical", qty: "3", unit: "EA", unitCost: "US$2,100.33", total: 6301 },
+            ],
+          },
+          {
+            code: "Conference",
+            description: "Conference Room",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 30500,
+            subItems: [
+              { code: "09 90 00", description: "Glass Partition Walls", bidPackage: "Interior", qty: "80", unit: "SF", unitCost: "US$95.00", total: 7600 },
+              { code: "26 27 13", description: "Audio/Visual Systems", bidPackage: "Technology", qty: "1", unit: "LS", unitCost: "US$9,665.00", total: 9665 },
+              { code: "09 68 26", description: "Premium Carpet Flooring", bidPackage: "Interior", qty: "600", unit: "SF", unitCost: "US$21.73", total: 13035 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "LEVEL10",
+        description: "Level 10",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 60700,
+        subItems: [
+          {
+            code: "Executive",
+            description: "Executive Suite",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 60700,
+            subItems: [
+              { code: "09 64 00", description: "Hardwood Flooring", bidPackage: "Interior", qty: "1,200", unit: "SF", unitCost: "US$28.50", total: 34200 },
+              { code: "12 21 13", description: "Custom Millwork", bidPackage: "Furnishings", qty: "1", unit: "LS", unitCost: "US$26,500.00", total: 26500 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "Basement",
+        description: "Basement",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 38800,
+        subItems: [
+          {
+            code: "LEVEL8",
+            description: "Level 8",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 2722,
+            subItems: [
+              { code: "09 91 23", description: "Epoxy Floor Coating", bidPackage: "Interior", qty: "800", unit: "SF", unitCost: "US$3.40", total: 2722 },
+            ],
+          },
+          {
+            code: "Parking",
+            description: "Parking Garage",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 36078,
+            subItems: [
+              { code: "03 30 00", description: "Concrete Topping", bidPackage: "Concrete", qty: "12,000", unit: "SF", unitCost: "US$2.15", total: 25800 },
+              { code: "26 56 29", description: "Parking Garage Lighting", bidPackage: "Electrical", qty: "45", unit: "EA", unitCost: "US$228.40", total: 10278 },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 export function EstimateGenerator() {
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [activeView, setActiveView] = useState<'csi' | 'spaces'>('csi');
+  const [expandedRowsCSI, setExpandedRowsCSI] = useState<Set<string>>(new Set());
+  const [expandedRowsSpaces, setExpandedRowsSpaces] = useState<Set<string>>(new Set());
   const [editingItem, setEditingItem] = useState<EstimateItem | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const expandedRows = activeView === 'csi' ? expandedRowsCSI : expandedRowsSpaces;
+  const setExpandedRows = activeView === 'csi' ? setExpandedRowsCSI : setExpandedRowsSpaces;
+  const currentData = activeView === 'csi' ? estimateData : spacesData;
 
   const toggleRow = (code: string) => {
     const newExpanded = new Set(expandedRows);
@@ -275,7 +491,17 @@ export function EstimateGenerator() {
   };
 
   const expandAll = () => {
-    setExpandedRows(new Set(estimateData.map(item => item.code)));
+    const allCodes = new Set<string>();
+    const collectCodes = (items: EstimateItem[]) => {
+      items.forEach(item => {
+        allCodes.add(item.code);
+        if (item.subItems) {
+          collectCodes(item.subItems);
+        }
+      });
+    };
+    collectCodes(currentData);
+    setExpandedRows(allCodes);
   };
 
   const collapseAll = () => {
@@ -286,7 +512,73 @@ export function EstimateGenerator() {
     return `US$${value.toLocaleString()}`;
   };
 
-  const totalProject = estimateData.reduce((sum, item) => sum + item.total, 0);
+  const totalProject = currentData.reduce((sum, item) => sum + item.total, 0);
+
+  // Recursive function to render rows
+  const renderEstimateRow = (item: EstimateItem, level: number = 0): React.ReactNode => {
+    const isExpanded = expandedRows.has(item.code);
+    const hasSubItems = item.subItems && item.subItems.length > 0;
+    
+    // Determine badge style based on level and view type
+    const getBadgeVariant = () => {
+      if (activeView === 'spaces') {
+        // For spaces view: top 4 levels get blue badge
+        return level <= 3 ? "secondary" : "outline";
+      } else {
+        // For CSI view: top level gets blue badge
+        return level === 0 ? "secondary" : "outline";
+      }
+    };
+
+    return (
+      <>
+        <tr key={item.code} className="border-b hover:bg-muted/30 transition-colors">
+          <td className="p-3" style={{ paddingLeft: `${12 + level * 20}px` }}>
+            <div className="flex items-center gap-2">
+              {hasSubItems && (
+                <button
+                  onClick={() => toggleRow(item.code)}
+                  className="hover:bg-muted rounded p-0.5 transition-colors"
+                >
+                  {isExpanded ? (
+                    <ChevronDown className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+              {!hasSubItems && <div className="w-6" />}
+              <Badge variant={getBadgeVariant()} className="font-mono text-xs">
+                {item.code}
+              </Badge>
+              <span className={level === 0 ? "font-medium" : "text-sm"}>{item.description}</span>
+              {item.note && (
+                <Badge variant="outline" className="text-xs text-green-600 bg-green-50 border-green-200">
+                  {item.note}
+                </Badge>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 ml-auto"
+                onClick={() => setEditingItem(item)}
+              >
+                <Edit2 className="h-3 w-3" />
+              </Button>
+            </div>
+          </td>
+          <td className="p-3 text-muted-foreground text-sm">{item.bidPackage}</td>
+          <td className="p-3 text-right text-muted-foreground text-sm">{item.qty}</td>
+          <td className="p-3 text-right text-muted-foreground text-sm">{item.unit}</td>
+          <td className="p-3 text-right text-muted-foreground text-sm">{item.unitCost}</td>
+          <td className="p-3 text-right font-semibold">{formatCurrency(item.total)}</td>
+        </tr>
+
+        {/* Sub Items - rendered recursively */}
+        {isExpanded && hasSubItems && item.subItems!.map(subItem => renderEstimateRow(subItem, level + 1))}
+      </>
+    );
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -313,14 +605,12 @@ export function EstimateGenerator() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h3 className="font-medium">Master Estimate - Option 2</h3>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                CSI
-              </Button>
-              <Button variant="ghost" size="sm">
-                Spaces
-              </Button>
-            </div>
+            <Tabs value={activeView} onValueChange={(v) => setActiveView(v as 'csi' | 'spaces')}>
+              <TabsList>
+                <TabsTrigger value="csi">CSI</TabsTrigger>
+                <TabsTrigger value="spaces">Spaces</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">
@@ -368,74 +658,7 @@ export function EstimateGenerator() {
             </tr>
           </thead>
           <tbody>
-            {estimateData.map((item) => {
-              const isExpanded = expandedRows.has(item.code);
-              return (
-                <>
-                  {/* Main Row */}
-                  <tr key={item.code} className="border-b hover:bg-muted/30 transition-colors">
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => toggleRow(item.code)}
-                          className="hover:bg-muted rounded p-0.5 transition-colors"
-                        >
-                          {isExpanded ? (
-                            <ChevronDown className="h-4 w-4" />
-                          ) : (
-                            <ChevronRight className="h-4 w-4" />
-                          )}
-                        </button>
-                        <Badge variant="secondary" className="font-mono text-xs">
-                          {item.code}
-                        </Badge>
-                        <span className="font-medium">{item.description}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0 ml-auto"
-                          onClick={() => setEditingItem(item)}
-                        >
-                          <Edit2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </td>
-                    <td className="p-3 text-muted-foreground">{item.bidPackage}</td>
-                    <td className="p-3 text-right text-muted-foreground">{item.qty}</td>
-                    <td className="p-3 text-right text-muted-foreground">{item.unit}</td>
-                    <td className="p-3 text-right text-muted-foreground">{item.unitCost}</td>
-                    <td className="p-3 text-right font-semibold">{formatCurrency(item.total)}</td>
-                  </tr>
-
-                  {/* Sub Items */}
-                  {isExpanded && item.subItems?.map((subItem) => (
-                    <tr key={`${item.code}-${subItem.code}`} className="border-b bg-muted/10 hover:bg-muted/20 transition-colors">
-                      <td className="p-3 pl-12">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="font-mono text-xs">
-                            {subItem.code}
-                          </Badge>
-                          <span className="text-sm">{subItem.description}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0 ml-auto"
-                            onClick={() => setEditingItem(subItem)}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </td>
-                      <td className="p-3 text-sm">{subItem.bidPackage}</td>
-                      <td className="p-3 text-right text-sm">{subItem.qty}</td>
-                      <td className="p-3 text-right text-sm">{subItem.unit}</td>
-                      <td className="p-3 text-right text-sm">{subItem.unitCost}</td>
-                      <td className="p-3 text-right font-medium">{formatCurrency(subItem.total)}</td>
-                    </tr>
-                  ))}
-                </>
-              );
-            })}
+            {currentData.map((item) => renderEstimateRow(item, 0))}
 
             {/* Total Row */}
             <tr className="border-t-2 bg-muted/30 font-semibold">
