@@ -353,6 +353,59 @@ export function CompareBudgets() {
         {/* Compare Tab */}
         <TabsContent value="compare" className="flex-1 m-0 overflow-hidden flex flex-col">
           <div className="border-b bg-card p-4">
+            {/* Version Selection Dropdowns */}
+            <Card className="p-4 mb-4">
+              <h3 className="text-sm font-medium mb-4">Select Versions for Comparison</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Baseline Version</label>
+                  <Select value={baselineVersion} onValueChange={setBaselineVersion}>
+                    <SelectTrigger className="w-full bg-background">
+                      <SelectValue placeholder="Select baseline..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background z-50">
+                      {budgetVersions.map((version) => (
+                        <SelectItem key={version.id} value={version.id} className="cursor-pointer">
+                          <div className="flex items-center gap-2">
+                            <span>{version.icon}</span>
+                            <div>
+                              <div className="font-medium">{version.name}</div>
+                              {version.date && (
+                                <div className="text-xs text-muted-foreground">{version.date}</div>
+                              )}
+                            </div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Comparison Version</label>
+                  <Select value={comparisonVersion} onValueChange={setComparisonVersion}>
+                    <SelectTrigger className="w-full bg-background">
+                      <SelectValue placeholder="Select comparison..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background z-50">
+                      {budgetVersions.map((version) => (
+                        <SelectItem key={version.id} value={version.id} className="cursor-pointer">
+                          <div className="flex items-center gap-2">
+                            <span>{version.icon}</span>
+                            <div>
+                              <div className="font-medium">{version.name}</div>
+                              {version.date && (
+                                <div className="text-xs text-muted-foreground">{version.date}</div>
+                              )}
+                            </div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </Card>
+
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={expandAll}>
