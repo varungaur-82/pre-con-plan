@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Edit2, Search } from "lucide-react";
+import { ChevronDown, ChevronRight, Edit2, Search, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,6 +13,14 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface EstimateItem {
   code: string;
@@ -723,63 +731,149 @@ export function EstimateGenerator({ selectedDesignOption = 2 }: EstimateGenerato
         </table>
       </div>
 
-      {/* Edit Dialog */}
+      {/* Edit Recipe Dialog */}
       <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Estimate Item</DialogTitle>
-            <DialogDescription>
-              Update the details for {editingItem?.code} - {editingItem?.description}
+            <DialogTitle className="text-2xl">Edit Recipe</DialogTitle>
+            <DialogDescription className="text-base">
+              {editingItem?.code} - {editingItem?.description}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4">
+          <div className="space-y-6 py-4">
+            {/* Scope of Changes */}
+            <div>
+              <Label className="text-base font-medium mb-3 block">Scope of Changes</Label>
+              <div className="flex gap-2">
+                <Button variant="default" className="flex-1">
+                  This Line
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  All Children (0 lines)
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  All Matching
+                </Button>
+              </div>
+            </div>
+
+            {/* Finish Tier */}
+            <div>
+              <Label className="text-base font-medium mb-3 block">Finish Tier</Label>
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1">
+                  Basic
+                </Button>
+                <Button variant="default" className="flex-1">
+                  Standard
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  High
+                </Button>
+              </div>
+            </div>
+
+            {/* Source Type and City */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Code</Label>
-                <Input defaultValue={editingItem?.code} />
+                <Label className="text-base font-medium">Source Type</Label>
+                <Select defaultValue="rsmeans">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rsmeans">RSMeans</SelectItem>
+                    <SelectItem value="historical">Historical Data</SelectItem>
+                    <SelectItem value="vendor">Vendor Quote</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
-                <Label>Bid Package</Label>
-                <Input defaultValue={editingItem?.bidPackage} />
+                <Label className="text-base font-medium">City</Label>
+                <Input defaultValue="NYC" />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Input defaultValue={editingItem?.description} />
+            {/* Commercial Markups */}
+            <div>
+              <Label className="text-base font-medium mb-3 block">Commercial Markups (%)</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>General Requirements</Label>
+                  <Input type="number" defaultValue="8.5" step="0.1" />
+                </div>
+                <div className="space-y-2">
+                  <Label>OH&P / CM Fee</Label>
+                  <Input type="number" defaultValue="10" step="0.1" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Bond & Insurance</Label>
+                  <Input type="number" defaultValue="1.5" step="0.1" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sales/Use Tax</Label>
+                  <Input type="number" defaultValue="8.25" step="0.01" />
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>Quantity</Label>
-                <Input defaultValue={editingItem?.qty} />
-              </div>
-              <div className="space-y-2">
-                <Label>Unit</Label>
-                <Input defaultValue={editingItem?.unit} />
-              </div>
-              <div className="space-y-2">
-                <Label>Unit Cost</Label>
-                <Input defaultValue={editingItem?.unitCost} />
+            {/* Contingency */}
+            <div>
+              <Label className="text-base font-medium mb-3 block">Contingency</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <Select defaultValue="construction">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="construction">Construction</SelectItem>
+                    <SelectItem value="design">Design</SelectItem>
+                    <SelectItem value="owner">Owner</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input type="number" defaultValue="12" step="0.1" />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>Total</Label>
-              <Input 
-                defaultValue={editingItem?.total ? formatCurrency(editingItem.total) : ""} 
-                disabled 
-              />
+            {/* Checkboxes */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="allowance" />
+                <label
+                  htmlFor="allowance"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Allowance
+                </label>
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="lock-row" />
+                  <label
+                    htmlFor="lock-row"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Lock Row
+                  </label>
+                </div>
+                <p className="text-sm text-muted-foreground ml-6">
+                  Locked rows are protected from AI edits
+                </p>
+              </div>
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button variant="outline" onClick={() => setEditingItem(null)}>
               Cancel
             </Button>
-            <Button onClick={() => setEditingItem(null)}>
-              Save Changes
+            <Button variant="outline" className="gap-2">
+              <Eye className="h-4 w-4" />
+              Preview
+            </Button>
+            <Button onClick={() => setEditingItem(null)} className="gap-2">
+              Apply
             </Button>
           </DialogFooter>
         </DialogContent>
