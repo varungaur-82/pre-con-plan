@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EditRecipeDialog } from "@/components/EditRecipeDialog";
 
 interface BudgetVersion {
   id: string;
@@ -394,6 +395,8 @@ export function CompareBudgets() {
   const [isComparing, setIsComparing] = useState(false);
   const [expandedRowsBaseline, setExpandedRowsBaseline] = useState<Set<string>>(new Set());
   const [expandedRowsComparison, setExpandedRowsComparison] = useState<Set<string>>(new Set());
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<{ code: string; description: string } | null>(null);
 
   const toggleRowBaseline = (code: string) => {
     const newExpanded = new Set(expandedRowsBaseline);
@@ -435,6 +438,11 @@ export function CompareBudgets() {
   const collapseAll = () => {
     setExpandedRowsBaseline(new Set());
     setExpandedRowsComparison(new Set());
+  };
+
+  const handleEditItem = (code: string, description: string) => {
+    setEditingItem({ code, description });
+    setEditDialogOpen(true);
   };
 
   const formatCurrency = (value: number) => {
@@ -753,7 +761,13 @@ export function CompareBudgets() {
                             </Badge>
                             <div className="flex items-center gap-1.5">
                               <span>{item.description}</span>
-                              <button className="text-muted-foreground hover:text-foreground">
+                              <button 
+                                className="text-muted-foreground hover:text-foreground"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditItem(item.code, item.description);
+                                }}
+                              >
                                 ✏️
                               </button>
                             </div>
@@ -946,7 +960,13 @@ export function CompareBudgets() {
                             </Badge>
                             <div className="flex items-center gap-1.5">
                               <span>{item.description}</span>
-                              <button className="text-muted-foreground hover:text-foreground">
+                              <button 
+                                className="text-muted-foreground hover:text-foreground"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditItem(item.code, item.description);
+                                }}
+                              >
                                 ✏️
                               </button>
                             </div>
@@ -1269,6 +1289,16 @@ export function CompareBudgets() {
             </div>
         </TabsContent>
       </Tabs>
+
+      {/* Edit Recipe Dialog */}
+      {editingItem && (
+        <EditRecipeDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          itemCode={editingItem.code}
+          itemDescription={editingItem.description}
+        />
+      )}
     </div>
   );
 }
