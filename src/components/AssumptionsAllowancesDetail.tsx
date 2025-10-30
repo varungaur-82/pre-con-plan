@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, Edit, ChevronDown } from "lucide-react";
 
 interface AssumptionsAllowancesDetailProps {
@@ -12,7 +13,7 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
     <div className="h-full flex flex-col bg-background">
       {/* Header */}
       <div className="p-6 border-b bg-card">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={onBack}>
               <ChevronLeft className="h-4 w-4" />
@@ -32,6 +33,38 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
             <Button variant="outline" size="sm" className="text-purple-600">
               Ask AI
             </Button>
+          </div>
+        </div>
+        
+        {/* Filters */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Selected Estimate:</span>
+            <Select defaultValue="v3">
+              <SelectTrigger className="w-[200px] bg-background">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-popover z-50">
+                <SelectItem value="v1">Version 1.0</SelectItem>
+                <SelectItem value="v2">Version 2.0</SelectItem>
+                <SelectItem value="v3">Version 3.0 (Current)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Scenario:</span>
+            <Select defaultValue="base">
+              <SelectTrigger className="w-[200px] bg-background">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-popover z-50">
+                <SelectItem value="base">Base Case</SelectItem>
+                <SelectItem value="optimistic">Optimistic</SelectItem>
+                <SelectItem value="conservative">Conservative</SelectItem>
+                <SelectItem value="accelerated">Accelerated Schedule</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
