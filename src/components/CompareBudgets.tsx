@@ -447,25 +447,54 @@ export function CompareBudgets() {
             <div className="grid grid-cols-2 divide-x min-h-full">
               {/* Baseline Table */}
               <div className="overflow-auto">
-                <div className="sticky top-0 bg-muted/50 border-b p-3 z-10">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Badge variant="outline" className="mb-1">Baseline</Badge>
-                      <div className="text-sm font-medium">
-                        {budgetVersions.find(v => v.id === baselineVersion)?.name}
+                {/* Header Section */}
+                <div className="sticky top-0 bg-card border-b z-20">
+                  <div className="p-3 border-b">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <Badge variant="outline" className="mb-1">Baseline</Badge>
+                        <div className="text-sm font-medium">
+                          {budgetVersions.find(v => v.id === baselineVersion)?.name}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-muted-foreground">Project Total:</div>
+                        <div className="font-bold">{formatCurrency(baselineTotal)}</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs text-muted-foreground">Project Total:</div>
-                      <div className="font-bold">{formatCurrency(baselineTotal)}</div>
+                  </div>
+                  
+                  {/* Breadcrumb and Controls */}
+                  <div className="p-3 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="h-7 text-xs">
+                          <FileText className="h-3 w-3 mr-1" />
+                          CSI
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-7 text-xs">
+                          Spaces
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input type="checkbox" id="advanced-baseline" className="rounded" />
+                      <label htmlFor="advanced-baseline" className="text-xs">Advanced Cost Controls</label>
                     </div>
                   </div>
                 </div>
 
                 <table className="w-full">
-                  <thead className="sticky top-16 bg-muted/30 border-b text-xs z-10">
+                  <thead className="sticky top-[180px] bg-muted/30 border-b text-xs z-10">
                     <tr>
-                      <th className="text-left p-2 font-medium">CODE & DESCRIPTION</th>
+                      <th className="text-left p-2 font-medium w-[40%]">CODE & DESCRIPTION<br/>ACTIONS</th>
+                      <th className="text-left p-2 font-medium">BID PACKAGE</th>
+                      <th className="text-center p-2 font-medium">QTY</th>
+                      <th className="text-center p-2 font-medium">UNIT</th>
+                      <th className="text-right p-2 font-medium">UNIT COST</th>
                       <th className="text-right p-2 font-medium">TOTAL</th>
                     </tr>
                   </thead>
@@ -474,72 +503,173 @@ export function CompareBudgets() {
                   const isExpanded = expandedRowsBaseline.has(item.code);
                   return (
                     <>
-                      <tr key={item.code} className="border-b hover:bg-muted/30">
+                      <tr 
+                        key={item.code}
+                        className="border-b hover:bg-muted/20 cursor-pointer"
+                        onClick={() => toggleRowBaseline(item.code)}
+                      >
                         <td className="p-2">
                           <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => toggleRowBaseline(item.code)}
-                              className="hover:bg-muted rounded p-0.5"
-                            >
-                              {isExpanded ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                            </button>
-                            <Badge variant="secondary" className="font-mono text-xs">
-                              {item.code}
-                            </Badge>
-                            <span className="font-medium text-sm">{item.description}</span>
+                            {isExpanded ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4" />
+                            )}
+                            <input 
+                              type="checkbox" 
+                              className="rounded" 
+                              onClick={(e) => e.stopPropagation()} 
+                            />
+                            <div>
+                              <span className="font-bold mr-2">{item.code}</span>
+                              <span>{item.description}</span>
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                <span className="cursor-pointer hover:underline">✏️</span>
+                              </div>
+                            </div>
                           </div>
                         </td>
-                        <td className="p-2 text-right font-semibold text-sm">
-                          {formatCurrency(item.total)}
-                        </td>
+                        <td className="p-2 text-sm">{item.bidPackage}</td>
+                        <td className="p-2 text-center text-sm">{item.qty}</td>
+                        <td className="p-2 text-center text-sm">{item.unit}</td>
+                        <td className="p-2 text-right text-sm">{item.unitCost}</td>
+                        <td className="p-2 text-right font-semibold">{formatCurrency(item.total)}</td>
                       </tr>
                       {isExpanded && item.subItems?.map((subItem) => (
-                        <tr key={`${item.code}-${subItem.code}`} className="border-b bg-muted/10 hover:bg-muted/20">
-                          <td className="p-2 pl-10">
+                        <tr key={`${item.code}-${subItem.code}`} className="bg-muted/10 border-b hover:bg-muted/20 text-sm">
+                          <td className="p-2 pl-12">
                             <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="font-mono text-xs">
-                                {subItem.code}
-                              </Badge>
-                              <span className="text-xs">{subItem.description}</span>
+                              <input type="checkbox" className="rounded" />
+                              <div>
+                                <span className="font-mono text-xs mr-2">{subItem.code}</span>
+                                <span>{subItem.description}</span>
+                              </div>
                             </div>
                           </td>
-                          <td className="p-2 text-right text-xs font-medium">
-                            {formatCurrency(subItem.total)}
-                          </td>
+                          <td className="p-2">{subItem.bidPackage}</td>
+                          <td className="p-2 text-center">{subItem.qty}</td>
+                          <td className="p-2 text-center">{subItem.unit}</td>
+                          <td className="p-2 text-right">{subItem.unitCost}</td>
+                          <td className="p-2 text-right font-semibold">{formatCurrency(subItem.total)}</td>
                         </tr>
                       ))}
                     </>
                   );
                 })}
-                  </tbody>
+                   </tbody>
                 </table>
+
+                {/* Bottom Section with Validation */}
+                <div className="sticky bottom-0 bg-card border-t">
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm font-semibold">Project Total: {formatCurrency(baselineTotal)}</div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-xs text-muted-foreground">
+                        Net Delta vs Baseline
+                        <div className="font-bold text-green-600">+US$0</div>
+                        <div>+0.00%</div>
+                      </div>
+                      <div className="text-xs">
+                        <div className="mb-1">Validation Issues</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-red-600">⊘ 0</span>
+                          <span className="text-yellow-600">⚠ 31</span>
+                          <span className="text-green-600">⊘ 0</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2 mb-3">
+                      <Button size="sm" variant="outline" className="text-xs">Resolve All (31)</Button>
+                      <Button size="sm" className="text-xs bg-green-600 hover:bg-green-700">
+                        💾 Save Budget Updates
+                      </Button>
+                    </div>
+                    
+                    {/* Validation Warnings */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Concrete Footings: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Foundation Walls: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Basement Slab: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Comparison Table */}
               <div className="overflow-auto">
-                <div className="sticky top-0 bg-muted/50 border-b p-3 z-10">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Badge className="mb-1">Compare</Badge>
-                      <div className="text-sm font-medium">
-                        {budgetVersions.find(v => v.id === comparisonVersion)?.name}
+                {/* Header Section */}
+                <div className="sticky top-0 bg-card border-b z-20">
+                  <div className="p-3 border-b">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <Badge className="mb-1">Compare</Badge>
+                        <div className="text-sm font-medium">
+                          {budgetVersions.find(v => v.id === comparisonVersion)?.name}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-muted-foreground">Project Total:</div>
+                        <div className="font-bold">{formatCurrency(comparisonTotal)}</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs text-muted-foreground">Project Total:</div>
-                      <div className="font-bold">{formatCurrency(comparisonTotal)}</div>
+                  </div>
+                  
+                  {/* Breadcrumb and Controls */}
+                  <div className="p-3 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="h-7 text-xs">
+                          <FileText className="h-3 w-3 mr-1" />
+                          CSI
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-7 text-xs">
+                          Spaces
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input type="checkbox" id="advanced-comparison" className="rounded" />
+                      <label htmlFor="advanced-comparison" className="text-xs">Advanced Cost Controls</label>
                     </div>
                   </div>
                 </div>
 
                 <table className="w-full">
-                  <thead className="sticky top-16 bg-muted/30 border-b text-xs z-10">
+                  <thead className="sticky top-[180px] bg-muted/30 border-b text-xs z-10">
                     <tr>
-                      <th className="text-left p-2 font-medium">CODE & DESCRIPTION</th>
+                      <th className="text-left p-2 font-medium w-[40%]">CODE & DESCRIPTION<br/>ACTIONS</th>
+                      <th className="text-left p-2 font-medium">BID PACKAGE</th>
+                      <th className="text-center p-2 font-medium">QTY</th>
+                      <th className="text-center p-2 font-medium">UNIT</th>
+                      <th className="text-right p-2 font-medium">UNIT COST</th>
                       <th className="text-right p-2 font-medium">TOTAL</th>
                     </tr>
                   </thead>
@@ -548,49 +678,123 @@ export function CompareBudgets() {
                   const isExpanded = expandedRowsComparison.has(item.code);
                   return (
                     <>
-                      <tr key={item.code} className="border-b hover:bg-muted/30">
+                      <tr 
+                        key={item.code}
+                        className="border-b hover:bg-muted/20 cursor-pointer"
+                        onClick={() => toggleRowComparison(item.code)}
+                      >
                         <td className="p-2">
                           <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => toggleRowComparison(item.code)}
-                              className="hover:bg-muted rounded p-0.5"
-                            >
-                              {isExpanded ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                            </button>
-                            <Badge variant="secondary" className="font-mono text-xs">
-                              {item.code}
-                            </Badge>
-                            <span className="font-medium text-sm">{item.description}</span>
+                            {isExpanded ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4" />
+                            )}
+                            <input 
+                              type="checkbox" 
+                              className="rounded" 
+                              onClick={(e) => e.stopPropagation()} 
+                            />
+                            <div>
+                              <span className="font-bold mr-2">{item.code}</span>
+                              <span>{item.description}</span>
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                <span className="cursor-pointer hover:underline">✏️</span>
+                              </div>
+                            </div>
                           </div>
                         </td>
-                        <td className="p-2 text-right font-semibold text-sm">
-                          {formatCurrency(item.total)}
-                        </td>
+                        <td className="p-2 text-sm">{item.bidPackage}</td>
+                        <td className="p-2 text-center text-sm">{item.qty}</td>
+                        <td className="p-2 text-center text-sm">{item.unit}</td>
+                        <td className="p-2 text-right text-sm">{item.unitCost}</td>
+                        <td className="p-2 text-right font-semibold">{formatCurrency(item.total)}</td>
                       </tr>
                       {isExpanded && item.subItems?.map((subItem) => (
-                        <tr key={`${item.code}-${subItem.code}`} className="border-b bg-muted/10 hover:bg-muted/20">
-                          <td className="p-2 pl-10">
+                        <tr key={`${item.code}-${subItem.code}`} className="bg-muted/10 border-b hover:bg-muted/20 text-sm">
+                          <td className="p-2 pl-12">
                             <div className="flex items-center gap-2">
-                              <Badge variant="outline" className="font-mono text-xs">
-                                {subItem.code}
-                              </Badge>
-                              <span className="text-xs">{subItem.description}</span>
+                              <input type="checkbox" className="rounded" />
+                              <div>
+                                <span className="font-mono text-xs mr-2">{subItem.code}</span>
+                                <span>{subItem.description}</span>
+                              </div>
                             </div>
                           </td>
-                          <td className="p-2 text-right text-xs font-medium">
-                            {formatCurrency(subItem.total)}
-                          </td>
+                          <td className="p-2">{subItem.bidPackage}</td>
+                          <td className="p-2 text-center">{subItem.qty}</td>
+                          <td className="p-2 text-center">{subItem.unit}</td>
+                          <td className="p-2 text-right">{subItem.unitCost}</td>
+                          <td className="p-2 text-right font-semibold">{formatCurrency(subItem.total)}</td>
                         </tr>
                       ))}
                     </>
                   );
                 })}
-                  </tbody>
+                   </tbody>
                 </table>
+
+                {/* Bottom Section with Validation */}
+                <div className="sticky bottom-0 bg-card border-t">
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm font-semibold">Project Total: {formatCurrency(comparisonTotal)}</div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-xs text-muted-foreground">
+                        Net Delta vs Baseline
+                        <div className={`font-bold ${delta > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {delta > 0 ? '+' : ''}{formatCurrency(Math.abs(delta))}
+                        </div>
+                        <div>{delta > 0 ? '+' : ''}{deltaPercent}%</div>
+                      </div>
+                      <div className="text-xs">
+                        <div className="mb-1">Validation Issues</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-red-600">⊘ 0</span>
+                          <span className="text-yellow-600">⚠ 31</span>
+                          <span className="text-green-600">⊘ 0</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2 mb-3">
+                      <Button size="sm" variant="outline" className="text-xs">Resolve All (31)</Button>
+                      <Button size="sm" className="text-xs bg-green-600 hover:bg-green-700">
+                        💾 Save Budget Updates
+                      </Button>
+                    </div>
+                    
+                    {/* Validation Warnings */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Concrete Footings: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Foundation Walls: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                      <div className="flex items-center justify-between text-xs bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded">
+                        <div className="flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span>Basement Slab: No cost source specified</span>
+                          <span className="text-muted-foreground">· Assign cost source</span>
+                        </div>
+                        <Button size="sm" variant="ghost" className="h-6 text-xs">Fix</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
