@@ -203,7 +203,49 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                     <Edit className="h-3 w-3" />
                   </Button>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full text-xs h-7 text-yellow-600">
+                <p className="text-xs text-muted-foreground mb-3">
+                  Office furniture, workstations, conference room furniture, and specialized 
+                  equipment. Allowance includes delivery, installation, and setup.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: Furniture Allowance</div>
+                  <div className="text-muted-foreground">
+                    Basis: Owner procurement - Based on typical office furniture costs at $5.30/SF 
+                    for 141,000 SF building
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">Medium</Badge>
+                  <div className="text-sm font-semibold">$750,000</div>
+                  <div className="text-xs text-muted-foreground">Owner</div>
+                </div>
+              </Card>
+
+              {/* Allowance 3 */}
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Artwork & Signage</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Custom artwork, wayfinding signage, and brand elements throughout the 
+                  building. Includes design, fabrication, and installation.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: Art & Signage</div>
+                  <div className="text-muted-foreground">
+                    Basis: Brand guidelines - Based on corporate art and signage budgets at 
+                    $1.28/SF for 141,000 SF building
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 text-xs">Low</Badge>
+                  <div className="text-sm font-semibold">$180,000</div>
+                  <div className="text-xs text-muted-foreground">Owner</div>
+                </div>
+                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-yellow-600">
                   <ChevronDown className="h-3 w-3 mr-1" />
                   Scroll for more
                 </Button>
