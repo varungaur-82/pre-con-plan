@@ -94,10 +94,6 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <div className="text-sm font-semibold">$450,000</div>
                   <div className="text-xs text-muted-foreground">Owner</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-blue-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
               </Card>
 
               {/* Assumption 2 */}
@@ -124,10 +120,6 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <div className="text-sm font-semibold">$850,000</div>
                   <div className="text-xs text-muted-foreground">Design Team</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-blue-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
               </Card>
 
               {/* Assumption 3 */}
@@ -154,10 +146,6 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <div className="text-sm font-semibold">$320,000</div>
                   <div className="text-xs text-muted-foreground">Design Team</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-blue-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
               </Card>
             </div>
 
@@ -189,10 +177,6 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <div className="text-sm font-semibold">$1,200,000</div>
                   <div className="text-xs text-muted-foreground">TBD</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-yellow-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
               </Card>
 
               {/* Allowance 2 */}
@@ -245,10 +229,6 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <div className="text-sm font-semibold">$180,000</div>
                   <div className="text-xs text-muted-foreground">Owner</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-yellow-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
               </Card>
             </div>
 
@@ -283,10 +263,135 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                   <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">High</Badge>
                   <div className="text-xs text-muted-foreground">Structural Engineer</div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-green-600">
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Scroll for more
-                </Button>
+              </Card>
+
+              {/* Clarification 2 */}
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Landscaping maintenance</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Ongoing maintenance of landscaping, irrigation systems, and outdoor amenities. 
+                  This includes regular watering, pruning, and seasonal plantings.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: Site Work</div>
+                  <div className="text-muted-foreground">
+                    Basis: Operations scope - Landscaping maintenance is excluded from 
+                    construction contract and will be handled by facilities management
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 text-xs">High</Badge>
+                  <div className="text-xs text-muted-foreground">Facilities</div>
+                </div>
+              </Card>
+
+              {/* Clarification 3 */}
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Tenant improvements</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Interior build-out work for tenant spaces including partitions, finishes, and 
+                  tenant-specific systems. This work will be performed under separate tenant 
+                  improvement contracts.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: Tenant Spaces</div>
+                  <div className="text-muted-foreground">
+                    Basis: Separate contract - Tenant improvements are excluded from base building 
+                    contract and will be handled separately
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 text-xs">High</Badge>
+                  <div className="text-xs text-muted-foreground">Tenant</div>
+                </div>
+              </Card>
+
+              {/* Clarification 4 */}
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">MEP coordination requirements</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  All MEP systems must be fully coordinated in 3D BIM model prior to construction. 
+                  This includes clash detection, routing optimization, and installation sequencing.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: MEP Systems</div>
+                  <div className="text-muted-foreground">
+                    Basis: Code compliance - No additional cost impact, included in MEP 
+                    engineering and coordination fees
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">High</Badge>
+                  <div className="text-xs text-muted-foreground">MEP Engineer</div>
+                </div>
+              </Card>
+
+              {/* Exclusions */}
+              <div className="text-xs font-medium text-red-600 mb-2 mt-4">Exclusions</div>
+
+              {/* Exclusion 1 */}
+              <Card className="p-4 hover:shadow-md transition-shadow border-l-2 border-l-red-500">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Owner-furnished equipment</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Specialized equipment that will be provided directly by the owner, including 
+                  kitchen equipment, specialized machinery, and custom fixtures.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: Equipment</div>
+                  <div className="text-muted-foreground">
+                    Basis: Owner procurement - These items are excluded from construction 
+                    contract and will be installed by owner
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 text-xs">High</Badge>
+                  <div className="text-xs text-muted-foreground">Owner</div>
+                </div>
+              </Card>
+
+              {/* Exclusion 2 */}
+              <Card className="p-4 hover:shadow-md transition-shadow border-l-2 border-l-red-500">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Accessibility compliance</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  All areas must comply with ADA requirements including accessible routes, door 
+                  widths, restroom facilities, and parking. This is mandatory for occupancy.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: All Areas</div>
+                  <div className="text-muted-foreground">
+                    Basis: ADA requirements - No additional cost impact, compliance is mandatory 
+                    and included in base scope
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">High</Badge>
+                  <div className="text-xs text-muted-foreground">Architect</div>
+                </div>
               </Card>
             </div>
           </div>
