@@ -389,14 +389,212 @@ const comparisonData: BudgetItem[] = [
   },
 ];
 
+// Baseline Spaces Data
+const baselineSpacesData: BudgetItem[] = [
+  {
+    code: "Main Building",
+    description: "Main Building",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1052607,
+    subItems: [
+      {
+        code: "LEVEL5",
+        description: "Level 5",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 73096,
+        subItems: [
+          {
+            code: "OFFICE",
+            description: "Office (Tenant, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 55156,
+            subItems: [
+              {
+                code: "Office",
+                description: "Office Suite 501 - 2500 SF",
+                bidPackage: "—",
+                qty: "—",
+                unit: "—",
+                unitCost: "—",
+                total: 55156,
+                note: "84% vs benchmark",
+                subItems: [
+                  { code: "09 26 13", description: "Gypsum Board Walls", bidPackage: "Interior", qty: "1,250", unit: "SF", unitCost: "$2.50", total: 3125 },
+                  { code: "09 51 13", description: "Acoustical Ceiling", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "$3.75", total: 9375 },
+                  { code: "09 68 16", description: "Carpet Flooring", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "$8.50", total: 21250 },
+                  { code: "26 51 13", description: "Lighting Fixtures", bidPackage: "Electrical", qty: "25", unit: "EA", unitCost: "$450.00", total: 11250 },
+                  { code: "23 37 13", description: "Supply Air Diffusers", bidPackage: "HVAC", qty: "31.25", unit: "EA", unitCost: "$325.00", total: 10156 },
+                ],
+              },
+            ],
+          },
+          {
+            code: "Restroom",
+            description: "Restroom (Owner, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 17940,
+            subItems: [
+              { code: "09 30 13", description: "Ceramic Tile Walls", bidPackage: "Interior", qty: "450", unit: "SF", unitCost: "$12.50", total: 5625 },
+              { code: "09 65 13", description: "Resilient Flooring", bidPackage: "Interior", qty: "350", unit: "SF", unitCost: "$6.75", total: 2363 },
+              { code: "22 41 13", description: "Plumbing Fixtures", bidPackage: "Plumbing", qty: "8", unit: "EA", unitCost: "$875.00", total: 7000 },
+              { code: "26 56 13", description: "Emergency Lighting", bidPackage: "Electrical", qty: "6", unit: "EA", unitCost: "$325.50", total: 1953 },
+              { code: "23 34 13", description: "Exhaust Fans", bidPackage: "HVAC", qty: "4", unit: "EA", unitCost: "$249.75", total: 999 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "LEVEL6",
+        description: "Level 6",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 79715,
+        subItems: [
+          {
+            code: "Lobby",
+            description: "Lobby",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 79715,
+            subItems: [
+              { code: "09 30 23", description: "Stone Tile Flooring", bidPackage: "Interior", qty: "600", unit: "SF", unitCost: "$35.00", total: 21000 },
+              { code: "09 90 13", description: "Feature Wall Finish", bidPackage: "Interior", qty: "250", unit: "SF", unitCost: "$38.00", total: 9500 },
+              { code: "09 51 23", description: "Premium Acoustical Ceiling", bidPackage: "Interior", qty: "2,800", unit: "SF", unitCost: "$5.25", total: 14700 },
+              { code: "26 51 19", description: "LED Lighting Fixtures", bidPackage: "Electrical", qty: "30", unit: "EA", unitCost: "$575.00", total: 17250 },
+              { code: "12 48 13", description: "Custom Reception Desk", bidPackage: "Millwork", qty: "1", unit: "EA", unitCost: "$17,265.00", total: 17265 },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+// Comparison Spaces Data  
+const comparisonSpacesData: BudgetItem[] = [
+  {
+    code: "Main Building",
+    description: "Main Building",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1052607,
+    subItems: [
+      {
+        code: "LEVEL5",
+        description: "Level 5",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 73096,
+        subItems: [
+          {
+            code: "OFFICE",
+            description: "Office (Tenant, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 55156,
+            subItems: [
+              {
+                code: "Office",
+                description: "Office Suite 501 - 2500 SF",
+                bidPackage: "—",
+                qty: "—",
+                unit: "—",
+                unitCost: "—",
+                total: 55156,
+                note: "84% vs benchmark",
+                subItems: [
+                  { code: "09 26 13", description: "Gypsum Board Walls", bidPackage: "Interior", qty: "1,250", unit: "SF", unitCost: "$2.50", total: 3125 },
+                  { code: "09 51 13", description: "Acoustical Ceiling", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "$3.75", total: 9375 },
+                  { code: "09 68 16", description: "Carpet Flooring", bidPackage: "Interior", qty: "2,500", unit: "SF", unitCost: "$8.50", total: 21250 },
+                  { code: "26 51 13", description: "Lighting Fixtures", bidPackage: "Electrical", qty: "25", unit: "EA", unitCost: "$450.00", total: 11250 },
+                  { code: "23 37 13", description: "Supply Air Diffusers", bidPackage: "HVAC", qty: "31.25", unit: "EA", unitCost: "$325.00", total: 10156 },
+                ],
+              },
+            ],
+          },
+          {
+            code: "Restroom",
+            description: "Restroom (Owner, Standard Finish)",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 17940,
+            subItems: [
+              { code: "09 30 13", description: "Ceramic Tile Walls", bidPackage: "Interior", qty: "450", unit: "SF", unitCost: "$12.50", total: 5625 },
+              { code: "09 65 13", description: "Resilient Flooring", bidPackage: "Interior", qty: "350", unit: "SF", unitCost: "$6.75", total: 2363 },
+              { code: "22 41 13", description: "Plumbing Fixtures", bidPackage: "Plumbing", qty: "8", unit: "EA", unitCost: "$875.00", total: 7000 },
+              { code: "26 56 13", description: "Emergency Lighting", bidPackage: "Electrical", qty: "6", unit: "EA", unitCost: "$325.50", total: 1953 },
+              { code: "23 34 13", description: "Exhaust Fans", bidPackage: "HVAC", qty: "4", unit: "EA", unitCost: "$249.75", total: 999 },
+            ],
+          },
+        ],
+      },
+      {
+        code: "LEVEL6",
+        description: "Level 6",
+        bidPackage: "—",
+        qty: "—",
+        unit: "—",
+        unitCost: "—",
+        total: 79715,
+        subItems: [
+          {
+            code: "Lobby",
+            description: "Lobby",
+            bidPackage: "—",
+            qty: "—",
+            unit: "—",
+            unitCost: "—",
+            total: 79715,
+            subItems: [
+              { code: "09 30 23", description: "Stone Tile Flooring", bidPackage: "Interior", qty: "600", unit: "SF", unitCost: "$35.00", total: 21000 },
+              { code: "09 90 13", description: "Feature Wall Finish", bidPackage: "Interior", qty: "250", unit: "SF", unitCost: "$38.00", total: 9500 },
+              { code: "09 51 23", description: "Premium Acoustical Ceiling", bidPackage: "Interior", qty: "2,800", unit: "SF", unitCost: "$5.25", total: 14700 },
+              { code: "26 51 19", description: "LED Lighting Fixtures", bidPackage: "Electrical", qty: "30", unit: "EA", unitCost: "$575.00", total: 17250 },
+              { code: "12 48 13", description: "Custom Reception Desk", bidPackage: "Millwork", qty: "1", unit: "EA", unitCost: "$17,265.00", total: 17265 },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 export function CompareBudgets() {
   const [baselineVersion, setBaselineVersion] = useState<string>("");
   const [comparisonVersion, setComparisonVersion] = useState<string>("");
   const [isComparing, setIsComparing] = useState(false);
+  const [activeView, setActiveView] = useState<'csi' | 'spaces'>('csi');
   const [expandedRowsBaseline, setExpandedRowsBaseline] = useState<Set<string>>(new Set());
   const [expandedRowsComparison, setExpandedRowsComparison] = useState<Set<string>>(new Set());
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<{ code: string; description: string } | null>(null);
+  
+  const currentBaselineData = activeView === 'csi' ? baselineData : baselineSpacesData;
+  const currentComparisonData = activeView === 'csi' ? comparisonData : comparisonSpacesData;
 
   const toggleRowBaseline = (code: string) => {
     const newExpanded = new Set(expandedRowsBaseline);
@@ -431,8 +629,8 @@ export function CompareBudgets() {
   };
 
   const expandAll = () => {
-    setExpandedRowsBaseline(new Set(baselineData.map(item => item.code)));
-    setExpandedRowsComparison(new Set(comparisonData.map(item => item.code)));
+    setExpandedRowsBaseline(new Set(currentBaselineData.map(item => item.code)));
+    setExpandedRowsComparison(new Set(currentComparisonData.map(item => item.code)));
   };
 
   const collapseAll = () => {
@@ -445,12 +643,94 @@ export function CompareBudgets() {
     setEditDialogOpen(true);
   };
 
+  // Recursive rendering function for nested rows
+  const renderRows = (
+    items: BudgetItem[], 
+    expandedRows: Set<string>, 
+    toggleRow: (code: string) => void, 
+    level: number = 0,
+    isBaseline: boolean = true
+  ): JSX.Element[] => {
+    const results: JSX.Element[] = [];
+    
+    items.forEach((item) => {
+      const isExpanded = expandedRows.has(item.code);
+      const paddingLeft = level * 24 + 8;
+      
+      results.push(
+        <tr 
+          key={item.code}
+          className="border-b hover:bg-muted/20"
+        >
+          <td className="p-2">
+            <div className="flex items-center gap-2" style={{ paddingLeft: `${paddingLeft}px` }}>
+              {item.subItems && item.subItems.length > 0 && (
+                <button 
+                  onClick={() => toggleRow(item.code)}
+                  className="p-0 hover:bg-accent rounded"
+                >
+                  {isExpanded ? (
+                    <ChevronDown className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+              {(!item.subItems || item.subItems.length === 0) && (
+                <div className="w-4" />
+              )}
+              <input 
+                type="checkbox" 
+                className="rounded" 
+                onClick={(e) => e.stopPropagation()} 
+              />
+              <Badge 
+                variant={level === 0 ? "secondary" : "outline"} 
+                className={level === 0 ? "bg-foreground text-background font-bold px-2 py-0.5 text-xs rounded" : "font-mono text-xs px-1.5 py-0"}
+              >
+                {item.code}
+              </Badge>
+              <div className="flex items-center gap-1.5">
+                <span className={level > 0 ? "text-sm" : ""}>{item.description}</span>
+                <button 
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditItem(item.code, item.description);
+                  }}
+                >
+                  ✏️
+                </button>
+              </div>
+            </div>
+            {item.note && (
+              <div className="text-xs text-muted-foreground mt-0.5" style={{ paddingLeft: `${paddingLeft + 88}px` }}>
+                📝 {item.note}
+              </div>
+            )}
+          </td>
+          <td className="p-2 text-sm text-center">{item.bidPackage}</td>
+          <td className="p-2 text-center text-sm">{item.qty}</td>
+          <td className="p-2 text-center text-sm">{item.unit}</td>
+          <td className="p-2 text-right text-sm">{item.unitCost}</td>
+          <td className="p-2 text-right font-semibold">{formatCurrency(item.total)}</td>
+        </tr>
+      );
+      
+      if (isExpanded && item.subItems && item.subItems.length > 0) {
+        results.push(...renderRows(item.subItems, expandedRows, toggleRow, level + 1, isBaseline));
+      }
+    });
+    
+    return results;
+  };
+
   const formatCurrency = (value: number) => {
     return `US$${value.toLocaleString()}`;
   };
 
-  const baselineTotal = baselineData.reduce((sum, item) => sum + item.total, 0);
-  const comparisonTotal = comparisonData.reduce((sum, item) => sum + item.total, 0);
+  const baselineTotal = currentBaselineData.reduce((sum, item) => sum + item.total, 0);
+  const comparisonTotal = currentComparisonData.reduce((sum, item) => sum + item.total, 0);
   const delta = comparisonTotal - baselineTotal;
   const deltaPercent = ((delta / baselineTotal) * 100).toFixed(2);
 
@@ -697,17 +977,30 @@ export function CompareBudgets() {
                   <div className="p-3 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="h-7 text-xs">
+                        <Button 
+                          variant={activeView === 'csi' ? 'outline' : 'ghost'} 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => setActiveView('csi')}
+                        >
                           <FileText className="h-3 w-3 mr-1" />
                           CSI
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-7 text-xs">
+                        <Button 
+                          variant={activeView === 'spaces' ? 'outline' : 'ghost'} 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => setActiveView('spaces')}
+                        >
                           Spaces
                         </Button>
                       </div>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.
+                      {activeView === 'csi' 
+                        ? 'Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.'
+                        : 'Building → Levels → Spaces → CSI codes. Click rows to expand.'
+                      }
                     </div>
                     <div className="flex items-center gap-2">
                       <input type="checkbox" id="advanced-baseline" className="rounded" />
@@ -728,87 +1021,8 @@ export function CompareBudgets() {
                     </tr>
                   </thead>
                   <tbody>
-                {baselineData.map((item) => {
-                  const isExpanded = expandedRowsBaseline.has(item.code);
-                  return (
-                    <>
-                      <tr 
-                        key={item.code}
-                        className="border-b hover:bg-muted/20"
-                      >
-                        <td className="p-2">
-                          <div className="flex items-center gap-2">
-                            <button 
-                              onClick={() => toggleRowBaseline(item.code)}
-                              className="p-0 hover:bg-accent rounded"
-                            >
-                              {isExpanded ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                            </button>
-                            <input 
-                              type="checkbox" 
-                              className="rounded" 
-                              onClick={(e) => e.stopPropagation()} 
-                            />
-                            <Badge 
-                              variant="secondary" 
-                              className="bg-foreground text-background font-bold px-2 py-0.5 text-xs rounded"
-                            >
-                              {item.code}
-                            </Badge>
-                            <div className="flex items-center gap-1.5">
-                              <span>{item.description}</span>
-                              <button 
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEditItem(item.code, item.description);
-                                }}
-                              >
-                                ✏️
-                              </button>
-                            </div>
-                          </div>
-                          {item.description.includes("reduced") && (
-                            <div className="text-xs text-muted-foreground ml-[88px] mt-0.5">
-                              📝
-                            </div>
-                          )}
-                        </td>
-                        <td className="p-2 text-sm text-center">{item.bidPackage}</td>
-                        <td className="p-2 text-center text-sm">{item.qty}</td>
-                        <td className="p-2 text-center text-sm">{item.unit}</td>
-                        <td className="p-2 text-right text-sm">{item.unitCost}</td>
-                        <td className="p-2 text-right font-semibold">{formatCurrency(item.total)}</td>
-                      </tr>
-                      {isExpanded && item.subItems?.map((subItem) => (
-                        <tr key={`${item.code}-${subItem.code}`} className="bg-muted/10 border-b hover:bg-muted/20 text-sm">
-                          <td className="p-2 pl-12">
-                            <div className="flex items-center gap-2">
-                              <input type="checkbox" className="rounded" />
-                              <Badge 
-                                variant="outline" 
-                                className="font-mono text-xs px-1.5 py-0"
-                              >
-                                {subItem.code}
-                              </Badge>
-                              <span>{subItem.description}</span>
-                            </div>
-                          </td>
-                          <td className="p-2 text-center">{subItem.bidPackage}</td>
-                          <td className="p-2 text-center">{subItem.qty}</td>
-                          <td className="p-2 text-center">{subItem.unit}</td>
-                          <td className="p-2 text-right">{subItem.unitCost}</td>
-                          <td className="p-2 text-right font-semibold">{formatCurrency(subItem.total)}</td>
-                        </tr>
-                      ))}
-                    </>
-                  );
-                })}
-                   </tbody>
+                    {renderRows(currentBaselineData, expandedRowsBaseline, toggleRowBaseline, 0, true)}
+                  </tbody>
                 </table>
 
                 {/* Bottom Section with Validation */}
@@ -895,17 +1109,30 @@ export function CompareBudgets() {
                   <div className="p-3 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="h-7 text-xs">
+                        <Button 
+                          variant={activeView === 'csi' ? 'outline' : 'ghost'} 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => setActiveView('csi')}
+                        >
                           <FileText className="h-3 w-3 mr-1" />
                           CSI
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-7 text-xs">
+                        <Button 
+                          variant={activeView === 'spaces' ? 'outline' : 'ghost'} 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => setActiveView('spaces')}
+                        >
                           Spaces
                         </Button>
                       </div>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.
+                      {activeView === 'csi' 
+                        ? 'Uniformat → CSI → Bid Packages → Task line items. Click rows to expand.'
+                        : 'Building → Levels → Spaces → CSI codes. Click rows to expand.'
+                      }
                     </div>
                     <div className="flex items-center gap-2">
                       <input type="checkbox" id="advanced-comparison" className="rounded" />
@@ -926,88 +1153,8 @@ export function CompareBudgets() {
                     </tr>
                   </thead>
                   <tbody>
-                {comparisonData.map((item) => {
-                  const isExpanded = expandedRowsComparison.has(item.code);
-                  
-                  return (
-                    <>
-                      <tr 
-                        key={item.code}
-                        className="border-b hover:bg-muted/20"
-                      >
-                        <td className="p-2">
-                          <div className="flex items-center gap-2">
-                            <button 
-                              onClick={() => toggleRowComparison(item.code)}
-                              className="p-0 hover:bg-accent rounded"
-                            >
-                              {isExpanded ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                            </button>
-                            <input 
-                              type="checkbox" 
-                              className="rounded" 
-                              onClick={(e) => e.stopPropagation()} 
-                            />
-                            <Badge 
-                              variant="secondary" 
-                              className="bg-foreground text-background font-bold px-2 py-0.5 text-xs rounded"
-                            >
-                              {item.code}
-                            </Badge>
-                            <div className="flex items-center gap-1.5">
-                              <span>{item.description}</span>
-                              <button 
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEditItem(item.code, item.description);
-                                }}
-                              >
-                                ✏️
-                              </button>
-                            </div>
-                          </div>
-                          {item.note && (
-                            <div className="text-xs text-muted-foreground ml-[88px] mt-0.5">
-                              📝 {item.note}
-                            </div>
-                          )}
-                        </td>
-                        <td className="p-2 text-sm text-center">{item.bidPackage}</td>
-                        <td className="p-2 text-center text-sm">{item.qty}</td>
-                        <td className="p-2 text-center text-sm">{item.unit}</td>
-                        <td className="p-2 text-right text-sm">{item.unitCost}</td>
-                        <td className="p-2 text-right font-semibold">{formatCurrency(item.total)}</td>
-                      </tr>
-                      {isExpanded && item.subItems?.map((subItem) => (
-                        <tr key={`${item.code}-${subItem.code}`} className="bg-muted/10 border-b hover:bg-muted/20 text-sm">
-                          <td className="p-2 pl-12">
-                            <div className="flex items-center gap-2">
-                              <input type="checkbox" className="rounded" />
-                              <Badge 
-                                variant="outline" 
-                                className="font-mono text-xs px-1.5 py-0"
-                              >
-                                {subItem.code}
-                              </Badge>
-                              <span>{subItem.description}</span>
-                            </div>
-                          </td>
-                          <td className="p-2 text-center">{subItem.bidPackage}</td>
-                          <td className="p-2 text-center">{subItem.qty}</td>
-                          <td className="p-2 text-center">{subItem.unit}</td>
-                          <td className="p-2 text-right">{subItem.unitCost}</td>
-                          <td className="p-2 text-right font-semibold">{formatCurrency(subItem.total)}</td>
-                        </tr>
-                      ))}
-                    </>
-                  );
-                })}
-                   </tbody>
+                    {renderRows(currentComparisonData, expandedRowsComparison, toggleRowComparison, 0, false)}
+                  </tbody>
                 </table>
 
                 {/* Bottom Section with Validation */}
