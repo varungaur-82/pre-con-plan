@@ -22,6 +22,7 @@ interface BudgetVersion {
 interface BudgetItem {
   code: string;
   description: string;
+  note?: string;
   bidPackage: string;
   qty: string;
   unit: string;
@@ -101,6 +102,114 @@ const baselineData: BudgetItem[] = [
       { code: "D50", description: "Electrical", bidPackage: "Electrical", qty: "75,000", unit: "SF", unitCost: "$22", total: 1726230 },
     ]
   },
+  {
+    code: "E",
+    description: "Equipment & Furnishings",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1288938,
+  },
+  {
+    code: "F",
+    description: "Special Construction & Demolition",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 4166824,
+  },
+  {
+    code: "G",
+    description: "Sitework",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 150500,
+  },
+  {
+    code: "Z",
+    description: "General Requirements",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 2722643,
+  },
+  {
+    code: "SC",
+    description: "Owner Soft Costs",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 2822329,
+  },
+  {
+    code: "FF",
+    description: "FF&E",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 301599,
+  },
+  {
+    code: "IT",
+    description: "IT",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 158736,
+  },
+  {
+    code: "AV",
+    description: "AV",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 80003,
+  },
+  {
+    code: "SEC",
+    description: "Security",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 72384,
+  },
+  {
+    code: "FIN",
+    description: "Financing",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1904834,
+  },
+  {
+    code: "CONT",
+    description: "Contingency",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 2381042,
+  },
+  {
+    code: "COMM",
+    description: "Commissioning",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 380967,
+  },
 ];
 
 // Comparison data (DD-S04.B02) - with some changes
@@ -137,7 +246,8 @@ const comparisonData: BudgetItem[] = [
   },
   {
     code: "C",
-    description: "Interior finishes reduced",
+    description: "Interiors",
+    note: "Interior finishes reduced",
     bidPackage: "—",
     qty: "—",
     unit: "—",
@@ -151,7 +261,8 @@ const comparisonData: BudgetItem[] = [
   },
   {
     code: "D",
-    description: "MEP systems optimized",
+    description: "Services (MEP)",
+    note: "MEP systems optimized",
     bidPackage: "—",
     qty: "—",
     unit: "—",
@@ -164,6 +275,116 @@ const comparisonData: BudgetItem[] = [
       { code: "D40", description: "Fire Protection", bidPackage: "Fire Protection", qty: "75,000", unit: "SF", unitCost: "$8", total: 600000 },
       { code: "D50", description: "Electrical", bidPackage: "Electrical", qty: "75,000", unit: "SF", unitCost: "$16.02", total: 1201528 },
     ]
+  },
+  {
+    code: "E",
+    description: "Equipment & Furnishings",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1288938,
+  },
+  {
+    code: "F",
+    description: "Special Construction & Demolition",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 4166824,
+  },
+  {
+    code: "G",
+    description: "Sitework",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 150500,
+  },
+  {
+    code: "Z",
+    description: "General Requirements",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 2722643,
+  },
+  {
+    code: "SC",
+    description: "Owner Soft Costs",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 2822329,
+  },
+  {
+    code: "FF",
+    description: "FF&E",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 301599,
+  },
+  {
+    code: "IT",
+    description: "IT",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 158736,
+  },
+  {
+    code: "AV",
+    description: "AV",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 80003,
+  },
+  {
+    code: "SEC",
+    description: "Security",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 72384,
+  },
+  {
+    code: "FIN",
+    description: "Financing",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1904834,
+  },
+  {
+    code: "CONT",
+    description: "Contingency",
+    note: "Interior finishes reduced",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 1622613,
+  },
+  {
+    code: "COMM",
+    description: "Commissioning",
+    note: "Interior finishes reduced",
+    bidPackage: "—",
+    qty: "—",
+    unit: "—",
+    unitCost: "—",
+    total: 259618,
   },
 ];
 
@@ -505,31 +726,45 @@ export function CompareBudgets() {
                     <>
                       <tr 
                         key={item.code}
-                        className="border-b hover:bg-muted/20 cursor-pointer"
-                        onClick={() => toggleRowBaseline(item.code)}
+                        className="border-b hover:bg-muted/20"
                       >
                         <td className="p-2">
                           <div className="flex items-center gap-2">
-                            {isExpanded ? (
-                              <ChevronDown className="h-4 w-4" />
-                            ) : (
-                              <ChevronRight className="h-4 w-4" />
-                            )}
+                            <button 
+                              onClick={() => toggleRowBaseline(item.code)}
+                              className="p-0 hover:bg-accent rounded"
+                            >
+                              {isExpanded ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4" />
+                              )}
+                            </button>
                             <input 
                               type="checkbox" 
                               className="rounded" 
                               onClick={(e) => e.stopPropagation()} 
                             />
-                            <div>
-                              <span className="font-bold mr-2">{item.code}</span>
+                            <Badge 
+                              variant="secondary" 
+                              className="bg-foreground text-background font-bold px-2 py-0.5 text-xs rounded"
+                            >
+                              {item.code}
+                            </Badge>
+                            <div className="flex items-center gap-1.5">
                               <span>{item.description}</span>
-                              <div className="text-xs text-muted-foreground mt-0.5">
-                                <span className="cursor-pointer hover:underline">✏️</span>
-                              </div>
+                              <button className="text-muted-foreground hover:text-foreground">
+                                ✏️
+                              </button>
                             </div>
                           </div>
+                          {item.description.includes("reduced") && (
+                            <div className="text-xs text-muted-foreground ml-[88px] mt-0.5">
+                              📝
+                            </div>
+                          )}
                         </td>
-                        <td className="p-2 text-sm">{item.bidPackage}</td>
+                        <td className="p-2 text-sm text-center">{item.bidPackage}</td>
                         <td className="p-2 text-center text-sm">{item.qty}</td>
                         <td className="p-2 text-center text-sm">{item.unit}</td>
                         <td className="p-2 text-right text-sm">{item.unitCost}</td>
@@ -540,13 +775,16 @@ export function CompareBudgets() {
                           <td className="p-2 pl-12">
                             <div className="flex items-center gap-2">
                               <input type="checkbox" className="rounded" />
-                              <div>
-                                <span className="font-mono text-xs mr-2">{subItem.code}</span>
-                                <span>{subItem.description}</span>
-                              </div>
+                              <Badge 
+                                variant="outline" 
+                                className="font-mono text-xs px-1.5 py-0"
+                              >
+                                {subItem.code}
+                              </Badge>
+                              <span>{subItem.description}</span>
                             </div>
                           </td>
-                          <td className="p-2">{subItem.bidPackage}</td>
+                          <td className="p-2 text-center">{subItem.bidPackage}</td>
                           <td className="p-2 text-center">{subItem.qty}</td>
                           <td className="p-2 text-center">{subItem.unit}</td>
                           <td className="p-2 text-right">{subItem.unitCost}</td>
@@ -676,35 +914,50 @@ export function CompareBudgets() {
                   <tbody>
                 {comparisonData.map((item) => {
                   const isExpanded = expandedRowsComparison.has(item.code);
+                  
                   return (
                     <>
                       <tr 
                         key={item.code}
-                        className="border-b hover:bg-muted/20 cursor-pointer"
-                        onClick={() => toggleRowComparison(item.code)}
+                        className="border-b hover:bg-muted/20"
                       >
                         <td className="p-2">
                           <div className="flex items-center gap-2">
-                            {isExpanded ? (
-                              <ChevronDown className="h-4 w-4" />
-                            ) : (
-                              <ChevronRight className="h-4 w-4" />
-                            )}
+                            <button 
+                              onClick={() => toggleRowComparison(item.code)}
+                              className="p-0 hover:bg-accent rounded"
+                            >
+                              {isExpanded ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4" />
+                              )}
+                            </button>
                             <input 
                               type="checkbox" 
                               className="rounded" 
                               onClick={(e) => e.stopPropagation()} 
                             />
-                            <div>
-                              <span className="font-bold mr-2">{item.code}</span>
+                            <Badge 
+                              variant="secondary" 
+                              className="bg-foreground text-background font-bold px-2 py-0.5 text-xs rounded"
+                            >
+                              {item.code}
+                            </Badge>
+                            <div className="flex items-center gap-1.5">
                               <span>{item.description}</span>
-                              <div className="text-xs text-muted-foreground mt-0.5">
-                                <span className="cursor-pointer hover:underline">✏️</span>
-                              </div>
+                              <button className="text-muted-foreground hover:text-foreground">
+                                ✏️
+                              </button>
                             </div>
                           </div>
+                          {item.note && (
+                            <div className="text-xs text-muted-foreground ml-[88px] mt-0.5">
+                              📝 {item.note}
+                            </div>
+                          )}
                         </td>
-                        <td className="p-2 text-sm">{item.bidPackage}</td>
+                        <td className="p-2 text-sm text-center">{item.bidPackage}</td>
                         <td className="p-2 text-center text-sm">{item.qty}</td>
                         <td className="p-2 text-center text-sm">{item.unit}</td>
                         <td className="p-2 text-right text-sm">{item.unitCost}</td>
@@ -715,13 +968,16 @@ export function CompareBudgets() {
                           <td className="p-2 pl-12">
                             <div className="flex items-center gap-2">
                               <input type="checkbox" className="rounded" />
-                              <div>
-                                <span className="font-mono text-xs mr-2">{subItem.code}</span>
-                                <span>{subItem.description}</span>
-                              </div>
+                              <Badge 
+                                variant="outline" 
+                                className="font-mono text-xs px-1.5 py-0"
+                              >
+                                {subItem.code}
+                              </Badge>
+                              <span>{subItem.description}</span>
                             </div>
                           </td>
-                          <td className="p-2">{subItem.bidPackage}</td>
+                          <td className="p-2 text-center">{subItem.bidPackage}</td>
                           <td className="p-2 text-center">{subItem.qty}</td>
                           <td className="p-2 text-center">{subItem.unit}</td>
                           <td className="p-2 text-right">{subItem.unitCost}</td>
