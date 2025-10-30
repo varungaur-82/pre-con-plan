@@ -108,7 +108,53 @@ export function AssumptionsAllowancesDetail({ onBack }: AssumptionsAllowancesDet
                     <Edit className="h-3 w-3" />
                   </Button>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full text-xs h-7 text-blue-600">
+                <p className="text-xs text-muted-foreground mb-3">
+                  Large outdoor terrace space with premium finishes, outdoor kitchen, and seating 
+                  areas. Scope includes structural support, waterproofing, and high-end finishes.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: A600 - Exterior</div>
+                  <div className="text-muted-foreground">
+                    Basis: Pending owner decision - Estimated based on similar luxury terrace 
+                    projects at $120/SF for 7,100 SF
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">Low</Badge>
+                  <div className="text-sm font-semibold">$850,000</div>
+                  <div className="text-xs text-muted-foreground">Design Team</div>
+                </div>
+                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-blue-600">
+                  <ChevronDown className="h-3 w-3 mr-1" />
+                  Scroll for more
+                </Button>
+              </Card>
+
+              {/* Assumption 3 */}
+              <Card className="p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-medium text-sm">Premium finishes in lobby</h4>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  High-end lobby finishes including imported marble, custom millwork, and 
+                  designer lighting fixtures to create an impressive first impression.
+                </p>
+                <div className="space-y-1.5 text-xs mb-3">
+                  <div className="text-muted-foreground">Scope: A100 - Lobby</div>
+                  <div className="text-muted-foreground">
+                    Basis: Design intent - Based on premium finish specifications at $180/SF for 
+                    1,780 SF lobby area
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 text-xs">High</Badge>
+                  <div className="text-sm font-semibold">$320,000</div>
+                  <div className="text-xs text-muted-foreground">Design Team</div>
+                </div>
+                <Button variant="ghost" size="sm" className="w-full mt-2 text-xs h-7 text-blue-600">
                   <ChevronDown className="h-3 w-3 mr-1" />
                   Scroll for more
                 </Button>
