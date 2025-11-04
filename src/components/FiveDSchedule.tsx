@@ -816,8 +816,326 @@ export function FiveDSchedule() {
                                 <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
                                 <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
                               </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Procurement - Generators</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 20, 2024</TableCell>
+                                <TableCell>Nov 20, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Owner Equipment Selections</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 25, 2024</TableCell>
+                                <TableCell>Nov 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">CD Phase - Construction Documents</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 1, 2024</TableCell>
+                                <TableCell>Jan 15, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Preconstruction Meeting Series</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 1, 2024</TableCell>
+                                <TableCell>Dec 31, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">CD Phase - Construction Documents</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Procurement - AHUs</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 5, 2024</TableCell>
+                                <TableCell>Dec 5, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">CD Phase - Construction Documents</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Site Logistics Planning</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 10, 2024</TableCell>
+                                <TableCell>Dec 10, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">CD Phase - Construction Documents</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">AHJ Plan Review - Set 2</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell>Dec 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">AHJ Plan Review - Set 1</Badge></TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Long-Lead Submittal Review</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Oct 20, 2024</TableCell>
+                                <TableCell>Jan 20, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">CD Phase - Construction Documents</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Foundation Excavation</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Structure & Core</TableCell>
+                                <TableCell>Nov 1, 2024</TableCell>
+                                <TableCell>Dec 15, 2024</TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary" className="text-xs mr-1">Building Permit Application</Badge>
+                                  <Badge variant="secondary" className="text-xs">AHJ Plan Review - Set 2</Badge>
+                                </TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Foundation Concrete</div>
+                                </TableCell>
+                                <TableCell>Structure & Core</TableCell>
+                                <TableCell>Dec 16, 2024</TableCell>
+                                <TableCell>Jan 31, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Foundation Excavation</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Structural Steel Frame</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Structure & Core</TableCell>
+                                <TableCell>Feb 1, 2025</TableCell>
+                                <TableCell>May 15, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Foundation Concrete</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Core Walls & Shafts</div>
+                                </TableCell>
+                                <TableCell>Structure & Core</TableCell>
+                                <TableCell>Feb 15, 2025</TableCell>
+                                <TableCell>Jun 15, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Foundation Concrete</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Electrical Service</div>
+                                </TableCell>
+                                <TableCell>MEP Rough-In</TableCell>
+                                <TableCell>Apr 1, 2025</TableCell>
+                                <TableCell>May 31, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Structural Steel Frame</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">HVAC Ductwork</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>MEP Rough-In</TableCell>
+                                <TableCell>Apr 15, 2025</TableCell>
+                                <TableCell>Jul 31, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Structural Steel Frame</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Plumbing Rough-In</div>
+                                </TableCell>
+                                <TableCell>MEP Rough-In</TableCell>
+                                <TableCell>May 1, 2025</TableCell>
+                                <TableCell>Aug 15, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Structural Steel Frame</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Slab-on-Grade</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Structure & Core</TableCell>
+                                <TableCell>May 16, 2025</TableCell>
+                                <TableCell>Jun 15, 2025</TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary" className="text-xs mr-1">Structural Steel Frame</Badge>
+                                  <Badge variant="secondary" className="text-xs">Core Walls & Shafts</Badge>
+                                </TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Fire Protection</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>MEP Rough-In</TableCell>
+                                <TableCell>Jun 1, 2025</TableCell>
+                                <TableCell>Sep 30, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">HVAC Ductwork</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Glazing</div>
+                                </TableCell>
+                                <TableCell>Envelope</TableCell>
+                                <TableCell>Jun 1, 2025</TableCell>
+                                <TableCell>Sep 30, 2025</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">Procurement - Curtainwall</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Electrical Rough-In</div>
+                                </TableCell>
+                                <TableCell>MEP Rough-In</TableCell>
+                                <TableCell>Jul 1, 2025</TableCell>
+                                <TableCell>Sep 30, 2025</TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary" className="text-xs mr-1">Electrical Service</Badge>
+                                  <Badge variant="secondary" className="text-xs">HVAC Ductwork</Badge>
+                                </TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Final Inspections</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Interior Fit-Out</TableCell>
+                                <TableCell>Nov 15, 2025</TableCell>
+                                <TableCell>Dec 15, 2025</TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary" className="text-xs mr-1">Long-Lead Submittal Review</Badge>
+                                  <Badge variant="secondary" className="text-xs">Value Engineering Review</Badge>
+                                </TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-gray-500/10 text-gray-700 border-gray-300">Upcoming</Badge></TableCell>
+                              </TableRow>
                             </TableBody>
                           </Table>
+                        </div>
+                      </div>
+
+                      {/* Constraint Readiness Section */}
+                      <div className="mt-8">
+                        <h3 className="font-semibold mb-4">Constraint Readiness</h3>
+                        <div className="bg-muted/30 rounded-lg p-6">
+                          <div className="flex items-start gap-8">
+                            {/* Donut Chart */}
+                            <div className="flex-shrink-0">
+                              <ResponsiveContainer width={180} height={180}>
+                                <PieChart>
+                                  <Pie
+                                    data={[
+                                      { name: 'Confirmed', value: 68, color: '#10b981' },
+                                      { name: 'Missing', value: 32, color: '#ef4444' }
+                                    ]}
+                                    cx={90}
+                                    cy={90}
+                                    innerRadius={50}
+                                    outerRadius={80}
+                                    paddingAngle={0}
+                                    dataKey="value"
+                                    startAngle={90}
+                                    endAngle={-270}
+                                  >
+                                    <Cell fill="#10b981" />
+                                    <Cell fill="#ef4444" />
+                                  </Pie>
+                                </PieChart>
+                              </ResponsiveContainer>
+                              <div className="text-center -mt-28">
+                                <div className="text-4xl font-bold">68%</div>
+                              </div>
+                            </div>
+
+                            {/* Text Content */}
+                            <div className="flex-1">
+                              <p className="text-sm text-muted-foreground mb-4">
+                                Of critical/near-critical work has inputs confirmed
+                              </p>
+                              <div className="space-y-2">
+                                <p className="font-semibold text-sm">Top 5 Missing Inputs:</p>
+                                <ol className="text-sm space-y-1 list-decimal list-inside text-muted-foreground">
+                                  <li>Electrical service approval</li>
+                                  <li>Curtainwall submittal approval</li>
+                                  <li>Generator sizing confirmation</li>
+                                  <li>Space access windows</li>
+                                  <li>Long-lead PO approvals</li>
+                                </ol>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
