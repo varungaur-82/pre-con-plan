@@ -88,7 +88,7 @@ export function FiveDSchedule() {
       {/* Header */}
       <div className="p-6 border-b bg-card">
         <h1 className="text-2xl font-bold mb-4">
-          {activeModule === "overview" ? "T2 - 5D Schedule" : activeModule === "workspace" ? "T2 - 5D Schedule" : "T2 - 5D Schedule"}
+          {activeModule === "overview" ? "5D Schedule" : activeModule === "workspace" ? "5D Schedule" : "5D Schedule"}
         </h1>
         <div className="flex gap-2">
           <Button 
