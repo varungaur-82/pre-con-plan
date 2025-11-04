@@ -52,6 +52,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
   const [selectedDesignOption, setSelectedDesignOption] = useState<number | null>(null);
   const [activeEstimationModule, setActiveEstimationModule] = useState<"overview" | "generator" | "compare" | "basis">("overview");
+  const [active5DView, setActive5DView] = useState<"t1" | "t2">("t1");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -1713,6 +1714,28 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
              {/* 5D Tab */}
             <TabsContent value="5d" className="mt-0 h-full">
+              {/* Sub-navigation for 5D */}
+              <div className="border-b bg-card px-6 py-3">
+                <div className="flex gap-2">
+                  <Button 
+                    variant={active5DView === "t1" ? "default" : "ghost"} 
+                    size="sm"
+                    onClick={() => setActive5DView("t1")}
+                  >
+                    T1
+                  </Button>
+                  <Button 
+                    variant={active5DView === "t2" ? "default" : "ghost"} 
+                    size="sm"
+                    onClick={() => setActive5DView("t2")}
+                  >
+                    T2
+                  </Button>
+                </div>
+              </div>
+
+              {/* T1 Content - Current 5D page */}
+              {active5DView === "t1" && (
               <div className="flex h-full">
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col">
@@ -2760,6 +2783,15 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   )}
                 </div>
               </div>
+              )}
+
+              {/* T2 Content - Blank page */}
+              {active5DView === "t2" && (
+                <div className="container px-6 py-16 text-center">
+                  <h2 className="text-2xl font-bold text-muted-foreground mb-4">T2</h2>
+                  <p className="text-muted-foreground">Content coming soon...</p>
+                </div>
+              )}
             </TabsContent>
 
             {/* Automation Hub Tab */}
