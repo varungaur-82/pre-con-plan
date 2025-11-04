@@ -14,7 +14,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
 export function FiveDSchedule() {
   const [activeModule, setActiveModule] = useState<"overview" | "workspace" | "basis">("overview");
@@ -524,7 +524,86 @@ export function FiveDSchedule() {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      How fragile is the plan and where can it break?
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold">Float Exposure Histogram</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Distribution of activities by available float (slack time). Lower float = higher schedule risk.
+                          </p>
+                        </div>
+                        <AlertCircle className="h-5 w-5 text-muted-foreground" />
+                      </div>
+                      
+                      {/* Bar Chart */}
+                      <div className="bg-muted/30 rounded-lg p-6">
+                        <ResponsiveContainer width="100%" height={280}>
+                          <BarChart
+                            data={[
+                              { range: '0-2d', activities: 15, color: '#ef4444' },
+                              { range: '3-5d', activities: 30, color: '#f59e0b' },
+                              { range: '6-10d', activities: 27, color: '#3b82f6' },
+                              { range: '>10d', activities: 18, color: '#10b981' }
+                            ]}
+                            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                            <XAxis 
+                              dataKey="range" 
+                              label={{ value: 'Float Range', position: 'insideBottom', offset: -10 }}
+                              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                            />
+                            <YAxis 
+                              label={{ value: '% of Activities', angle: -90, position: 'insideLeft' }}
+                              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                            />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: 'hsl(var(--background))', 
+                                border: '1px solid hsl(var(--border))',
+                                borderRadius: '6px'
+                              }}
+                              formatter={(value: number) => [`${value}%`, 'Activities']}
+                            />
+                            <Bar dataKey="activities" radius={[4, 4, 0, 0]}>
+                              {[
+                                { range: '0-2d', activities: 15, color: '#ef4444' },
+                                { range: '3-5d', activities: 30, color: '#f59e0b' },
+                                { range: '6-10d', activities: 27, color: '#3b82f6' },
+                                { range: '>10d', activities: 18, color: '#10b981' }
+                              ].map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      {/* Statistics */}
+                      <div className="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Total Activities Analyzed:</span>
+                          <div className="font-semibold text-lg">80 activities</div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Near-critical (≤5d float):</span>
+                          <div className="font-semibold text-lg text-amber-600">50% (40 activities)</div>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Critical (0-2d float):</span>
+                          <div className="font-semibold text-lg text-red-600">15% (12 activities)</div>
+                        </div>
+                      </div>
+
+                      {/* Logic Explanation */}
+                      <div className="bg-muted/30 rounded-lg p-4 text-sm text-muted-foreground">
+                        <span className="font-semibold">Logic:</span> Activities are grouped by their total float (slack). Float is calculated as the difference between early finish and late finish dates. Lower float indicates activities on or near the critical path, requiring tighter control and risk management.
+                      </div>
+                    </div>
                   </CardContent>
                 </CollapsibleContent>
               </Card>
