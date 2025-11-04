@@ -14,13 +14,6 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { 
@@ -59,7 +52,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const [isDesignSidebarCollapsed, setIsDesignSidebarCollapsed] = useState(false);
   const [selectedDesignOption, setSelectedDesignOption] = useState<number | null>(null);
   const [activeEstimationModule, setActiveEstimationModule] = useState<"overview" | "generator" | "compare" | "basis">("overview");
-  const [active5DView, setActive5DView] = useState<"estimation" | "schedule">("estimation");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -346,51 +338,12 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     >
                       Design Studio
                     </TabsTrigger>
-                    
-                    {/* 5D Tab with Dropdown */}
-                    <NavigationMenu>
-                      <NavigationMenuList>
-                        <NavigationMenuItem>
-                          <NavigationMenuTrigger 
-                            className={cn(
-                              "rounded-none border-b-2 border-transparent px-6 py-3 h-auto bg-transparent hover:bg-transparent",
-                              currentTab === "5d" && "border-construction-primary"
-                            )}
-                          >
-                            5D
-                          </NavigationMenuTrigger>
-                          <NavigationMenuContent>
-                            <div className="w-48 p-2">
-                              <button
-                                onClick={() => {
-                                  setCurrentTab("5d");
-                                  setActive5DView("estimation");
-                                }}
-                                className={cn(
-                                  "w-full text-left px-4 py-2 rounded-md hover:bg-accent transition-colors",
-                                  currentTab === "5d" && active5DView === "estimation" && "bg-accent"
-                                )}
-                              >
-                                5D Estimation
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setCurrentTab("5d");
-                                  setActive5DView("schedule");
-                                }}
-                                className={cn(
-                                  "w-full text-left px-4 py-2 rounded-md hover:bg-accent transition-colors",
-                                  currentTab === "5d" && active5DView === "schedule" && "bg-accent"
-                                )}
-                              >
-                                5D Schedule
-                              </button>
-                            </div>
-                          </NavigationMenuContent>
-                        </NavigationMenuItem>
-                      </NavigationMenuList>
-                    </NavigationMenu>
-                    
+                    <TabsTrigger 
+                      value="5d" 
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
+                    >
+                      5D
+                    </TabsTrigger>
                     <TabsTrigger 
                       value="automation" 
                       className="rounded-none border-b-2 border-transparent data-[state=active]:border-construction-primary data-[state=active]:bg-transparent px-6 py-3"
@@ -1760,7 +1713,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
 
              {/* 5D Tab */}
             <TabsContent value="5d" className="mt-0 h-full">
-              {active5DView === "estimation" ? (
               <div className="flex h-full">
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col">
@@ -2808,45 +2760,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                   )}
                 </div>
               </div>
-              ) : (
-                /* 5D Schedule View */
-                <div className="container px-6 py-16 text-center">
-                  <h2 className="text-2xl font-bold text-foreground mb-4">5D Schedule</h2>
-                  <p className="text-muted-foreground mb-6">
-                    Integrate schedule and cost data for comprehensive 5D analysis.
-                  </p>
-                  <div className="max-w-2xl mx-auto">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Coming Soon</CardTitle>
-                        <CardDescription>
-                          The 5D Schedule module is currently under development. This feature will allow you to:
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="text-left space-y-2 text-sm text-muted-foreground">
-                          <li className="flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 mt-0.5 text-construction-primary" />
-                            <span>Link cost data with project schedule</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 mt-0.5 text-construction-primary" />
-                            <span>Visualize cash flow over time</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 mt-0.5 text-construction-primary" />
-                            <span>Track earned value metrics</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 mt-0.5 text-construction-primary" />
-                            <span>Analyze schedule impacts on costs</span>
-                          </li>
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              )}
             </TabsContent>
 
             {/* Automation Hub Tab */}
