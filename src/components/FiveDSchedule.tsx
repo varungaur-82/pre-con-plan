@@ -31,6 +31,12 @@ export function FiveDSchedule() {
     "0.0": false,
     "1.0": false,
     "2.0": true,
+    "3.0": false,
+    "4.0": false,
+    "5.0": false,
+    "6.0": false,
+    "7.0": false,
+    "8.0": false,
   });
 
   const changeDriversData = [
@@ -1851,6 +1857,314 @@ export function FiveDSchedule() {
                             <TableCell>01 26 00</TableCell>
                             <TableCell>3d</TableCell>
                             <TableCell>2.4</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 3.0 Design Development (DD) */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "3.0": !wbsExpanded["3.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["3.0"] ? '' : '-rotate-90'}`} />
+                            3.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Design Development (DD)</TableCell>
+                        <TableCell>01 33 00</TableCell>
+                        <TableCell>3d</TableCell>
+                        <TableCell>2.5</TableCell>
+                      </TableRow>
+                      {wbsExpanded["3.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.1</TableCell>
+                            <TableCell>DD – Arch/Struct 30/60%</TableCell>
+                            <TableCell>03–07</TableCell>
+                            <TableCell>45d</TableCell>
+                            <TableCell>3.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.2</TableCell>
+                            <TableCell>DD – MEPF 30/60%</TableCell>
+                            <TableCell>21–28</TableCell>
+                            <TableCell>45d</TableCell>
+                            <TableCell>3.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.3</TableCell>
+                            <TableCell>Code & AHJ Checkpoints</TableCell>
+                            <TableCell>01 41 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>3.1, 3.2</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.4</TableCell>
+                            <TableCell>DD Cost Check (Class 2–3)</TableCell>
+                            <TableCell>01 21 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>3.1, 3.2, 3.3</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.5</TableCell>
+                            <TableCell>Long-Lead Strategy Freeze</TableCell>
+                            <TableCell>01 26 00</TableCell>
+                            <TableCell>5d</TableCell>
+                            <TableCell>3.4</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">3.6</TableCell>
+                            <TableCell>DD Owner Gate (Approve/Revise)</TableCell>
+                            <TableCell>01 26 00</TableCell>
+                            <TableCell>3d</TableCell>
+                            <TableCell>3.4, 3.5</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 4.0 Construction Documents (CDs) */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "4.0": !wbsExpanded["4.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["4.0"] ? '' : '-rotate-90'}`} />
+                            4.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Construction Documents (CDs)</TableCell>
+                        <TableCell>01 33 00</TableCell>
+                        <TableCell>3d</TableCell>
+                        <TableCell>3.6</TableCell>
+                      </TableRow>
+                      {wbsExpanded["4.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">4.1</TableCell>
+                            <TableCell>CDs – Arch/Struct 90/IFC</TableCell>
+                            <TableCell>03–07</TableCell>
+                            <TableCell>35d</TableCell>
+                            <TableCell>4.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">4.2</TableCell>
+                            <TableCell>CDs – MEPF 90/IFC</TableCell>
+                            <TableCell>21–28</TableCell>
+                            <TableCell>35d</TableCell>
+                            <TableCell>4.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">4.3</TableCell>
+                            <TableCell>Specifications (All Divs)</TableCell>
+                            <TableCell>00</TableCell>
+                            <TableCell>35d</TableCell>
+                            <TableCell>4.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">4.4</TableCell>
+                            <TableCell>Permit Submittal & Revisions</TableCell>
+                            <TableCell>01 41 00</TableCell>
+                            <TableCell>20d</TableCell>
+                            <TableCell>4.1, 4.2, 4.3</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">4.5</TableCell>
+                            <TableCell>GMP/Tender Docs Finalized</TableCell>
+                            <TableCell>00 21 13</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>4.1, 4.2, 4.3</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 5.0 Procurement & Awards */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "5.0": !wbsExpanded["5.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["5.0"] ? '' : '-rotate-90'}`} />
+                            5.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Procurement & Awards</TableCell>
+                        <TableCell>00 40 00</TableCell>
+                        <TableCell>5d</TableCell>
+                        <TableCell>4.5</TableCell>
+                      </TableRow>
+                      {wbsExpanded["5.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">5.1</TableCell>
+                            <TableCell>Prequal & ITB</TableCell>
+                            <TableCell>00 21 13</TableCell>
+                            <TableCell>14d</TableCell>
+                            <TableCell>5.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">5.2</TableCell>
+                            <TableCell>Long-Lead PO Awards</TableCell>
+                            <TableCell>01 66 00</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>3.5, 5.1</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">5.3</TableCell>
+                            <TableCell>Main Trade Awards / GMP</TableCell>
+                            <TableCell>00 52 00</TableCell>
+                            <TableCell>5d</TableCell>
+                            <TableCell>5.1</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">5.4</TableCell>
+                            <TableCell>Priority Submittals & Shops</TableCell>
+                            <TableCell>01 33 00</TableCell>
+                            <TableCell>21d</TableCell>
+                            <TableCell>5.2, 5.3</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 6.0 Construction – Sitework & Core */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "6.0": !wbsExpanded["6.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["6.0"] ? '' : '-rotate-90'}`} />
+                            6.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Construction – Sitework & Core</TableCell>
+                        <TableCell>31–33</TableCell>
+                        <TableCell>7d</TableCell>
+                        <TableCell>5.3</TableCell>
+                      </TableRow>
+                      {wbsExpanded["6.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.1</TableCell>
+                            <TableCell>Foundations & Substructure</TableCell>
+                            <TableCell>03 00 00</TableCell>
+                            <TableCell>28d</TableCell>
+                            <TableCell>6.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.2</TableCell>
+                            <TableCell>Superstructure</TableCell>
+                            <TableCell>05 00 00</TableCell>
+                            <TableCell>35d</TableCell>
+                            <TableCell>6.1</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.3</TableCell>
+                            <TableCell>Building Envelope Dry-In</TableCell>
+                            <TableCell>07 00 00</TableCell>
+                            <TableCell>28d</TableCell>
+                            <TableCell>6.2</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.4</TableCell>
+                            <TableCell>MEPF Rough-In</TableCell>
+                            <TableCell>21–26</TableCell>
+                            <TableCell>56d</TableCell>
+                            <TableCell>6.2, 6.3</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.5</TableCell>
+                            <TableCell>Interiors & Finishes</TableCell>
+                            <TableCell>09–12</TableCell>
+                            <TableCell>49d</TableCell>
+                            <TableCell>6.4</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.6</TableCell>
+                            <TableCell>Systems & Low-Voltage</TableCell>
+                            <TableCell>27–28</TableCell>
+                            <TableCell>42d</TableCell>
+                            <TableCell>6.4, 6.5</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">6.7</TableCell>
+                            <TableCell>Siteworks & Hardscape</TableCell>
+                            <TableCell>32 00 00</TableCell>
+                            <TableCell>28d</TableCell>
+                            <TableCell>6.3</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 7.0 Startup, Commissioning, Turnover */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "7.0": !wbsExpanded["7.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["7.0"] ? '' : '-rotate-90'}`} />
+                            7.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Startup, Commissioning, Turnover</TableCell>
+                        <TableCell>01 91 00</TableCell>
+                        <TableCell>21d</TableCell>
+                        <TableCell>6.4, 6.5, 6.6</TableCell>
+                      </TableRow>
+                      {wbsExpanded["7.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">7.1</TableCell>
+                            <TableCell>AHJ Inspections & TCO/CO</TableCell>
+                            <TableCell>01 41 00</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>7.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">7.2</TableCell>
+                            <TableCell>Training & O&M Handover</TableCell>
+                            <TableCell>01 78 23</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>7.1</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">7.3</TableCell>
+                            <TableCell>Punchlist & Closeout</TableCell>
+                            <TableCell>01 77 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>7.1, 7.2</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 8.0 Post-Occupancy */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "8.0": !wbsExpanded["8.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["8.0"] ? '' : '-rotate-90'}`} />
+                            8.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Post-Occupancy</TableCell>
+                        <TableCell>01 86 00</TableCell>
+                        <TableCell>21d</TableCell>
+                        <TableCell>7.3</TableCell>
+                      </TableRow>
+                      {wbsExpanded["8.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">8.1</TableCell>
+                            <TableCell>Final Cost Report & Lessons Learned</TableCell>
+                            <TableCell>01 32 19</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>8.0</TableCell>
                           </TableRow>
                         </>
                       )}
