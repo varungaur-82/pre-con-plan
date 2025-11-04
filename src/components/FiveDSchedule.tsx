@@ -25,6 +25,13 @@ export function FiveDSchedule() {
   const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
   const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
+  
+  // WBS collapsible states
+  const [wbsExpanded, setWbsExpanded] = useState<Record<string, boolean>>({
+    "0.0": false,
+    "1.0": false,
+    "2.0": true,
+  });
 
   const changeDriversData = [
     { name: 'Procurement / Long-Lead', value: 22, days: '22d', percentage: '27.5%', color: '#3b82f6' },
@@ -1625,9 +1632,233 @@ export function FiveDSchedule() {
         )}
 
         {activeModule === "workspace" && (
-          <div className="container px-6 py-16 text-center">
-            <h2 className="text-2xl font-bold text-muted-foreground mb-4">Schedule Workspace</h2>
-            <p className="text-muted-foreground">Content coming soon...</p>
+          <div className="p-6 space-y-6">
+            {/* Toolbar */}
+            <div className="bg-card border rounded-lg p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-4 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Design Option</span>
+                    <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
+                      <option>Option A</option>
+                      <option>Option B</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Estimate Version</span>
+                    <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
+                      <option>DD-S04</option>
+                      <option>DD-S03</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Schedule Version</span>
+                    <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
+                      <option>S-01</option>
+                      <option>S-02</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" variant="outline">
+                    🔄 Generate
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    📥 Export
+                  </Button>
+                </div>
+              </div>
+              <div className="flex items-center gap-6 text-xs text-muted-foreground">
+                <span>Design sync: synced 2d ago</span>
+                <span>Estimate sync: synced 1d ago</span>
+                <span>Policy pack: BoS v1.0</span>
+                <span>Data: fresh &lt;1h</span>
+              </div>
+            </div>
+
+            {/* Main Workspace */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <Button size="sm" variant="default">Build</Button>
+                    <div className="h-6 w-px bg-border"></div>
+                    <Button size="sm" variant="ghost">WBS (CSI)</Button>
+                  </div>
+                  <div className="text-sm font-semibold">WBS (CSI) + Gantt View</div>
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        placeholder="Filter..." 
+                        className="pl-3 pr-8 py-1.5 text-sm border rounded-md bg-background w-48"
+                      />
+                    </div>
+                    <Button size="sm" variant="outline">🔍 Filters</Button>
+                    <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
+                      <option>Month</option>
+                      <option>Week</option>
+                      <option>Day</option>
+                    </select>
+                    <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
+                      <option>36px</option>
+                      <option>24px</option>
+                      <option>48px</option>
+                    </select>
+                    <Button size="sm" variant="outline">📋 Open Context</Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="border rounded-lg overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-32">WBS</TableHead>
+                        <TableHead>ACTIVITY</TableHead>
+                        <TableHead className="w-32">CSI</TableHead>
+                        <TableHead className="w-24">DURATION</TableHead>
+                        <TableHead className="w-40">PREDECESSORS</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {/* 0.0 Project Charter Signed */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "0.0": !wbsExpanded["0.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["0.0"] ? '' : '-rotate-90'}`} />
+                            0.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Project Charter Signed</TableCell>
+                        <TableCell>01 10 00</TableCell>
+                        <TableCell>5d</TableCell>
+                        <TableCell>—</TableCell>
+                      </TableRow>
+                      {wbsExpanded["0.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">0.1</TableCell>
+                            <TableCell>Funding & Delivery Strategy Freeze</TableCell>
+                            <TableCell>01 12 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>0.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">0.2</TableCell>
+                            <TableCell>Stakeholder RACI & Comm Plan</TableCell>
+                            <TableCell>01 31 19</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>0.0</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 1.0 Due Diligence & Site Controls */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "1.0": !wbsExpanded["1.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["1.0"] ? '' : '-rotate-90'}`} />
+                            1.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Due Diligence & Site Controls</TableCell>
+                        <TableCell>00 30 00</TableCell>
+                        <TableCell>14d</TableCell>
+                        <TableCell>0.0</TableCell>
+                      </TableRow>
+                      {wbsExpanded["1.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">1.1</TableCell>
+                            <TableCell>Surveys (Topo/Utility/Geotech)</TableCell>
+                            <TableCell>02 21 16</TableCell>
+                            <TableCell>21d</TableCell>
+                            <TableCell>1.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">1.2</TableCell>
+                            <TableCell>Program Brief & Space Plan</TableCell>
+                            <TableCell>01 11 00</TableCell>
+                            <TableCell>14d</TableCell>
+                            <TableCell>0.2</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">1.3</TableCell>
+                            <TableCell>Target Cost & Schedule (Class 4–5)</TableCell>
+                            <TableCell>01 21 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>1.2</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+
+                      {/* 2.0 Schematic Design (SD) Start */}
+                      <TableRow>
+                        <TableCell className="font-medium">
+                          <button 
+                            onClick={() => setWbsExpanded({...wbsExpanded, "2.0": !wbsExpanded["2.0"]})}
+                            className="flex items-center gap-1"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["2.0"] ? '' : '-rotate-90'}`} />
+                            2.0
+                          </button>
+                        </TableCell>
+                        <TableCell className="font-semibold">Schematic Design (SD) Start</TableCell>
+                        <TableCell>01 33 00</TableCell>
+                        <TableCell>3d</TableCell>
+                        <TableCell>1.2</TableCell>
+                      </TableRow>
+                      {wbsExpanded["2.0"] && (
+                        <>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">2.1</TableCell>
+                            <TableCell>SD – Site & Civil Concepts</TableCell>
+                            <TableCell>31 00 00</TableCell>
+                            <TableCell>20d</TableCell>
+                            <TableCell>2.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">2.2</TableCell>
+                            <TableCell>SD – Arch / Structural Concepts</TableCell>
+                            <TableCell>03–06</TableCell>
+                            <TableCell>25d</TableCell>
+                            <TableCell>2.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">2.3</TableCell>
+                            <TableCell>SD – MEPF Concepts & Loads</TableCell>
+                            <TableCell>21–26</TableCell>
+                            <TableCell>20d</TableCell>
+                            <TableCell>2.0</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">2.4</TableCell>
+                            <TableCell>SD Cost Check (Class 3–4)</TableCell>
+                            <TableCell>01 21 00</TableCell>
+                            <TableCell>10d</TableCell>
+                            <TableCell>2.1, 2.2, 2.3</TableCell>
+                          </TableRow>
+                          <TableRow className="bg-muted/30">
+                            <TableCell className="pl-8">2.5</TableCell>
+                            <TableCell>SD Owner Gate (Approve/Revise)</TableCell>
+                            <TableCell>01 26 00</TableCell>
+                            <TableCell>3d</TableCell>
+                            <TableCell>2.4</TableCell>
+                          </TableRow>
+                        </>
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
