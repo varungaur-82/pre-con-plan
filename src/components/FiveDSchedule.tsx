@@ -17,6 +17,23 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
+// Helper component for rendering Gantt timeline
+const GanttBar = ({ start, duration, label }: { start: number; duration: number; label?: string }) => {
+  return (
+    <div className="relative h-8 w-full bg-muted/20">
+      <div 
+        className="absolute top-1/2 -translate-y-1/2 h-6 bg-primary rounded flex items-center px-2 text-xs text-primary-foreground whitespace-nowrap"
+        style={{ 
+          left: `${start}%`, 
+          width: `${duration}%` 
+        }}
+      >
+        {label && <span>{label}</span>}
+      </div>
+    </div>
+  );
+};
+
 export function FiveDSchedule() {
   const [activeModule, setActiveModule] = useState<"overview" | "workspace" | "basis">("overview");
   const [isSchedulePostureOpen, setIsSchedulePostureOpen] = useState(true);
@@ -25,6 +42,7 @@ export function FiveDSchedule() {
   const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
   const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
+  const [workspaceView, setWorkspaceView] = useState<"detail" | "gantt">("detail");
   
   // WBS collapsible states
   const [wbsExpanded, setWbsExpanded] = useState<Record<string, boolean>>({
@@ -1685,13 +1703,28 @@ export function FiveDSchedule() {
             {/* Main Workspace */}
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-4">
                     <Button size="sm" variant="default">Build</Button>
                     <div className="h-6 w-px bg-border"></div>
                     <Button size="sm" variant="ghost">WBS (CSI)</Button>
                   </div>
-                  <div className="text-sm font-semibold">WBS (CSI) + Gantt View</div>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      size="sm" 
+                      variant={workspaceView === "detail" ? "default" : "outline"}
+                      onClick={() => setWorkspaceView("detail")}
+                    >
+                      Detail View
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant={workspaceView === "gantt" ? "default" : "outline"}
+                      onClick={() => setWorkspaceView("gantt")}
+                    >
+                      Gantt View
+                    </Button>
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <input 
@@ -1722,9 +1755,15 @@ export function FiveDSchedule() {
                       <TableRow>
                         <TableHead className="w-32">WBS</TableHead>
                         <TableHead>ACTIVITY</TableHead>
-                        <TableHead className="w-32">CSI</TableHead>
-                        <TableHead className="w-24">DURATION</TableHead>
-                        <TableHead className="w-40">PREDECESSORS</TableHead>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableHead className="w-32">CSI</TableHead>
+                            <TableHead className="w-24">DURATION</TableHead>
+                            <TableHead className="w-40">PREDECESSORS</TableHead>
+                          </>
+                        ) : (
+                          <TableHead className="w-full">GANTT TIMELINE</TableHead>
+                        )}
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -1740,25 +1779,49 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Project Charter Signed</TableCell>
-                        <TableCell>01 10 00</TableCell>
-                        <TableCell>5d</TableCell>
-                        <TableCell>—</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 10 00</TableCell>
+                            <TableCell>5d</TableCell>
+                            <TableCell>—</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={5} duration={3} label="Mar 1-5" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["0.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">0.1</TableCell>
                             <TableCell>Funding & Delivery Strategy Freeze</TableCell>
-                            <TableCell>01 12 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>0.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 12 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>0.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={8} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">0.2</TableCell>
                             <TableCell>Stakeholder RACI & Comm Plan</TableCell>
-                            <TableCell>01 31 19</TableCell>
-                            <TableCell>7d</TableCell>
-                            <TableCell>0.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 31 19</TableCell>
+                                <TableCell>7d</TableCell>
+                                <TableCell>0.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={10} duration={5} label="7d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -1775,32 +1838,64 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Due Diligence & Site Controls</TableCell>
-                        <TableCell>00 30 00</TableCell>
-                        <TableCell>14d</TableCell>
-                        <TableCell>0.0</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>00 30 00</TableCell>
+                            <TableCell>14d</TableCell>
+                            <TableCell>0.0</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={15} duration={8} label="Mar 6-19" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["1.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">1.1</TableCell>
                             <TableCell>Surveys (Topo/Utility/Geotech)</TableCell>
-                            <TableCell>02 21 16</TableCell>
-                            <TableCell>21d</TableCell>
-                            <TableCell>1.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>02 21 16</TableCell>
+                                <TableCell>21d</TableCell>
+                                <TableCell>1.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={17} duration={12} label="21d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">1.2</TableCell>
                             <TableCell>Program Brief & Space Plan</TableCell>
-                            <TableCell>01 11 00</TableCell>
-                            <TableCell>14d</TableCell>
-                            <TableCell>0.2</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 11 00</TableCell>
+                                <TableCell>14d</TableCell>
+                                <TableCell>0.2</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={19} duration={8} label="14d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">1.3</TableCell>
                             <TableCell>Target Cost & Schedule (Class 4–5)</TableCell>
-                            <TableCell>01 21 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>1.2</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 21 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>1.2</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={27} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -1817,46 +1912,94 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Schematic Design (SD) Start</TableCell>
-                        <TableCell>01 33 00</TableCell>
-                        <TableCell>3d</TableCell>
-                        <TableCell>1.2</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 33 00</TableCell>
+                            <TableCell>3d</TableCell>
+                            <TableCell>1.2</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={33} duration={2} label="Apr 1-3" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["2.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">2.1</TableCell>
                             <TableCell>SD – Site & Civil Concepts</TableCell>
-                            <TableCell>31 00 00</TableCell>
-                            <TableCell>20d</TableCell>
-                            <TableCell>2.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>31 00 00</TableCell>
+                                <TableCell>20d</TableCell>
+                                <TableCell>2.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={35} duration={12} label="20d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">2.2</TableCell>
                             <TableCell>SD – Arch / Structural Concepts</TableCell>
-                            <TableCell>03–06</TableCell>
-                            <TableCell>25d</TableCell>
-                            <TableCell>2.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>03–06</TableCell>
+                                <TableCell>25d</TableCell>
+                                <TableCell>2.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={35} duration={14} label="25d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">2.3</TableCell>
                             <TableCell>SD – MEPF Concepts & Loads</TableCell>
-                            <TableCell>21–26</TableCell>
-                            <TableCell>20d</TableCell>
-                            <TableCell>2.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>21–26</TableCell>
+                                <TableCell>20d</TableCell>
+                                <TableCell>2.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={36} duration={12} label="20d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">2.4</TableCell>
                             <TableCell>SD Cost Check (Class 3–4)</TableCell>
-                            <TableCell>01 21 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>2.1, 2.2, 2.3</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 21 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>2.1, 2.2, 2.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={49} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">2.5</TableCell>
                             <TableCell>SD Owner Gate (Approve/Revise)</TableCell>
-                            <TableCell>01 26 00</TableCell>
-                            <TableCell>3d</TableCell>
-                            <TableCell>2.4</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 26 00</TableCell>
+                                <TableCell>3d</TableCell>
+                                <TableCell>2.4</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={55} duration={2} label="3d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -1873,53 +2016,109 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Design Development (DD)</TableCell>
-                        <TableCell>01 33 00</TableCell>
-                        <TableCell>3d</TableCell>
-                        <TableCell>2.5</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 33 00</TableCell>
+                            <TableCell>3d</TableCell>
+                            <TableCell>2.5</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={57} duration={2} label="May 1-3" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["3.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.1</TableCell>
                             <TableCell>DD – Arch/Struct 30/60%</TableCell>
-                            <TableCell>03–07</TableCell>
-                            <TableCell>45d</TableCell>
-                            <TableCell>3.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>03–07</TableCell>
+                                <TableCell>45d</TableCell>
+                                <TableCell>3.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={59} duration={25} label="45d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.2</TableCell>
                             <TableCell>DD – MEPF 30/60%</TableCell>
-                            <TableCell>21–28</TableCell>
-                            <TableCell>45d</TableCell>
-                            <TableCell>3.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>21–28</TableCell>
+                                <TableCell>45d</TableCell>
+                                <TableCell>3.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={60} duration={25} label="45d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.3</TableCell>
                             <TableCell>Code & AHJ Checkpoints</TableCell>
-                            <TableCell>01 41 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>3.1, 3.2</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 41 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>3.1, 3.2</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={84} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.4</TableCell>
                             <TableCell>DD Cost Check (Class 2–3)</TableCell>
-                            <TableCell>01 21 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>3.1, 3.2, 3.3</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 21 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>3.1, 3.2, 3.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={84} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.5</TableCell>
                             <TableCell>Long-Lead Strategy Freeze</TableCell>
-                            <TableCell>01 26 00</TableCell>
-                            <TableCell>5d</TableCell>
-                            <TableCell>3.4</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 26 00</TableCell>
+                                <TableCell>5d</TableCell>
+                                <TableCell>3.4</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={90} duration={3} label="5d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">3.6</TableCell>
                             <TableCell>DD Owner Gate (Approve/Revise)</TableCell>
-                            <TableCell>01 26 00</TableCell>
-                            <TableCell>3d</TableCell>
-                            <TableCell>3.4, 3.5</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 26 00</TableCell>
+                                <TableCell>3d</TableCell>
+                                <TableCell>3.4, 3.5</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={93} duration={2} label="3d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -1936,46 +2135,94 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Construction Documents (CDs)</TableCell>
-                        <TableCell>01 33 00</TableCell>
-                        <TableCell>3d</TableCell>
-                        <TableCell>3.6</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 33 00</TableCell>
+                            <TableCell>3d</TableCell>
+                            <TableCell>3.6</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={20} duration={15} label="Jun 1-Jul 15" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["4.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">4.1</TableCell>
                             <TableCell>CDs – Arch/Struct 90/IFC</TableCell>
-                            <TableCell>03–07</TableCell>
-                            <TableCell>35d</TableCell>
-                            <TableCell>4.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>03–07</TableCell>
+                                <TableCell>35d</TableCell>
+                                <TableCell>4.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={22} duration={20} label="35d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">4.2</TableCell>
                             <TableCell>CDs – MEPF 90/IFC</TableCell>
-                            <TableCell>21–28</TableCell>
-                            <TableCell>35d</TableCell>
-                            <TableCell>4.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>21–28</TableCell>
+                                <TableCell>35d</TableCell>
+                                <TableCell>4.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={23} duration={20} label="35d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">4.3</TableCell>
                             <TableCell>Specifications (All Divs)</TableCell>
-                            <TableCell>00</TableCell>
-                            <TableCell>35d</TableCell>
-                            <TableCell>4.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>00</TableCell>
+                                <TableCell>35d</TableCell>
+                                <TableCell>4.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={24} duration={20} label="35d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">4.4</TableCell>
                             <TableCell>Permit Submittal & Revisions</TableCell>
-                            <TableCell>01 41 00</TableCell>
-                            <TableCell>20d</TableCell>
-                            <TableCell>4.1, 4.2, 4.3</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 41 00</TableCell>
+                                <TableCell>20d</TableCell>
+                                <TableCell>4.1, 4.2, 4.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={44} duration={12} label="20d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">4.5</TableCell>
                             <TableCell>GMP/Tender Docs Finalized</TableCell>
-                            <TableCell>00 21 13</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>4.1, 4.2, 4.3</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>00 21 13</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>4.1, 4.2, 4.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={44} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -1992,39 +2239,79 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Procurement & Awards</TableCell>
-                        <TableCell>00 40 00</TableCell>
-                        <TableCell>5d</TableCell>
-                        <TableCell>4.5</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>00 40 00</TableCell>
+                            <TableCell>5d</TableCell>
+                            <TableCell>4.5</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={50} duration={3} label="Jul 16-20" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["5.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">5.1</TableCell>
                             <TableCell>Prequal & ITB</TableCell>
-                            <TableCell>00 21 13</TableCell>
-                            <TableCell>14d</TableCell>
-                            <TableCell>5.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>00 21 13</TableCell>
+                                <TableCell>14d</TableCell>
+                                <TableCell>5.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={53} duration={8} label="14d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">5.2</TableCell>
                             <TableCell>Long-Lead PO Awards</TableCell>
-                            <TableCell>01 66 00</TableCell>
-                            <TableCell>7d</TableCell>
-                            <TableCell>3.5, 5.1</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 66 00</TableCell>
+                                <TableCell>7d</TableCell>
+                                <TableCell>3.5, 5.1</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={61} duration={4} label="7d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">5.3</TableCell>
                             <TableCell>Main Trade Awards / GMP</TableCell>
-                            <TableCell>00 52 00</TableCell>
-                            <TableCell>5d</TableCell>
-                            <TableCell>5.1</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>00 52 00</TableCell>
+                                <TableCell>5d</TableCell>
+                                <TableCell>5.1</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={61} duration={3} label="5d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">5.4</TableCell>
                             <TableCell>Priority Submittals & Shops</TableCell>
-                            <TableCell>01 33 00</TableCell>
-                            <TableCell>21d</TableCell>
-                            <TableCell>5.2, 5.3</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 33 00</TableCell>
+                                <TableCell>21d</TableCell>
+                                <TableCell>5.2, 5.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={65} duration={12} label="21d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -2041,60 +2328,109 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Construction – Sitework & Core</TableCell>
-                        <TableCell>31–33</TableCell>
-                        <TableCell>7d</TableCell>
-                        <TableCell>5.3</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>31–33</TableCell>
+                            <TableCell>7d</TableCell>
+                            <TableCell>5.3</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={40} duration={30} label="Aug-Nov" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["6.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.1</TableCell>
-                            <TableCell>Foundations & Substructure</TableCell>
-                            <TableCell>03 00 00</TableCell>
-                            <TableCell>28d</TableCell>
-                            <TableCell>6.0</TableCell>
+                            <TableCell>Site Demolition & Clearing</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>02 41 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>6.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={40} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.2</TableCell>
-                            <TableCell>Superstructure</TableCell>
-                            <TableCell>05 00 00</TableCell>
-                            <TableCell>35d</TableCell>
-                            <TableCell>6.1</TableCell>
+                            <TableCell>Excavation & Shoring</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>31 23 00</TableCell>
+                                <TableCell>14d</TableCell>
+                                <TableCell>6.1</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={46} duration={8} label="14d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.3</TableCell>
-                            <TableCell>Building Envelope Dry-In</TableCell>
-                            <TableCell>07 00 00</TableCell>
-                            <TableCell>28d</TableCell>
-                            <TableCell>6.2</TableCell>
+                            <TableCell>Foundation Work</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>03 30 00</TableCell>
+                                <TableCell>21d</TableCell>
+                                <TableCell>6.2</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={54} duration={12} label="21d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.4</TableCell>
-                            <TableCell>MEPF Rough-In</TableCell>
-                            <TableCell>21–26</TableCell>
-                            <TableCell>56d</TableCell>
-                            <TableCell>6.2, 6.3</TableCell>
+                            <TableCell>Structure - SOG to Roof</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>03–05</TableCell>
+                                <TableCell>56d</TableCell>
+                                <TableCell>6.3</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={66} duration={30} label="56d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.5</TableCell>
-                            <TableCell>Interiors & Finishes</TableCell>
-                            <TableCell>09–12</TableCell>
-                            <TableCell>49d</TableCell>
-                            <TableCell>6.4</TableCell>
+                            <TableCell>Envelope & Glazing</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>07–08</TableCell>
+                                <TableCell>42d</TableCell>
+                                <TableCell>6.4 (lag)</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={75} duration={24} label="42d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">6.6</TableCell>
-                            <TableCell>Systems & Low-Voltage</TableCell>
-                            <TableCell>27–28</TableCell>
-                            <TableCell>42d</TableCell>
-                            <TableCell>6.4, 6.5</TableCell>
-                          </TableRow>
-                          <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">6.7</TableCell>
-                            <TableCell>Siteworks & Hardscape</TableCell>
-                            <TableCell>32 00 00</TableCell>
-                            <TableCell>28d</TableCell>
-                            <TableCell>6.3</TableCell>
+                            <TableCell>MEP & Interior Finishes</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>21–28, 09</TableCell>
+                                <TableCell>70d</TableCell>
+                                <TableCell>6.4 (lag)</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={80} duration={35} label="70d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -2111,32 +2447,64 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Startup, Commissioning, Turnover</TableCell>
-                        <TableCell>01 91 00</TableCell>
-                        <TableCell>21d</TableCell>
-                        <TableCell>6.4, 6.5, 6.6</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 91 00</TableCell>
+                            <TableCell>21d</TableCell>
+                            <TableCell>6.4, 6.5, 6.6</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={85} duration={12} label="Dec 1-21" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["7.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">7.1</TableCell>
                             <TableCell>AHJ Inspections & TCO/CO</TableCell>
-                            <TableCell>01 41 00</TableCell>
-                            <TableCell>7d</TableCell>
-                            <TableCell>7.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 41 00</TableCell>
+                                <TableCell>7d</TableCell>
+                                <TableCell>7.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={85} duration={4} label="7d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">7.2</TableCell>
                             <TableCell>Training & O&M Handover</TableCell>
-                            <TableCell>01 78 23</TableCell>
-                            <TableCell>7d</TableCell>
-                            <TableCell>7.1</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 78 23</TableCell>
+                                <TableCell>7d</TableCell>
+                                <TableCell>7.1</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={89} duration={4} label="7d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">7.3</TableCell>
                             <TableCell>Punchlist & Closeout</TableCell>
-                            <TableCell>01 77 00</TableCell>
-                            <TableCell>10d</TableCell>
-                            <TableCell>7.1, 7.2</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 77 00</TableCell>
+                                <TableCell>10d</TableCell>
+                                <TableCell>7.1, 7.2</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={93} duration={6} label="10d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
@@ -2153,18 +2521,34 @@ export function FiveDSchedule() {
                           </button>
                         </TableCell>
                         <TableCell className="font-semibold">Post-Occupancy</TableCell>
-                        <TableCell>01 86 00</TableCell>
-                        <TableCell>21d</TableCell>
-                        <TableCell>7.3</TableCell>
+                        {workspaceView === "detail" ? (
+                          <>
+                            <TableCell>01 86 00</TableCell>
+                            <TableCell>21d</TableCell>
+                            <TableCell>7.3</TableCell>
+                          </>
+                        ) : (
+                          <TableCell>
+                            <GanttBar start={95} duration={5} label="Jan 1-21" />
+                          </TableCell>
+                        )}
                       </TableRow>
                       {wbsExpanded["8.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
                             <TableCell className="pl-8">8.1</TableCell>
                             <TableCell>Final Cost Report & Lessons Learned</TableCell>
-                            <TableCell>01 32 19</TableCell>
-                            <TableCell>7d</TableCell>
-                            <TableCell>8.0</TableCell>
+                            {workspaceView === "detail" ? (
+                              <>
+                                <TableCell>01 32 19</TableCell>
+                                <TableCell>7d</TableCell>
+                                <TableCell>8.0</TableCell>
+                              </>
+                            ) : (
+                              <TableCell>
+                                <GanttBar start={95} duration={4} label="7d" />
+                              </TableCell>
+                            )}
                           </TableRow>
                         </>
                       )}
