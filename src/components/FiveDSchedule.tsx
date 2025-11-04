@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { 
   Clock, 
   TrendingUp, 
@@ -602,6 +603,222 @@ export function FiveDSchedule() {
                       {/* Logic Explanation */}
                       <div className="bg-muted/30 rounded-lg p-4 text-sm text-muted-foreground">
                         <span className="font-semibold">Logic:</span> Activities are grouped by their total float (slack). Float is calculated as the difference between early finish and late finish dates. Lower float indicates activities on or near the critical path, requiring tighter control and risk management.
+                      </div>
+
+                      {/* Critical & Near-Critical Path Activities Table */}
+                      <div className="mt-8">
+                        <h3 className="font-semibold mb-4">Critical & Near-Critical Path Activities</h3>
+                        <div className="border rounded-lg overflow-hidden">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Activity</TableHead>
+                                <TableHead>Path</TableHead>
+                                <TableHead>Start Date</TableHead>
+                                <TableHead>End Date</TableHead>
+                                <TableHead>Dependencies</TableHead>
+                                <TableHead>Float</TableHead>
+                                <TableHead>Status</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">SD Phase - Schematic Design</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Mar 1, 2024</TableCell>
+                                <TableCell>Jun 15, 2024</TableCell>
+                                <TableCell>—</TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Zoning Variance Review</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>May 1, 2024</TableCell>
+                                <TableCell>Jun 30, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">SD Phase - Schematic Design</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Design Coordination - Structure</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jul 1, 2024</TableCell>
+                                <TableCell>Aug 31, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Procurement - Elevators</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jul 1, 2024</TableCell>
+                                <TableCell>Sep 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">DD Phase - Design Development</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jun 15, 2024</TableCell>
+                                <TableCell>Oct 1, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">SD Phase - Schematic Design</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Utility Coordination</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 1, 2024</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Design Coordination - MEP</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 15, 2024</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Environmental Permits</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 15, 2024</TableCell>
+                                <TableCell>Oct 31, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Design Coordination - Envelope</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 1, 2024</TableCell>
+                                <TableCell>Nov 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Procurement - Switchgear</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 1, 2024</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">GC/CM Selection</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 1, 2024</TableCell>
+                                <TableCell>Oct 31, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Geotechnical Investigation Review</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 5, 2024</TableCell>
+                                <TableCell>Sep 25, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Procurement - Curtainwall</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 10, 2024</TableCell>
+                                <TableCell>Nov 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">Building Permit Application</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 15, 2024</TableCell>
+                                <TableCell>Nov 15, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="text-red-600 font-semibold">0d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Trade Contractor Prequalification</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 15, 2024</TableCell>
+                                <TableCell>Nov 30, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">AHJ Plan Review - Set 1</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Sep 20, 2024</TableCell>
+                                <TableCell>Oct 10, 2024</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">CD Phase - Construction Documents</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">1d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
