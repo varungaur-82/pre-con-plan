@@ -1753,8 +1753,8 @@ export function FiveDSchedule() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-32">WBS</TableHead>
-                        <TableHead>ACTIVITY</TableHead>
+                        <TableHead className="w-32 min-w-32">WBS</TableHead>
+                        <TableHead className="w-80 min-w-80">ACTIVITY</TableHead>
                         {workspaceView === "detail" ? (
                           <>
                             <TableHead className="w-32">CSI</TableHead>
