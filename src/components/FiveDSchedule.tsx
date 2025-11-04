@@ -1767,6 +1767,17 @@ export function FiveDSchedule() {
               <CardContent>
                 <div className="border rounded-lg overflow-hidden">
                   <Table>
+                    <colgroup>
+                      <col className="w-32" />
+                      <col className="w-80" />
+                      {workspaceView === "detail" && (
+                        <>
+                          <col className="w-32" />
+                          <col className="w-24" />
+                          <col className="w-40" />
+                        </>
+                      )}
+                    </colgroup>
                     <TableHeader>
                       <TableRow>
                         <TableHead className="w-32 min-w-32">WBS</TableHead>
@@ -1785,7 +1796,7 @@ export function FiveDSchedule() {
                     <TableBody>
                       {/* 0.0 Project Charter Signed */}
                       <TableRow>
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium w-32 min-w-32">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "0.0": !wbsExpanded["0.0"]})}
                             className="flex items-center gap-1"
@@ -1794,7 +1805,7 @@ export function FiveDSchedule() {
                             0.0
                           </button>
                         </TableCell>
-                        <TableCell className="font-semibold">Project Charter Signed</TableCell>
+                        <TableCell className="font-semibold w-80 min-w-80">Project Charter Signed</TableCell>
                         {workspaceView === "detail" ? (
                           <>
                             <TableCell>01 10 00</TableCell>
@@ -1810,8 +1821,8 @@ export function FiveDSchedule() {
                       {wbsExpanded["0.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">0.1</TableCell>
-                            <TableCell>Funding & Delivery Strategy Freeze</TableCell>
+                            <TableCell className="pl-8 w-32 min-w-32">0.1</TableCell>
+                            <TableCell className="w-80 min-w-80">Funding & Delivery Strategy Freeze</TableCell>
                             {workspaceView === "detail" ? (
                               <>
                                 <TableCell>01 12 00</TableCell>
@@ -1825,8 +1836,8 @@ export function FiveDSchedule() {
                             )}
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">0.2</TableCell>
-                            <TableCell>Stakeholder RACI & Comm Plan</TableCell>
+                            <TableCell className="pl-8 w-32 min-w-32">0.2</TableCell>
+                            <TableCell className="w-80 min-w-80">Stakeholder RACI & Comm Plan</TableCell>
                             {workspaceView === "detail" ? (
                               <>
                                 <TableCell>01 31 19</TableCell>
@@ -1844,7 +1855,7 @@ export function FiveDSchedule() {
 
                       {/* 1.0 Due Diligence & Site Controls */}
                       <TableRow>
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium w-32 min-w-32">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "1.0": !wbsExpanded["1.0"]})}
                             className="flex items-center gap-1"
@@ -1853,7 +1864,7 @@ export function FiveDSchedule() {
                             1.0
                           </button>
                         </TableCell>
-                        <TableCell className="font-semibold">Due Diligence & Site Controls</TableCell>
+                        <TableCell className="font-semibold w-80 min-w-80">Due Diligence & Site Controls</TableCell>
                         {workspaceView === "detail" ? (
                           <>
                             <TableCell>00 30 00</TableCell>
