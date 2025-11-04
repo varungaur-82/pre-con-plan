@@ -30,6 +30,7 @@ import { AutomationHub } from "./AutomationHub";
 import { EstimateGenerator } from "./EstimateGenerator";
 import { CompareBudgets } from "./CompareBudgets";
 import { BasisOfEstimate } from "./BasisOfEstimate";
+import { FiveDSchedule } from "./FiveDSchedule";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -2785,12 +2786,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               </div>
               )}
 
-              {/* T2 Content - Blank page */}
+              {/* T2 Content - 5D Schedule */}
               {active5DView === "t2" && (
-                <div className="container px-6 py-16 text-center">
-                  <h2 className="text-2xl font-bold text-muted-foreground mb-4">T2</h2>
-                  <p className="text-muted-foreground">Content coming soon...</p>
-                </div>
+                <FiveDSchedule />
               )}
             </TabsContent>
 
