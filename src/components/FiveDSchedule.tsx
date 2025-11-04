@@ -38,13 +38,13 @@ const GanttBar = ({ start, duration, label, color = "construction" }: {
   return (
     <div className="relative h-8 w-full bg-muted/20">
       <div 
-        className={`absolute top-1/2 -translate-y-1/2 h-6 ${colorClasses[color]} rounded flex items-center px-2 text-xs text-white whitespace-nowrap shadow-sm transition-all hover:scale-105`}
+        className={`absolute top-1/2 -translate-y-1/2 h-6 ${colorClasses[color]} rounded flex items-center justify-center px-3 text-xs text-white whitespace-nowrap shadow-sm transition-all hover:scale-105 min-w-[80px]`}
         style={{ 
           left: `${start}%`, 
-          width: `${duration}%` 
+          width: `max(${duration}%, 80px)` 
         }}
       >
-        {label && <span>{label}</span>}
+        {label && <span className="font-medium">{label}</span>}
       </div>
     </div>
   );
