@@ -10,14 +10,29 @@ import {
   ChevronDown,
   MapPin,
   Building2,
-  Calendar
+  Calendar,
+  AlertCircle
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
 export function FiveDSchedule() {
   const [activeModule, setActiveModule] = useState<"overview" | "workspace" | "basis">("overview");
   const [isSchedulePostureOpen, setIsSchedulePostureOpen] = useState(true);
+  const [isChangeDriversOpen, setIsChangeDriversOpen] = useState(false);
+  const [isPathHealthOpen, setIsPathHealthOpen] = useState(false);
+  const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
+  const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
+
+  const changeDriversData = [
+    { name: 'Procurement / Long-Lead', value: 22, days: '22d', percentage: '27.5%', color: '#3b82f6' },
+    { name: 'Decision Latency', value: 18, days: '18d', percentage: '22.5%', color: '#10b981' },
+    { name: 'Design Coordination & Rework', value: 12, days: '12d', percentage: '15.0%', color: '#f59e0b' },
+    { name: 'Permits & Third Parties', value: 10, days: '10d', percentage: '12.5%', color: '#ef4444' },
+    { name: 'Scope Evolution', value: 8, days: '8d', percentage: '10.0%', color: '#8b5cf6' },
+    { name: 'Information Latency/Quality', value: 6, days: '6d', percentage: '7.5%', color: '#ec4899' },
+    { name: 'Assumption Errors', value: 4, days: '4d', percentage: '5.0%', color: '#06b6d4' }
+  ];
 
   return (
     <div className="flex flex-col h-full">
@@ -394,6 +409,166 @@ export function FiveDSchedule() {
                         </div>
                       </div>
                     </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Change Drivers Section */}
+            <Collapsible open={isChangeDriversOpen} onOpenChange={setIsChangeDriversOpen}>
+              <Card>
+                <CollapsibleTrigger className="w-full">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5 text-green-600" />
+                        Change Drivers
+                      </CardTitle>
+                      <ChevronDown className={`h-5 w-5 transition-transform ${isChangeDriversOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                    <p className="text-sm text-muted-foreground text-left mt-1">
+                      Why did the end date move since last version?
+                    </p>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-semibold">Schedule Change Drivers</h3>
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm">
+                            PNG
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            CSV
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-8">
+                        {/* Pie Chart */}
+                        <div className="flex-shrink-0">
+                          <ResponsiveContainer width={300} height={300}>
+                            <PieChart>
+                              <Pie
+                                data={changeDriversData}
+                                cx={150}
+                                cy={150}
+                                innerRadius={80}
+                                outerRadius={120}
+                                paddingAngle={2}
+                                dataKey="value"
+                                label={({ days }) => days}
+                                labelLine={false}
+                              >
+                                {changeDriversData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                              <Tooltip 
+                                formatter={(value: number, name: string, props: any) => [
+                                  `${props.payload.days} (${props.payload.percentage})`,
+                                  props.payload.name
+                                ]}
+                                contentStyle={{ 
+                                  backgroundColor: 'hsl(var(--background))', 
+                                  border: '1px solid hsl(var(--border))',
+                                  borderRadius: '6px'
+                                }}
+                              />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+
+                        {/* Legend */}
+                        <div className="flex-1 space-y-2">
+                          {changeDriversData.map((item, index) => (
+                            <div key={index} className="flex items-center justify-between py-2 border-b last:border-0">
+                              <div className="flex items-center gap-2">
+                                <div 
+                                  className="w-3 h-3 rounded-full flex-shrink-0" 
+                                  style={{ backgroundColor: item.color }}
+                                ></div>
+                                <span className="text-sm">{item.name}</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className="font-semibold text-sm">{item.days}</span>
+                                <span className="text-sm text-muted-foreground min-w-[60px] text-right">
+                                  ({item.percentage})
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Path Health Section */}
+            <Collapsible open={isPathHealthOpen} onOpenChange={setIsPathHealthOpen}>
+              <Card>
+                <CollapsibleTrigger className="w-full">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5 text-amber-600" />
+                        Path Health
+                      </CardTitle>
+                      <ChevronDown className={`h-5 w-5 transition-transform ${isPathHealthOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Long-Lead & Risked Items Section */}
+            <Collapsible open={isLongLeadOpen} onOpenChange={setIsLongLeadOpen}>
+              <Card>
+                <CollapsibleTrigger className="w-full">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5 text-orange-600" />
+                        Long-Lead & Risked Items
+                      </CardTitle>
+                      <ChevronDown className={`h-5 w-5 transition-transform ${isLongLeadOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+
+            {/* Look-Ahead Schedule Section */}
+            <Collapsible open={isLookAheadOpen} onOpenChange={setIsLookAheadOpen}>
+              <Card>
+                <CollapsibleTrigger className="w-full">
+                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-purple-600" />
+                        Look-Ahead Schedule
+                      </CardTitle>
+                      <ChevronDown className={`h-5 w-5 transition-transform ${isLookAheadOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
                   </CardContent>
                 </CollapsibleContent>
               </Card>
