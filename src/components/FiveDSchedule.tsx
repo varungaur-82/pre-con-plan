@@ -18,11 +18,27 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 
 // Helper component for rendering Gantt timeline
-const GanttBar = ({ start, duration, label }: { start: number; duration: number; label?: string }) => {
+const GanttBar = ({ start, duration, label, color = "construction" }: { 
+  start: number; 
+  duration: number; 
+  label?: string;
+  color?: "setup" | "design-early" | "design-mid" | "design-final" | "procurement" | "construction" | "commissioning" | "closeout";
+}) => {
+  const colorClasses = {
+    setup: "bg-slate-500",
+    "design-early": "bg-purple-500",
+    "design-mid": "bg-indigo-500",
+    "design-final": "bg-blue-500",
+    procurement: "bg-orange-500",
+    construction: "bg-green-500",
+    commissioning: "bg-cyan-500",
+    closeout: "bg-amber-500"
+  };
+  
   return (
     <div className="relative h-8 w-full bg-muted/20">
       <div 
-        className="absolute top-1/2 -translate-y-1/2 h-6 bg-primary rounded flex items-center px-2 text-xs text-primary-foreground whitespace-nowrap"
+        className={`absolute top-1/2 -translate-y-1/2 h-6 ${colorClasses[color]} rounded flex items-center px-2 text-xs text-white whitespace-nowrap shadow-sm transition-all hover:scale-105`}
         style={{ 
           left: `${start}%`, 
           width: `${duration}%` 
@@ -1787,7 +1803,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={5} duration={3} label="Mar 1-5" />
+                            <GanttBar start={5} duration={3} label="Mar 1-5" color="setup" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -1804,7 +1820,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={8} duration={6} label="10d" />
+                                <GanttBar start={8} duration={6} label="10d" color="setup" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1819,7 +1835,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={10} duration={5} label="7d" />
+                                <GanttBar start={10} duration={5} label="7d" color="setup" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1846,7 +1862,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={15} duration={8} label="Mar 6-19" />
+                            <GanttBar start={15} duration={8} label="Mar 6-19" color="setup" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -1863,7 +1879,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={17} duration={12} label="21d" />
+                                <GanttBar start={17} duration={12} label="21d" color="setup" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1878,7 +1894,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={19} duration={8} label="14d" />
+                                <GanttBar start={19} duration={8} label="14d" color="setup" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1893,7 +1909,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={27} duration={6} label="10d" />
+                                <GanttBar start={27} duration={6} label="10d" color="setup" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1920,7 +1936,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={33} duration={2} label="Apr 1-3" />
+                            <GanttBar start={33} duration={2} label="Apr 1-3" color="design-early" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -1937,7 +1953,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={35} duration={12} label="20d" />
+                                <GanttBar start={35} duration={12} label="20d" color="design-early" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1952,7 +1968,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={35} duration={14} label="25d" />
+                                <GanttBar start={35} duration={14} label="25d" color="design-early" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1967,7 +1983,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={36} duration={12} label="20d" />
+                                <GanttBar start={36} duration={12} label="20d" color="design-early" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1982,7 +1998,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={49} duration={6} label="10d" />
+                                <GanttBar start={49} duration={6} label="10d" color="design-early" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -1997,7 +2013,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={55} duration={2} label="3d" />
+                                <GanttBar start={55} duration={2} label="3d" color="design-early" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2024,7 +2040,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={57} duration={2} label="May 1-3" />
+                            <GanttBar start={57} duration={2} label="May 1-3" color="design-mid" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2041,7 +2057,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={59} duration={25} label="45d" />
+                                <GanttBar start={59} duration={25} label="45d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2056,7 +2072,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={60} duration={25} label="45d" />
+                                <GanttBar start={60} duration={25} label="45d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2071,7 +2087,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={84} duration={6} label="10d" />
+                                <GanttBar start={84} duration={6} label="10d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2086,7 +2102,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={84} duration={6} label="10d" />
+                                <GanttBar start={84} duration={6} label="10d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2101,7 +2117,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={90} duration={3} label="5d" />
+                                <GanttBar start={90} duration={3} label="5d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2116,7 +2132,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={93} duration={2} label="3d" />
+                                <GanttBar start={93} duration={2} label="3d" color="design-mid" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2143,7 +2159,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={20} duration={15} label="Jun 1-Jul 15" />
+                            <GanttBar start={20} duration={15} label="Jun 1-Jul 15" color="design-final" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2160,7 +2176,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={22} duration={20} label="35d" />
+                                <GanttBar start={22} duration={20} label="35d" color="design-final" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2175,7 +2191,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={23} duration={20} label="35d" />
+                                <GanttBar start={23} duration={20} label="35d" color="design-final" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2190,7 +2206,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={24} duration={20} label="35d" />
+                                <GanttBar start={24} duration={20} label="35d" color="design-final" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2205,7 +2221,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={44} duration={12} label="20d" />
+                                <GanttBar start={44} duration={12} label="20d" color="design-final" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2220,7 +2236,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={44} duration={6} label="10d" />
+                                <GanttBar start={44} duration={6} label="10d" color="design-final" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2247,7 +2263,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={50} duration={3} label="Jul 16-20" />
+                            <GanttBar start={50} duration={3} label="Jul 16-20" color="procurement" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2264,7 +2280,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={53} duration={8} label="14d" />
+                                <GanttBar start={53} duration={8} label="14d" color="procurement" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2279,7 +2295,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={61} duration={4} label="7d" />
+                                <GanttBar start={61} duration={4} label="7d" color="procurement" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2294,7 +2310,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={61} duration={3} label="5d" />
+                                <GanttBar start={61} duration={3} label="5d" color="procurement" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2309,7 +2325,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={65} duration={12} label="21d" />
+                                <GanttBar start={65} duration={12} label="21d" color="procurement" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2336,7 +2352,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={40} duration={30} label="Aug-Nov" />
+                            <GanttBar start={40} duration={30} label="Aug-Nov" color="construction" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2353,7 +2369,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={40} duration={6} label="10d" />
+                                <GanttBar start={40} duration={6} label="10d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2368,7 +2384,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={46} duration={8} label="14d" />
+                                <GanttBar start={46} duration={8} label="14d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2383,7 +2399,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={54} duration={12} label="21d" />
+                                <GanttBar start={54} duration={12} label="21d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2398,7 +2414,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={66} duration={30} label="56d" />
+                                <GanttBar start={66} duration={30} label="56d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2413,7 +2429,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={75} duration={24} label="42d" />
+                                <GanttBar start={75} duration={24} label="42d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2428,7 +2444,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={80} duration={35} label="70d" />
+                                <GanttBar start={80} duration={35} label="70d" color="construction" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2455,7 +2471,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={85} duration={12} label="Dec 1-21" />
+                            <GanttBar start={85} duration={12} label="Dec 1-21" color="commissioning" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2472,7 +2488,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={85} duration={4} label="7d" />
+                                <GanttBar start={85} duration={4} label="7d" color="commissioning" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2487,7 +2503,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={89} duration={4} label="7d" />
+                                <GanttBar start={89} duration={4} label="7d" color="commissioning" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2502,7 +2518,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={93} duration={6} label="10d" />
+                                <GanttBar start={93} duration={6} label="10d" color="commissioning" />
                               </TableCell>
                             )}
                           </TableRow>
@@ -2529,7 +2545,7 @@ export function FiveDSchedule() {
                           </>
                         ) : (
                           <TableCell>
-                            <GanttBar start={95} duration={5} label="Jan 1-21" />
+                            <GanttBar start={95} duration={5} label="Jan 1-21" color="closeout" />
                           </TableCell>
                         )}
                       </TableRow>
@@ -2546,7 +2562,7 @@ export function FiveDSchedule() {
                               </>
                             ) : (
                               <TableCell>
-                                <GanttBar start={95} duration={4} label="7d" />
+                                <GanttBar start={95} duration={4} label="7d" color="closeout" />
                               </TableCell>
                             )}
                           </TableRow>
