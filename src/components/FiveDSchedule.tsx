@@ -1160,7 +1160,265 @@ export function FiveDSchedule() {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      Are we exposing the schedule to procurement and approvals risk?
+                    </p>
+                    
+                    <div className="space-y-8">
+                      {/* Long-Lead Tracker */}
+                      <div>
+                        <h3 className="font-semibold mb-4">Long-Lead Tracker</h3>
+                        <div className="space-y-3">
+                          {/* Switchgear */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Switchgear</div>
+                                <div className="text-sm text-muted-foreground">Need-by: Jan 15, 2025</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Lead: 16 weeks</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Status: PO Placed</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <span className="text-sm font-semibold text-amber-600">+14d slack</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Curtainwall */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Curtainwall</div>
+                                <div className="text-sm text-muted-foreground">Need-by: Dec 1, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Lead: 20 weeks</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Status: In Fabrication</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <span className="text-sm font-semibold text-green-600">+21d slack</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* AHUs */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">AHUs</div>
+                                <div className="text-sm text-muted-foreground">Need-by: Feb 1, 2025</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Lead: 14 weeks</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Status: Not Released</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <span className="text-sm font-semibold text-red-600">-5d slack</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Generators */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Generators</div>
+                                <div className="text-sm text-muted-foreground">Need-by: Jan 1, 2025</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Lead: 18 weeks</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Status: PO Placed</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <span className="text-sm font-semibold text-amber-600">+8d slack</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Elevators */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Elevators</div>
+                                <div className="text-sm text-muted-foreground">Need-by: Nov 15, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Lead: 24 weeks</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Status: Shipped</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <span className="text-sm font-semibold text-green-600">+35d slack</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Owner/Authority Decisions Board */}
+                      <div>
+                        <h3 className="font-semibold mb-4">Owner/Authority Decisions Board</h3>
+                        <div className="space-y-3">
+                          {/* Finalize Electrical Service Design */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Finalize Electrical Service Design</div>
+                                <div className="text-sm text-muted-foreground">Due: Oct 10, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 14 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Owner</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge variant="destructive" className="text-xs">high</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Approve Curtainwall System Design */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Approve Curtainwall System Design</div>
+                                <div className="text-sm text-muted-foreground">Due: Oct 5, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 7 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Designer</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge className="text-xs bg-amber-500 hover:bg-amber-600">medium</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Confirm Generator Sizing */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Confirm Generator Sizing</div>
+                                <div className="text-sm text-muted-foreground">Due: Sep 30, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 21 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Owner</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge variant="destructive" className="text-xs">high</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Approve HVAC System Selection */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Approve HVAC System Selection</div>
+                                <div className="text-sm text-muted-foreground">Due: Oct 15, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 10 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Owner</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge className="text-xs bg-amber-500 hover:bg-amber-600">medium</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Select Interior Finishes */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Select Interior Finishes</div>
+                                <div className="text-sm text-muted-foreground">Due: Nov 1, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 5 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Owner</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge className="text-xs bg-green-600 hover:bg-green-700">low</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Finalize Site Access Agreements */}
+                          <div className="bg-muted/30 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold">Finalize Site Access Agreements</div>
+                                <div className="text-sm text-muted-foreground">Due: Oct 20, 2024</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Impact: 12 days</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Owner: Owner</div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="text-sm">Affects: Design & Preconstruction</div>
+                              </div>
+                              <div>
+                                <Badge variant="destructive" className="text-xs">high</Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </CollapsibleContent>
               </Card>
