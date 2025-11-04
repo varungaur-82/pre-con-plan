@@ -1723,14 +1723,14 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
                     size="sm"
                     onClick={() => setActive5DView("t1")}
                   >
-                    T1
+                    T1 - 5D Estimation
                   </Button>
                   <Button 
                     variant={active5DView === "t2" ? "default" : "ghost"} 
                     size="sm"
                     onClick={() => setActive5DView("t2")}
                   >
-                    T2
+                    T2 - 5D Schedule
                   </Button>
                 </div>
               </div>
