@@ -24,6 +24,7 @@ export function FiveDSchedule() {
   const [isPathHealthOpen, setIsPathHealthOpen] = useState(false);
   const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
+  const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
 
   const changeDriversData = [
     { name: 'Procurement / Long-Lead', value: 22, days: '22d', percentage: '27.5%', color: '#3b82f6' },
@@ -1440,7 +1441,182 @@ export function FiveDSchedule() {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">Content coming soon...</p>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      What's next and are we truly ready?
+                    </p>
+                    
+                    <div className="space-y-6">
+                      {/* Look-Ahead Period Controls */}
+                      <div className="bg-muted/30 rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-semibold">Look-Ahead Period</h3>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant={lookAheadPeriod === "7days" ? "default" : "outline"} 
+                              size="sm"
+                              onClick={() => setLookAheadPeriod("7days")}
+                            >
+                              7 Days
+                            </Button>
+                            <Button 
+                              variant={lookAheadPeriod === "2weeks" ? "default" : "outline"} 
+                              size="sm"
+                              onClick={() => setLookAheadPeriod("2weeks")}
+                            >
+                              2 Weeks
+                            </Button>
+                            <Button 
+                              variant={lookAheadPeriod === "1month" ? "default" : "outline"} 
+                              size="sm"
+                              onClick={() => setLookAheadPeriod("1month")}
+                            >
+                              1 Month
+                            </Button>
+                            <Button 
+                              variant={lookAheadPeriod === "quarter" ? "default" : "outline"} 
+                              size="sm"
+                              onClick={() => setLookAheadPeriod("quarter")}
+                            >
+                              Quarter
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Summary Stats */}
+                        <div className="grid grid-cols-4 gap-4 mb-4">
+                          <div>
+                            <div className="text-sm text-muted-foreground">Total Activities</div>
+                            <div className="text-3xl font-bold">7</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground">Completed</div>
+                            <div className="text-3xl font-bold text-green-600">3</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground">In Progress</div>
+                            <div className="text-3xl font-bold text-blue-600">4</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground">Critical/Near-Critical</div>
+                            <div className="text-3xl font-bold text-amber-600">7</div>
+                          </div>
+                        </div>
+
+                        <div className="text-sm text-muted-foreground">
+                          Period: <span className="font-semibold">Aug 15, 2024 → Aug 29, 2024</span>
+                        </div>
+                      </div>
+
+                      {/* Activities in Look-Ahead Period */}
+                      <div>
+                        <h3 className="font-semibold mb-4">Activities in Look-Ahead Period</h3>
+                        <div className="border rounded-lg overflow-hidden">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Activity</TableHead>
+                                <TableHead>Path</TableHead>
+                                <TableHead>Start</TableHead>
+                                <TableHead>End</TableHead>
+                                <TableHead>Duration</TableHead>
+                                <TableHead>Dependencies</TableHead>
+                                <TableHead>Float</TableHead>
+                                <TableHead>Status</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Design Coordination - Structure</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jul 1, 2024</TableCell>
+                                <TableCell>Aug 31, 2024</TableCell>
+                                <TableCell>61 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Procurement - Elevators</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jul 1, 2024</TableCell>
+                                <TableCell>Sep 15, 2024</TableCell>
+                                <TableCell>76 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">5d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Value Engineering Review</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jul 15, 2024</TableCell>
+                                <TableCell>Sep 15, 2024</TableCell>
+                                <TableCell>62 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">7d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-300">Completed</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium">DD Phase - Design Development</div>
+                                    <div className="text-xs text-red-600 font-semibold">Critical</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Jun 15, 2024</TableCell>
+                                <TableCell>Oct 1, 2024</TableCell>
+                                <TableCell>108 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">SD Phase - Schematic Design</Badge></TableCell>
+                                <TableCell><span className="text-orange-600 font-semibold">2d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Utility Coordination</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 1, 2024</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell>75 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Design Coordination - MEP</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 15, 2024</TableCell>
+                                <TableCell>Oct 15, 2024</TableCell>
+                                <TableCell>61 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">3d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <div className="font-medium">Environmental Permits</div>
+                                </TableCell>
+                                <TableCell>Design & Preconstruction</TableCell>
+                                <TableCell>Aug 15, 2024</TableCell>
+                                <TableCell>Oct 31, 2024</TableCell>
+                                <TableCell>77 days</TableCell>
+                                <TableCell><Badge variant="secondary" className="text-xs">DD Phase - Design Development</Badge></TableCell>
+                                <TableCell><span className="font-semibold">4d</span></TableCell>
+                                <TableCell><Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-300">Current</Badge></TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </CollapsibleContent>
               </Card>
