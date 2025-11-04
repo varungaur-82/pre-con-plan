@@ -13,6 +13,7 @@ import {
   Calendar
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export function FiveDSchedule() {
   const [activeModule, setActiveModule] = useState<"overview" | "workspace" | "basis">("overview");
@@ -342,6 +343,54 @@ export function FiveDSchedule() {
                               <span>Today</span>
                             </div>
                           </div>
+                        </div>
+                      </div>
+
+                      {/* Milestone Stability Trend Chart */}
+                      <div className="space-y-4 mt-8 pt-8 border-t">
+                        <h3 className="font-semibold">Milestone Stability Trend (Last 4 Versions)</h3>
+                        <div className="bg-background rounded-lg p-4 border">
+                          <ResponsiveContainer width="100%" height={200}>
+                            <LineChart 
+                              data={[
+                                { version: 'SD-S02', days: 0 },
+                                { version: 'DD-S01', days: 3 },
+                                { version: 'DD-S03', days: -3 },
+                                { version: 'DD-S04', days: 6 }
+                              ]}
+                              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                              <XAxis 
+                                dataKey="version" 
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                axisLine={{ stroke: 'hsl(var(--border))' }}
+                              />
+                              <YAxis 
+                                label={{ value: 'Days', angle: -90, position: 'insideLeft', style: { fill: 'hsl(var(--muted-foreground))', fontSize: 11 } }}
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                axisLine={{ stroke: 'hsl(var(--border))' }}
+                                domain={[-3, 9]}
+                              />
+                              <Tooltip 
+                                formatter={(value: number) => [`${value} days`, 'Drift']}
+                                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                                contentStyle={{ 
+                                  backgroundColor: 'hsl(var(--background))', 
+                                  border: '1px solid hsl(var(--border))',
+                                  borderRadius: '6px'
+                                }}
+                              />
+                              <Line 
+                                type="monotone" 
+                                dataKey="days" 
+                                stroke="#3b82f6" 
+                                strokeWidth={2}
+                                dot={{ fill: '#3b82f6', r: 4 }}
+                                activeDot={{ r: 6 }}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
                         </div>
                       </div>
                     </div>
