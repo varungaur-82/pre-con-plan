@@ -2827,6 +2827,247 @@ export function FiveDSchedule() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Buffer / Contingency & Construction Class Section */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Buffer / Contingency & Construction Class</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Define small schedule buffers within allowed bands and assign Construction Class (Soft/Hard) by default and by trade to control movement tolerance.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Buffer / Contingency */}
+                  <div className="space-y-4">
+                    <div className="bg-muted/30 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-3">Buffer / Contingency</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Add limited contingency days overall or by trade, always staged and applied via Delta Preview.
+                      </p>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Buffer days (0–3)</span>
+                          <input 
+                            type="number" 
+                            value="0" 
+                            min="0"
+                            max="3"
+                            className="w-20 px-3 py-2 border rounded-md text-sm text-center"
+                          />
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Adds safety time inside BoS bands; applied via Delta Preview.
+                        </p>
+
+                        <div className="mt-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm w-32">Envelope</span>
+                            <input 
+                              type="number" 
+                              value="1" 
+                              className="w-20 px-2 py-1 border rounded text-sm text-center"
+                            />
+                            <Button variant="ghost" size="sm" className="ml-auto text-destructive">
+                              Remove
+                            </Button>
+                          </div>
+
+                          <Button variant="outline" size="sm" className="w-full">
+                            Add Trade Buffer
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Construction Class */}
+                  <div className="space-y-4">
+                    <div className="bg-muted/30 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-3">Construction Class</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Soft allows safe adjustments within bands; Hard fixes dates for select nodes or trades.
+                      </p>
+
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium mb-1 block">Default Class</label>
+                          <select className="w-full px-3 py-2 border rounded-md text-sm">
+                            <option>Soft</option>
+                            <option>Hard</option>
+                          </select>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Soft can slip within bands; Hard is fixed-date policy for select nodes.
+                          </p>
+                        </div>
+
+                        <div className="mt-4">
+                          <label className="text-sm font-medium mb-2 block">Trade Assignments</label>
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm w-32">Envelope</span>
+                              <select className="flex-1 px-2 py-1 border rounded text-sm">
+                                <option>Hard</option>
+                                <option>Soft</option>
+                              </select>
+                              <Button variant="ghost" size="sm" className="text-destructive">
+                                Remove
+                              </Button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm w-32">Foundations</span>
+                              <select className="flex-1 px-2 py-1 border rounded text-sm">
+                                <option>Hard</option>
+                                <option>Soft</option>
+                              </select>
+                              <Button variant="ghost" size="sm" className="text-destructive">
+                                Remove
+                              </Button>
+                            </div>
+
+                            <Button variant="outline" size="sm" className="w-full">
+                              Add Trade
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Freshness & Health Section */}
+            <Card className="mb-6">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Freshness & Health</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Track staleness and quickly refresh inputs (calendars, labor, weather). See last updated dates and apply via Delta Preview.
+                  </p>
+                </div>
+                <Button variant="outline" size="sm">
+                  One-click Refresh
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-semibold text-sm mb-1">Calendars</h4>
+                    <p className="text-sm text-muted-foreground">Last update: 06/11/2025</p>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-semibold text-sm mb-1">Labor Set</h4>
+                    <p className="text-sm text-muted-foreground">Last update: 06/11/2025</p>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-semibold text-sm mb-1">Weather Pack (NYC)</h4>
+                    <p className="text-sm text-muted-foreground">Last update: 06/11/2025</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Governance (Delivery Model toggles) Section */}
+            <Card className="mb-6">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Governance (Delivery Model toggles)</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Set delivery model and policy-level toggles that influence overlaps and calendar behavior. These are owner-level guardrails, not scope edits.
+                  </p>
+                </div>
+                <Button variant="outline" size="sm">
+                  Enable Early PO
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Delivery Model */}
+                  <div className="space-y-4">
+                    <div className="bg-muted/30 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-3">Delivery Model</h3>
+                      <select className="w-full px-3 py-2 border rounded-md text-sm">
+                        <option>CMAR (Construction Manager at Risk)</option>
+                        <option>Design-Bid-Build</option>
+                        <option>Design-Build</option>
+                        <option>IPD (Integrated Project Delivery)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Policy Toggles */}
+                  <div className="space-y-4">
+                    <div className="bg-muted/30 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-3">Policy Toggles</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Design–Bid overlap (%)</span>
+                          <input 
+                            type="number" 
+                            value="10" 
+                            className="w-20 px-2 py-1 border rounded text-sm text-center"
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Pre-award PO (Long-Lead)</span>
+                          <select className="w-32 px-2 py-1 border rounded text-sm">
+                            <option>Disabled</option>
+                            <option>Enabled</option>
+                          </select>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Submittal SLA (days)</span>
+                          <input 
+                            type="number" 
+                            value="10" 
+                            className="w-20 px-2 py-1 border rounded text-sm text-center"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Lineage & Approvals Section */}
+            <Card className="mb-6">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Lineage & Approvals</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Every change is staged first, then applied with a full audit trail. Out-of-band edits require justification and approvals; versions are saved for comparison.
+                  </p>
+                </div>
+                <label className="flex items-center gap-2">
+                  <Checkbox />
+                  <span className="text-sm font-medium">Request Review</span>
+                </label>
+              </CardHeader>
+              <CardContent>
+                <div className="p-4 bg-muted/30 rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    Every policy change writes lineage and, when required, an approval request.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Save Basis of Schedule Footer */}
+            <div className="sticky bottom-0 bg-card border-t p-4 flex items-center justify-between">
+              <h3 className="font-semibold">Save Basis of Schedule</h3>
+              <div className="flex gap-2">
+                <Badge variant="secondary">BoS v1.0</Badge>
+                <Button variant="outline" size="sm">Initial baseline</Button>
+                <Button variant="outline" size="sm">Save as Version</Button>
+                <Button size="sm">Apply (Delta Preview)</Button>
+              </div>
+            </div>
           </div>
         )}
       </div>
