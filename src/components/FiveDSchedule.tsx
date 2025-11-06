@@ -13,13 +13,67 @@ import {
   Building2,
   Calendar,
   AlertCircle,
-  X
+  X,
+  Check
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// Trade Calendar Dropdown Component
+const TradeCalendarDropdown = ({ tradeName }: { tradeName: string }) => {
+  const [selectedCalendar, setSelectedCalendar] = useState("Project (default)");
+  
+  const calendarOptions = [
+    "Project (default)",
+    "6×10 • No Sundays",
+    "5×8 • Mon–Fri"
+  ];
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-sm w-24">{tradeName}</span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline" 
+            className="flex-1 justify-between text-sm font-normal"
+          >
+            {selectedCalendar}
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56 bg-popover z-50" align="start">
+          {calendarOptions.map((option) => (
+            <DropdownMenuItem
+              key={option}
+              onClick={() => setSelectedCalendar(option)}
+              className="cursor-pointer"
+            >
+              <div className="flex items-center justify-between w-full">
+                <span>{option}</span>
+                {selectedCalendar === option && (
+                  <Check className="h-4 w-4 text-primary" />
+                )}
+              </div>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Button variant="ghost" size="sm" className="text-destructive">
+        Remove
+      </Button>
+    </div>
+  );
+};
 
 // Helper component for rendering Gantt timeline
-const GanttBar = ({ start, duration, label, color = "construction" }: { 
+const GanttBar = ({ start, duration, label, color = "construction" }: {
   start: number; 
   duration: number; 
   label?: string;
@@ -2533,7 +2587,7 @@ export function FiveDSchedule() {
                           <label className="text-sm font-medium mb-1 block">Name</label>
                           <input 
                             type="text" 
-                            value="Project • 6×10 (No Sund" 
+                            value="Project • 6×10 (No Sundays)" 
                             className="w-full px-3 py-2 border rounded-md text-sm"
                             readOnly
                           />
@@ -2629,23 +2683,8 @@ export function FiveDSchedule() {
                       </p>
 
                       <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm w-24">Envelope</span>
-                          <select className="flex-1 px-3 py-2 border rounded-md text-sm">
-                            <option>Project (default)</option>
-                            <option>Custom</option>
-                          </select>
-                          <Button variant="ghost" size="sm" className="text-destructive">Remove</Button>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm w-24">Roofing</span>
-                          <select className="flex-1 px-3 py-2 border rounded-md text-sm">
-                            <option>Project (default)</option>
-                            <option>Custom</option>
-                          </select>
-                          <Button variant="ghost" size="sm" className="text-destructive">Remove</Button>
-                        </div>
+                        <TradeCalendarDropdown tradeName="Envelope" />
+                        <TradeCalendarDropdown tradeName="Roofing" />
 
                         <Button variant="outline" size="sm" className="w-full">
                           Add Trade
