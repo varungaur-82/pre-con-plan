@@ -58,6 +58,7 @@ export function FiveDSchedule() {
   const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
   const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
+  const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
   
   // WBS collapsible states
   const [wbsExpanded, setWbsExpanded] = useState<Record<string, boolean>>({
@@ -1745,12 +1746,20 @@ export function FiveDSchedule() {
                       <option>24px</option>
                       <option>40px</option>
                     </select>
-                    <Button size="sm" variant="outline">📋 Open Context</Button>
+                    <Button 
+                      size="sm" 
+                      variant={isContextPanelOpen ? "default" : "outline"}
+                      onClick={() => setIsContextPanelOpen(!isContextPanelOpen)}
+                    >
+                      📋 {isContextPanelOpen ? "Close" : "Open"} Context
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="border rounded-lg overflow-hidden overflow-x-auto">
+                <div className="flex gap-4">
+                  {/* Gantt Table */}
+                  <div className={`border rounded-lg overflow-hidden overflow-x-auto transition-all ${isContextPanelOpen ? 'flex-1' : 'w-full'}`}>
                   <Table>
                     <colgroup>
                       <col style={{ width: '80px' }} />
@@ -2339,6 +2348,86 @@ export function FiveDSchedule() {
                     </TableBody>
                   </Table>
                 </div>
+
+                {/* Context Panel - Collapsible */}
+                {isContextPanelOpen && (
+                  <div className="w-80 border rounded-lg bg-card p-4 animate-in slide-in-from-right">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold text-sm mb-2">Task Context</h3>
+                        <div className="space-y-2 text-xs">
+                          <div className="p-2 bg-muted/50 rounded">
+                            <p className="text-muted-foreground">Selected: 2.0 Schematic Design (SD)</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-3">
+                        <h4 className="font-semibold text-xs mb-2">Dependencies</h4>
+                        <div className="space-y-1 text-xs">
+                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
+                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span>1.0 Due Diligence</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
+                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span>0.0 Project Charter</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-3">
+                        <h4 className="font-semibold text-xs mb-2">Successors</h4>
+                        <div className="space-y-1 text-xs">
+                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
+                            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                            <span>3.0 Design Development</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
+                            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                            <span>4.0 Procurement</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-3">
+                        <h4 className="font-semibold text-xs mb-2">Resources</h4>
+                        <div className="space-y-2 text-xs">
+                          <div className="p-2 bg-muted/50 rounded">
+                            <div className="font-medium">Architecture Team</div>
+                            <div className="text-muted-foreground">4 resources</div>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded">
+                            <div className="font-medium">Engineering</div>
+                            <div className="text-muted-foreground">2 resources</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-3">
+                        <h4 className="font-semibold text-xs mb-2">Constraints</h4>
+                        <div className="space-y-1 text-xs">
+                          <div className="flex items-center gap-2 p-1.5 bg-amber-500/10 rounded">
+                            <AlertCircle className="h-3 w-3 text-amber-600" />
+                            <span>Budget approval required</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-1.5 bg-red-500/10 rounded">
+                            <AlertCircle className="h-3 w-3 text-red-600" />
+                            <span>Permit deadline: Mar 15</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t pt-3">
+                        <h4 className="font-semibold text-xs mb-2">Notes</h4>
+                        <div className="text-xs text-muted-foreground p-2 bg-muted/50 rounded">
+                          Coordination with client stakeholders required for design reviews. Weekly check-ins scheduled.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
               </CardContent>
             </Card>
           </div>
