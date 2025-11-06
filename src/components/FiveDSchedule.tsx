@@ -12,7 +12,8 @@ import {
   MapPin,
   Building2,
   Calendar,
-  AlertCircle
+  AlertCircle,
+  X
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
@@ -59,6 +60,7 @@ export function FiveDSchedule() {
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
   const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
   const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
+  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
   
   // WBS collapsible states
   const [wbsExpanded, setWbsExpanded] = useState<Record<string, boolean>>({
@@ -72,6 +74,28 @@ export function FiveDSchedule() {
     "7.0": false,
     "8.0": false,
   });
+
+  const handleTaskClick = (wbs: string, taskName: string, e?: React.MouseEvent) => {
+    // Don't select when clicking the expand button
+    if (e && (e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    
+    const taskId = `${wbs}|${taskName}`;
+    setSelectedTasks(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(taskId)) {
+        newSet.delete(taskId);
+      } else {
+        newSet.add(taskId);
+      }
+      return newSet;
+    });
+    
+    if (!isContextPanelOpen) {
+      setIsContextPanelOpen(true);
+    }
+  };
 
   const changeDriversData = [
     { name: 'Procurement / Long-Lead', value: 22, days: '22d', percentage: '27.5%', color: '#3b82f6' },
@@ -1825,7 +1849,10 @@ export function FiveDSchedule() {
                       )}
 
                       {/* 1.0 Due Diligence & Site Controls */}
-                      <TableRow>
+                      <TableRow 
+                        onClick={(e) => handleTaskClick("1.0", "Due Diligence & Site Controls", e)}
+                        className={`cursor-pointer transition-colors ${selectedTasks.has("1.0|Due Diligence & Site Controls") ? 'bg-primary/10' : 'hover:bg-accent/50'}`}
+                      >
                         <TableCell className="font-medium text-xs">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "1.0": !wbsExpanded["1.0"]})}
@@ -1845,7 +1872,10 @@ export function FiveDSchedule() {
                       </TableRow>
                       {wbsExpanded["1.0"] && (
                         <>
-                          <TableRow className="bg-muted/30">
+                          <TableRow 
+                            onClick={() => handleTaskClick("1.1", "Surveys (Topo/Utility/Geotech)")}
+                            className={`cursor-pointer transition-colors ${selectedTasks.has("1.1|Surveys (Topo/Utility/Geotech)") ? 'bg-primary/10' : 'bg-muted/30 hover:bg-accent/50'}`}
+                          >
                             <TableCell className="pl-6 text-xs">1.1</TableCell>
                             <TableCell className="text-xs">Surveys (Topo/Utility/Geotech)</TableCell>
                             <TableCell className="text-xs">21d</TableCell>
@@ -1855,7 +1885,10 @@ export function FiveDSchedule() {
                               <GanttBar start={17} duration={12} label="21d" color="setup" />
                             </TableCell>
                           </TableRow>
-                          <TableRow className="bg-muted/30">
+                          <TableRow 
+                            onClick={() => handleTaskClick("1.2", "Program Brief & Space Plan")}
+                            className={`cursor-pointer transition-colors ${selectedTasks.has("1.2|Program Brief & Space Plan") ? 'bg-primary/10' : 'bg-muted/30 hover:bg-accent/50'}`}
+                          >
                             <TableCell className="pl-6 text-xs">1.2</TableCell>
                             <TableCell className="text-xs">Program Brief & Space Plan</TableCell>
                             <TableCell className="text-xs">14d</TableCell>
@@ -1865,7 +1898,10 @@ export function FiveDSchedule() {
                               <GanttBar start={19} duration={8} label="14d" color="setup" />
                             </TableCell>
                           </TableRow>
-                          <TableRow className="bg-muted/30">
+                          <TableRow 
+                            onClick={() => handleTaskClick("1.3", "Target Cost & Schedule (Class 4–5)")}
+                            className={`cursor-pointer transition-colors ${selectedTasks.has("1.3|Target Cost & Schedule (Class 4–5)") ? 'bg-primary/10' : 'bg-muted/30 hover:bg-accent/50'}`}
+                          >
                             <TableCell className="pl-6 text-xs">1.3</TableCell>
                             <TableCell className="text-xs">Target Cost & Schedule (Class 4–5)</TableCell>
                             <TableCell className="text-xs">10d</TableCell>
@@ -1879,7 +1915,10 @@ export function FiveDSchedule() {
                       )}
 
                       {/* 2.0 Schematic Design (SD) Start */}
-                      <TableRow>
+                      <TableRow 
+                        onClick={(e) => handleTaskClick("2.0", "Schematic Design (SD) Start", e)}
+                        className={`cursor-pointer transition-colors ${selectedTasks.has("2.0|Schematic Design (SD) Start") ? 'bg-primary/10' : 'hover:bg-accent/50'}`}
+                      >
                         <TableCell className="font-medium text-xs">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "2.0": !wbsExpanded["2.0"]})}
@@ -2351,80 +2390,88 @@ export function FiveDSchedule() {
 
                 {/* Context Panel - Collapsible */}
                 {isContextPanelOpen && (
-                  <div className="w-80 border rounded-lg bg-card p-4 animate-in slide-in-from-right">
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="font-semibold text-sm mb-2">Task Context</h3>
-                        <div className="space-y-2 text-xs">
-                          <div className="p-2 bg-muted/50 rounded">
-                            <p className="text-muted-foreground">Selected: 2.0 Schematic Design (SD)</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-3">
-                        <h4 className="font-semibold text-xs mb-2">Dependencies</h4>
-                        <div className="space-y-1 text-xs">
-                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
-                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                            <span>1.0 Due Diligence</span>
-                          </div>
-                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
-                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                            <span>0.0 Project Charter</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-3">
-                        <h4 className="font-semibold text-xs mb-2">Successors</h4>
-                        <div className="space-y-1 text-xs">
-                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
-                            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                            <span>3.0 Design Development</span>
-                          </div>
-                          <div className="flex items-center gap-2 p-1.5 hover:bg-muted/50 rounded">
-                            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                            <span>4.0 Procurement</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-3">
-                        <h4 className="font-semibold text-xs mb-2">Resources</h4>
-                        <div className="space-y-2 text-xs">
-                          <div className="p-2 bg-muted/50 rounded">
-                            <div className="font-medium">Architecture Team</div>
-                            <div className="text-muted-foreground">4 resources</div>
-                          </div>
-                          <div className="p-2 bg-muted/50 rounded">
-                            <div className="font-medium">Engineering</div>
-                            <div className="text-muted-foreground">2 resources</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-3">
-                        <h4 className="font-semibold text-xs mb-2">Constraints</h4>
-                        <div className="space-y-1 text-xs">
-                          <div className="flex items-center gap-2 p-1.5 bg-amber-500/10 rounded">
-                            <AlertCircle className="h-3 w-3 text-amber-600" />
-                            <span>Budget approval required</span>
-                          </div>
-                          <div className="flex items-center gap-2 p-1.5 bg-red-500/10 rounded">
-                            <AlertCircle className="h-3 w-3 text-red-600" />
-                            <span>Permit deadline: Mar 15</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t pt-3">
-                        <h4 className="font-semibold text-xs mb-2">Notes</h4>
-                        <div className="text-xs text-muted-foreground p-2 bg-muted/50 rounded">
-                          Coordination with client stakeholders required for design reviews. Weekly check-ins scheduled.
-                        </div>
-                      </div>
+                  <div className="w-80 border-l bg-card p-4 overflow-y-auto animate-in slide-in-from-right">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-lg">Task Context</h3>
+                      <button
+                        onClick={() => setIsContextPanelOpen(false)}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
                     </div>
+
+                    {selectedTasks.size === 0 ? (
+                      <p className="text-sm text-muted-foreground">Click on a task row to view details</p>
+                    ) : (
+                      <div className="space-y-4">
+                        {Array.from(selectedTasks).map((taskId) => {
+                          const [wbs, taskName] = taskId.split('|');
+                          
+                          // Generate realistic details based on WBS
+                          const wbsNum = parseFloat(wbs);
+                          const isNearCritical = wbsNum % 1 === 0.2 || wbsNum === 0.2;
+                          const isCritical = wbsNum === 0.2;
+                          const hasPredecessor = wbsNum > 0;
+                          const hasSuccessor = wbsNum < 8.0;
+                          const duration = Math.floor(Math.random() * 20) + 3;
+                          
+                          return (
+                            <div key={taskId} className="border rounded-lg p-4 space-y-3 bg-card shadow-sm">
+                              <div className="border-b pb-2">
+                                <h4 className="font-semibold">{taskName} ({wbs})</h4>
+                              </div>
+
+                              <div>
+                                <p className="font-medium text-sm mb-1">Predecessors:</p>
+                                {hasPredecessor ? (
+                                  <p className="text-sm text-muted-foreground ml-2">
+                                    • {(wbsNum - 0.1).toFixed(1)} → FS +0d lag <span className="text-muted-foreground/70">(Finish-to-Start)</span>
+                                  </p>
+                                ) : (
+                                  <p className="text-sm text-muted-foreground ml-2 italic">None (start node)</p>
+                                )}
+                              </div>
+
+                              <div>
+                                <p className="font-medium text-sm mb-1">Successors:</p>
+                                {hasSuccessor ? (
+                                  <p className="text-sm text-muted-foreground ml-2">
+                                    {wbsNum % 1 === 0 ? 
+                                      `• ${(wbsNum + 0.1).toFixed(1)} → FS +0d lag` :
+                                      `• ${(Math.floor(wbsNum) + 1).toFixed(1)} → FS +0d lag`
+                                    }
+                                  </p>
+                                ) : (
+                                  <p className="text-sm text-muted-foreground ml-2 italic">None (end node)</p>
+                                )}
+                              </div>
+
+                              <div>
+                                <p className="font-medium text-sm mb-1">Total Float:</p>
+                                <p className={`text-sm ml-2 ${isCritical ? 'text-destructive font-semibold' : isNearCritical ? 'text-orange-500 font-semibold' : 'text-muted-foreground'}`}>
+                                  {isCritical ? '0d (Critical Path)' : isNearCritical ? '1d (Near-Critical)' : `${Math.floor(Math.random() * 10) + 2}d`}
+                                </p>
+                              </div>
+
+                              <div>
+                                <p className="font-medium text-sm mb-1">Duration:</p>
+                                <p className="text-sm text-muted-foreground ml-2">
+                                  {duration}d | Calendar: cal-5x8
+                                </p>
+                              </div>
+
+                              <div className="pt-2 border-t">
+                                <p className="font-medium text-sm mb-1">PDM Network Logic</p>
+                                <p className="text-xs text-muted-foreground">
+                                  Precedence relationships (FS/SS/FF/SF), lags, and constraints
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
