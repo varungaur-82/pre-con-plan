@@ -58,7 +58,6 @@ export function FiveDSchedule() {
   const [isLongLeadOpen, setIsLongLeadOpen] = useState(false);
   const [isLookAheadOpen, setIsLookAheadOpen] = useState(false);
   const [lookAheadPeriod, setLookAheadPeriod] = useState<"7days" | "2weeks" | "1month" | "quarter">("2weeks");
-  const [workspaceView, setWorkspaceView] = useState<"detail" | "gantt">("detail");
   
   // WBS collapsible states
   const [wbsExpanded, setWbsExpanded] = useState<Record<string, boolean>>({
@@ -1728,22 +1727,6 @@ export function FiveDSchedule() {
                     <Button size="sm" variant="ghost">WBS (CSI)</Button>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button 
-                      size="sm" 
-                      variant={workspaceView === "detail" ? "default" : "outline"}
-                      onClick={() => setWorkspaceView("detail")}
-                    >
-                      Detail View
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant={workspaceView === "gantt" ? "default" : "outline"}
-                      onClick={() => setWorkspaceView("gantt")}
-                    >
-                      Gantt View
-                    </Button>
-                  </div>
-                  <div className="flex items-center gap-2">
                     <div className="relative">
                       <input 
                         type="text" 
@@ -1758,277 +1741,204 @@ export function FiveDSchedule() {
                       <option>Day</option>
                     </select>
                     <select className="px-3 py-1.5 border rounded-md text-sm bg-background">
-                      <option>36px</option>
+                      <option>32px</option>
                       <option>24px</option>
-                      <option>48px</option>
+                      <option>40px</option>
                     </select>
                     <Button size="sm" variant="outline">📋 Open Context</Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="border rounded-lg overflow-hidden">
+                <div className="border rounded-lg overflow-hidden overflow-x-auto">
                   <Table>
                     <colgroup>
-                      <col className="w-32" />
-                      <col className="w-80" />
-                      {workspaceView === "detail" && (
-                        <>
-                          <col className="w-32" />
-                          <col className="w-24" />
-                          <col className="w-40" />
-                        </>
-                      )}
+                      <col style={{ width: '80px' }} />
+                      <col style={{ width: '250px' }} />
+                      <col style={{ width: '70px' }} />
+                      <col style={{ width: '90px' }} />
+                      <col style={{ width: '90px' }} />
+                      <col style={{ minWidth: '400px' }} />
                     </colgroup>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-32 min-w-32">WBS</TableHead>
-                        <TableHead className="w-80 min-w-80">ACTIVITY</TableHead>
-                        {workspaceView === "detail" ? (
-                          <>
-                            <TableHead className="w-32">CSI</TableHead>
-                            <TableHead className="w-24">DURATION</TableHead>
-                            <TableHead className="w-40">PREDECESSORS</TableHead>
-                          </>
-                        ) : (
-                          <TableHead className="w-full">GANTT TIMELINE</TableHead>
-                        )}
+                        <TableHead className="text-xs">WBS</TableHead>
+                        <TableHead className="text-xs">Task Name</TableHead>
+                        <TableHead className="text-xs">Duration</TableHead>
+                        <TableHead className="text-xs">Start</TableHead>
+                        <TableHead className="text-xs">End</TableHead>
+                        <TableHead className="text-xs">Timeline</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {/* 0.0 Project Charter Signed */}
                       <TableRow>
-                        <TableCell className="font-medium w-32 min-w-32">
+                        <TableCell className="font-medium text-xs">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "0.0": !wbsExpanded["0.0"]})}
                             className="flex items-center gap-1"
                           >
-                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["0.0"] ? '' : '-rotate-90'}`} />
+                            <ChevronDown className={`h-3 w-3 transition-transform ${wbsExpanded["0.0"] ? '' : '-rotate-90'}`} />
                             0.0
                           </button>
                         </TableCell>
-                        <TableCell className="font-semibold w-80 min-w-80">Project Charter Signed</TableCell>
-                        {workspaceView === "detail" ? (
-                          <>
-                            <TableCell>01 10 00</TableCell>
-                            <TableCell>5d</TableCell>
-                            <TableCell>—</TableCell>
-                          </>
-                        ) : (
-                          <TableCell>
-                            <GanttBar start={5} duration={3} label="Mar 1-5" color="setup" />
-                          </TableCell>
-                        )}
+                        <TableCell className="font-semibold text-xs">Project Charter Signed</TableCell>
+                        <TableCell className="text-xs">5d</TableCell>
+                        <TableCell className="text-xs">2/13/2014</TableCell>
+                        <TableCell className="text-xs">2/18/2014</TableCell>
+                        <TableCell>
+                          <GanttBar start={5} duration={3} label="Mar 1-5" color="setup" />
+                        </TableCell>
                       </TableRow>
                       {wbsExpanded["0.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8 w-32 min-w-32">0.1</TableCell>
-                            <TableCell className="w-80 min-w-80">Funding & Delivery Strategy Freeze</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 12 00</TableCell>
-                                <TableCell>10d</TableCell>
-                                <TableCell>0.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={8} duration={6} label="10d" color="setup" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">0.1</TableCell>
+                            <TableCell className="text-xs">Funding & Delivery Strategy Freeze</TableCell>
+                            <TableCell className="text-xs">10d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">2/22/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={8} duration={6} label="10d" color="setup" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8 w-32 min-w-32">0.2</TableCell>
-                            <TableCell className="w-80 min-w-80">Stakeholder RACI & Comm Plan</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 31 19</TableCell>
-                                <TableCell>7d</TableCell>
-                                <TableCell>0.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={10} duration={5} label="7d" color="setup" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">0.2</TableCell>
+                            <TableCell className="text-xs">Stakeholder RACI & Comm Plan</TableCell>
+                            <TableCell className="text-xs">7d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">2/19/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={10} duration={5} label="7d" color="setup" />
+                            </TableCell>
                           </TableRow>
                         </>
                       )}
 
                       {/* 1.0 Due Diligence & Site Controls */}
                       <TableRow>
-                        <TableCell className="font-medium w-32 min-w-32">
+                        <TableCell className="font-medium text-xs">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "1.0": !wbsExpanded["1.0"]})}
                             className="flex items-center gap-1"
                           >
-                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["1.0"] ? '' : '-rotate-90'}`} />
+                            <ChevronDown className={`h-3 w-3 transition-transform ${wbsExpanded["1.0"] ? '' : '-rotate-90'}`} />
                             1.0
                           </button>
                         </TableCell>
-                        <TableCell className="font-semibold w-80 min-w-80">Due Diligence & Site Controls</TableCell>
-                        {workspaceView === "detail" ? (
-                          <>
-                            <TableCell>00 30 00</TableCell>
-                            <TableCell>14d</TableCell>
-                            <TableCell>0.0</TableCell>
-                          </>
-                        ) : (
-                          <TableCell>
-                            <GanttBar start={15} duration={8} label="Mar 6-19" color="setup" />
-                          </TableCell>
-                        )}
+                        <TableCell className="font-semibold text-xs">Due Diligence & Site Controls</TableCell>
+                        <TableCell className="text-xs">14d</TableCell>
+                        <TableCell className="text-xs">2/13/2014</TableCell>
+                        <TableCell className="text-xs">2/26/2014</TableCell>
+                        <TableCell>
+                          <GanttBar start={15} duration={8} label="Mar 6-19" color="setup" />
+                        </TableCell>
                       </TableRow>
                       {wbsExpanded["1.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">1.1</TableCell>
-                            <TableCell>Surveys (Topo/Utility/Geotech)</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>02 21 16</TableCell>
-                                <TableCell>21d</TableCell>
-                                <TableCell>1.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={17} duration={12} label="21d" color="setup" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">1.1</TableCell>
+                            <TableCell className="text-xs">Surveys (Topo/Utility/Geotech)</TableCell>
+                            <TableCell className="text-xs">21d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">3/5/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={17} duration={12} label="21d" color="setup" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">1.2</TableCell>
-                            <TableCell>Program Brief & Space Plan</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 11 00</TableCell>
-                                <TableCell>14d</TableCell>
-                                <TableCell>0.2</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={19} duration={8} label="14d" color="setup" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">1.2</TableCell>
+                            <TableCell className="text-xs">Program Brief & Space Plan</TableCell>
+                            <TableCell className="text-xs">14d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">2/26/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={19} duration={8} label="14d" color="setup" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">1.3</TableCell>
-                            <TableCell>Target Cost & Schedule (Class 4–5)</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 21 00</TableCell>
-                                <TableCell>10d</TableCell>
-                                <TableCell>1.2</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={27} duration={6} label="10d" color="setup" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">1.3</TableCell>
+                            <TableCell className="text-xs">Target Cost & Schedule (Class 4–5)</TableCell>
+                            <TableCell className="text-xs">10d</TableCell>
+                            <TableCell className="text-xs">2/19/2014</TableCell>
+                            <TableCell className="text-xs">2/28/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={27} duration={6} label="10d" color="setup" />
+                            </TableCell>
                           </TableRow>
                         </>
                       )}
 
                       {/* 2.0 Schematic Design (SD) Start */}
                       <TableRow>
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium text-xs">
                           <button 
                             onClick={() => setWbsExpanded({...wbsExpanded, "2.0": !wbsExpanded["2.0"]})}
                             className="flex items-center gap-1"
                           >
-                            <ChevronDown className={`h-4 w-4 transition-transform ${wbsExpanded["2.0"] ? '' : '-rotate-90'}`} />
+                            <ChevronDown className={`h-3 w-3 transition-transform ${wbsExpanded["2.0"] ? '' : '-rotate-90'}`} />
                             2.0
                           </button>
                         </TableCell>
-                        <TableCell className="font-semibold">Schematic Design (SD) Start</TableCell>
-                        {workspaceView === "detail" ? (
-                          <>
-                            <TableCell>01 33 00</TableCell>
-                            <TableCell>3d</TableCell>
-                            <TableCell>1.2</TableCell>
-                          </>
-                        ) : (
-                          <TableCell>
-                            <GanttBar start={33} duration={2} label="Apr 1-3" color="design-early" />
-                          </TableCell>
-                        )}
+                        <TableCell className="font-semibold text-xs">Schematic Design (SD) Start</TableCell>
+                        <TableCell className="text-xs">3d</TableCell>
+                        <TableCell className="text-xs">2/13/2014</TableCell>
+                        <TableCell className="text-xs">2/15/2014</TableCell>
+                        <TableCell>
+                          <GanttBar start={33} duration={2} label="Apr 1-3" color="design-early" />
+                        </TableCell>
                       </TableRow>
                       {wbsExpanded["2.0"] && (
                         <>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">2.1</TableCell>
-                            <TableCell>SD – Site & Civil Concepts</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>31 00 00</TableCell>
-                                <TableCell>20d</TableCell>
-                                <TableCell>2.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={35} duration={12} label="20d" color="design-early" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">2.1</TableCell>
+                            <TableCell className="text-xs">SD – Site & Civil Concepts</TableCell>
+                            <TableCell className="text-xs">20d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">3/4/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={35} duration={12} label="20d" color="design-early" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">2.2</TableCell>
-                            <TableCell>SD – Arch / Structural Concepts</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>03–06</TableCell>
-                                <TableCell>25d</TableCell>
-                                <TableCell>2.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={35} duration={14} label="25d" color="design-early" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">2.2</TableCell>
+                            <TableCell className="text-xs">SD – Arch / Structural Concepts</TableCell>
+                            <TableCell className="text-xs">25d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">3/9/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={35} duration={14} label="25d" color="design-early" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">2.3</TableCell>
-                            <TableCell>SD – MEPF Concepts & Loads</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>21–26</TableCell>
-                                <TableCell>20d</TableCell>
-                                <TableCell>2.0</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={36} duration={12} label="20d" color="design-early" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">2.3</TableCell>
+                            <TableCell className="text-xs">SD – MEPF Concepts & Loads</TableCell>
+                            <TableCell className="text-xs">20d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">3/4/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={36} duration={12} label="20d" color="design-early" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">2.4</TableCell>
-                            <TableCell>SD Cost Check (Class 3–4)</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 21 00</TableCell>
-                                <TableCell>10d</TableCell>
-                                <TableCell>2.1, 2.2, 2.3</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={49} duration={6} label="10d" color="design-early" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">2.4</TableCell>
+                            <TableCell className="text-xs">SD Cost Check (Class 3–4)</TableCell>
+                            <TableCell className="text-xs">10d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">2/22/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={49} duration={6} label="10d" color="design-early" />
+                            </TableCell>
                           </TableRow>
                           <TableRow className="bg-muted/30">
-                            <TableCell className="pl-8">2.5</TableCell>
-                            <TableCell>SD Owner Gate (Approve/Revise)</TableCell>
-                            {workspaceView === "detail" ? (
-                              <>
-                                <TableCell>01 26 00</TableCell>
-                                <TableCell>3d</TableCell>
-                                <TableCell>2.4</TableCell>
-                              </>
-                            ) : (
-                              <TableCell>
-                                <GanttBar start={55} duration={2} label="3d" color="design-early" />
-                              </TableCell>
-                            )}
+                            <TableCell className="pl-6 text-xs">2.5</TableCell>
+                            <TableCell className="text-xs">SD Owner Gate (Approve/Revise)</TableCell>
+                            <TableCell className="text-xs">3d</TableCell>
+                            <TableCell className="text-xs">2/13/2014</TableCell>
+                            <TableCell className="text-xs">2/15/2014</TableCell>
+                            <TableCell>
+                              <GanttBar start={55} duration={2} label="3d" color="design-early" />
+                            </TableCell>
                           </TableRow>
                         </>
                       )}
