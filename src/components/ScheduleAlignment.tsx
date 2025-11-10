@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Upload, Link2, Clock, Eye, CheckCircle, XCircle, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 
 interface ScheduleTask {
   id: string;
@@ -43,6 +45,20 @@ const months = [
 export function ScheduleAlignment() {
   const [showBaseline, setShowBaseline] = useState(true);
   const [activeStep, setActiveStep] = useState<'intake' | 'summary'>('intake');
+  const [uploadMode, setUploadMode] = useState<'file' | 'manual'>('file');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      toast.success(`${files.length} file(s) uploaded successfully`);
+      // Process files here
+    }
+  };
+
+  const handleWebhookConnect = () => {
+    toast.success("Webhook connected successfully");
+  };
 
   const getBarColor = (status: string, isBaseline?: boolean) => {
     if (isBaseline) return "bg-blue-300/70";
@@ -117,7 +133,218 @@ export function ScheduleAlignment() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-6">
-        <Card className="p-6">
+        {activeStep === 'intake' ? (
+          <div className="max-w-5xl mx-auto space-y-6">
+            {/* Schedule Intake & Parse Header */}
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold mb-2">Schedule Intake & Parse</h2>
+                <p className="text-muted-foreground max-w-3xl mx-auto">
+                  Import schedule updates, reports, notes, or any project-related changes. The system will automatically parse and
+                  extract schedule claims for reconciliation.
+                </p>
+              </div>
+
+              {/* Upload Mode Selection */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <button
+                  onClick={() => setUploadMode('file')}
+                  className={`p-6 border-2 rounded-lg transition-all ${
+                    uploadMode === 'file'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <Upload className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <div className="font-semibold mb-1">File Upload</div>
+                  <div className="text-sm text-muted-foreground">All file types</div>
+                </button>
+                <button
+                  onClick={() => setUploadMode('manual')}
+                  className={`p-6 border-2 rounded-lg transition-all ${
+                    uploadMode === 'manual'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div className="text-3xl mb-2">+</div>
+                  <div className="font-semibold mb-1">Manual Entry</div>
+                  <div className="text-sm text-muted-foreground">Type directly</div>
+                </button>
+              </div>
+
+              {/* File Upload Area */}
+              {uploadMode === 'file' && (
+                <div className="border-2 border-dashed border-border rounded-lg p-12 text-center bg-muted/20">
+                  <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold mb-2">Upload Files</h3>
+                  <p className="text-sm text-muted-foreground mb-4 max-w-2xl mx-auto">
+                    Upload schedule files, reports, documents, notes, or any project-related files. The system will automatically recognize
+                    file types and extract schedule information.
+                  </p>
+                  <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground mb-6">
+                    <span>Schedules (.mpp, .xer, .xml)</span>
+                    <span>Reports (.pdf, .csv, .xlsx)</span>
+                    <span>Notes (.txt, .md, .docx)</span>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    accept=".mpp,.xer,.xml,.pdf,.csv,.xlsx,.txt,.md,.docx"
+                  />
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="gap-2"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Choose Files
+                  </Button>
+                </div>
+              )}
+
+              {/* Manual Entry Area */}
+              {uploadMode === 'manual' && (
+                <div className="border-2 border-border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold mb-4">Manual Schedule Entry</h3>
+                  <textarea
+                    placeholder="Enter schedule updates, changes, or notes here..."
+                    className="w-full h-48 px-4 py-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <div className="flex justify-end mt-4">
+                    <Button>Parse Entry</Button>
+                  </div>
+                </div>
+              )}
+
+              {/* API Webhook Section */}
+              <div className="mt-8 pt-8 border-t">
+                <div className="flex items-start gap-3 mb-4">
+                  <Link2 className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">Connect API Webhook</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Automatically ingest updates from external systems via webhook URL
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        placeholder="https://api.example.com/webhook"
+                        className="flex-1 px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <Button onClick={handleWebhookConnect}>Connect</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Previous Alignment Updates */}
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-semibold">Previous Alignment Updates</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Recent schedule alignment sessions and their outcomes
+                  </p>
+                </div>
+                <Button variant="outline">View All</Button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Update Entry 1 */}
+                <div className="border rounded-lg p-4 hover:bg-muted/20 transition-colors cursor-pointer group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      <span>Jan 15, 2024</span>
+                    </div>
+                    <Eye className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <h4 className="font-medium mb-3">
+                    Permit approval delay +2 weeks, MEP rough-in completed early -3 days
+                  </h4>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-muted-foreground">Items: 5</span>
+                    <div className="flex items-center gap-1 text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>4 accepted</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-red-600">
+                      <XCircle className="h-4 w-4" />
+                      <span>1 rejected</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-muted-foreground ml-auto">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>+11 days</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Update Entry 2 */}
+                <div className="border rounded-lg p-4 hover:bg-muted/20 transition-colors cursor-pointer group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      <span>Jan 10, 2024</span>
+                    </div>
+                    <Eye className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <h4 className="font-medium mb-3">
+                    Owner milestone updates, Foundation delay +1 week
+                  </h4>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-muted-foreground">Items: 3</span>
+                    <div className="flex items-center gap-1 text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>3 accepted</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-red-600">
+                      <XCircle className="h-4 w-4" />
+                      <span>0 rejected</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-muted-foreground ml-auto">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>+7 days</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Update Entry 3 */}
+                <div className="border rounded-lg p-4 hover:bg-muted/20 transition-colors cursor-pointer group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      <span>Jan 5, 2024</span>
+                    </div>
+                    <Eye className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <h4 className="font-medium mb-3">
+                    Design phase completion +5 days, Procurement acceleration -2 days
+                  </h4>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-muted-foreground">Items: 4</span>
+                    <div className="flex items-center gap-1 text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>2 accepted</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-red-600">
+                      <XCircle className="h-4 w-4" />
+                      <span>2 rejected</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-muted-foreground ml-auto">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>+3 days</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        ) : (
+          <Card className="p-6">
           {/* Controls */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold">Current Schedule Overview</h2>
@@ -265,6 +492,7 @@ export function ScheduleAlignment() {
             </div>
           </div>
         </Card>
+        )}
       </div>
     </div>
   );
