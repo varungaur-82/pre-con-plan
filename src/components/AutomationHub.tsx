@@ -5,6 +5,7 @@ import { ArrowUp, ArrowDown, TrendingUp, BarChart3, Download, Bell, Settings as 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CostTracker } from "./CostTracker";
+import { ScheduleTracker } from "./ScheduleTracker";
 import { CreateReportWizard } from "./CreateReportWizard";
 import { useState } from "react";
 import {
@@ -174,6 +175,7 @@ export function AutomationHub() {
       <TabsList className="mb-6">
         <TabsTrigger value="report-automation">Report Automation</TabsTrigger>
         <TabsTrigger value="cost-tracker">Cost Tracker</TabsTrigger>
+        <TabsTrigger value="schedule-tracker">Schedule Tracker</TabsTrigger>
       </TabsList>
 
       <TabsContent value="report-automation">
@@ -519,6 +521,10 @@ export function AutomationHub() {
 
       <TabsContent value="cost-tracker">
         <CostTracker />
+      </TabsContent>
+
+      <TabsContent value="schedule-tracker">
+        <ScheduleTracker />
       </TabsContent>
     </Tabs>
   );
