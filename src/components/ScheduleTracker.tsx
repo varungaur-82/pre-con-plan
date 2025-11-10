@@ -6,6 +6,7 @@ import { Settings, Minus, Plus } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, ReferenceLine } from "recharts";
 import { ScheduleBuilder } from "./ScheduleBuilder";
 import { ScheduleAlignment } from "./ScheduleAlignment";
+import { ScheduleRules } from "./ScheduleRules";
 
 const sCurveData = [
   { month: '2025-08', baseline: 2, actual: 0 },
@@ -59,7 +60,12 @@ export function ScheduleTracker() {
             >
               Schedule Alignment
             </Button>
-            <Button variant="outline">Schedule Rules</Button>
+            <Button 
+              variant={activeView === "rules" ? "default" : "outline"}
+              onClick={() => setActiveView("rules")}
+            >
+              Schedule Rules
+            </Button>
             <Button variant="outline">Impact Room</Button>
           </div>
         </div>
@@ -70,6 +76,8 @@ export function ScheduleTracker() {
         <ScheduleBuilder />
       ) : activeView === "alignment" ? (
         <ScheduleAlignment />
+      ) : activeView === "rules" ? (
+        <ScheduleRules />
       ) : (
         <>
           {/* Key Metrics Cards */}
