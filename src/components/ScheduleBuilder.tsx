@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import { 
   X, 
   ChevronDown, 
@@ -31,9 +32,27 @@ interface Task {
   owner?: string;
   dependencies?: string[];
   isMilestone?: boolean;
+  startDate?: Date;
+  endDate?: Date;
 }
 
-const tasks: Task[] = [
+interface DragState {
+  taskId: string;
+  startX: number;
+  initialStartMonth: number;
+  type: 'move' | 'resize-start' | 'resize-end';
+}
+
+// Helper to calculate dates from months
+const calculateDate = (monthOffset: number): Date => {
+  const baseDate = new Date(2025, 11, 25); // Dec 25, 2025
+  const date = new Date(baseDate);
+  date.setMonth(date.getMonth() + Math.floor(monthOffset));
+  date.setDate(date.getDate() + (monthOffset % 1) * 30);
+  return date;
+};
+
+const initialTasks: Task[] = [
   // Design Phase
   { id: "design-1", title: "SD - Site & Civil Con", phase: "Design", startMonth: 1, duration: 1.5, color: "bg-blue-400" },
   { id: "design-2", title: "DD - Architectural Concepts", phase: "Design", startMonth: 1.5, duration: 2, color: "bg-blue-300" },
@@ -46,7 +65,11 @@ const tasks: Task[] = [
   { id: "permit-2", title: "Permit Submit", phase: "Permitting", startMonth: 7.5, duration: 0, color: "bg-slate-600", isMilestone: true },
   // Procurement Phase
   { id: "proc-1", title: "Long-Lead Procurement", phase: "Procurement", startMonth: 5.5, duration: 6, color: "bg-slate-400" },
-];
+].map(task => ({
+  ...task,
+  startDate: calculateDate(task.startMonth),
+  endDate: calculateDate(task.startMonth + task.duration)
+}));
 
 const months = [
   "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", 
@@ -54,8 +77,95 @@ const months = [
 ];
 
 export function ScheduleBuilder() {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [selectedTask, setSelectedTask] = useState<Task | null>(tasks[0]);
   const [inspectorOpen, setInspectorOpen] = useState(true);
+  const [dragState, setDragState] = useState<DragState | null>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Update selected task when tasks change
+  useEffect(() => {
+    if (selectedTask) {
+      const updated = tasks.find(t => t.id === selectedTask.id);
+      if (updated) {
+        setSelectedTask(updated);
+      }
+    }
+  }, [tasks]);
+
+  const handleMouseDown = (e: React.MouseEvent, task: Task, type: 'move' | 'resize-start' | 'resize-end') => {
+    if (task.isMilestone) return;
+    e.stopPropagation();
+    
+    setDragState({
+      taskId: task.id,
+      startX: e.clientX,
+      initialStartMonth: task.startMonth,
+      type
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!dragState || !timelineRef.current) return;
+
+    const timelineWidth = timelineRef.current.offsetWidth;
+    const deltaX = e.clientX - dragState.startX;
+    const deltaMonths = (deltaX / timelineWidth) * 12;
+
+    setTasks(prevTasks => {
+      return prevTasks.map(task => {
+        if (task.id !== dragState.taskId) return task;
+
+        let newStartMonth = task.startMonth;
+        let newDuration = task.duration;
+
+        if (dragState.type === 'move') {
+          newStartMonth = Math.max(0, dragState.initialStartMonth + deltaMonths);
+        } else if (dragState.type === 'resize-start') {
+          const newStart = Math.max(0, dragState.initialStartMonth + deltaMonths);
+          const endMonth = task.startMonth + task.duration;
+          newDuration = Math.max(0.5, endMonth - newStart);
+          newStartMonth = newStart;
+        } else if (dragState.type === 'resize-end') {
+          newDuration = Math.max(0.5, task.duration + deltaMonths);
+        }
+
+        return {
+          ...task,
+          startMonth: newStartMonth,
+          duration: newDuration,
+          startDate: calculateDate(newStartMonth),
+          endDate: calculateDate(newStartMonth + newDuration)
+        };
+      });
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (dragState) {
+      toast.success("Task updated successfully");
+      setDragState(null);
+    }
+  };
+
+  useEffect(() => {
+    if (dragState) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [dragState]);
+
+  const formatDate = (date?: Date) => {
+    if (!date) return "";
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const phases = [
     { name: "Design", milestones: 8, color: "bg-blue-50" },
@@ -220,25 +330,35 @@ export function ScheduleBuilder() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Planned Start</label>
-                  <div className="flex items-center gap-1 border rounded-md px-2 py-1.5">
+                  <div className="flex items-center gap-1 border rounded-md px-2 py-1.5 bg-muted/30">
                     <input 
                       type="text" 
-                      defaultValue="16/12/2025"
-                      className="w-full text-sm outline-none"
+                      value={formatDate(selectedTask.startDate)}
+                      className="w-full text-sm outline-none bg-transparent"
+                      readOnly
                     />
                     <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                   </div>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Planned Finish</label>
-                  <div className="flex items-center gap-1 border rounded-md px-2 py-1.5">
+                  <div className="flex items-center gap-1 border rounded-md px-2 py-1.5 bg-muted/30">
                     <input 
                       type="text" 
-                      defaultValue="10/01/2026"
-                      className="w-full text-sm outline-none"
+                      value={formatDate(selectedTask.endDate)}
+                      className="w-full text-sm outline-none bg-transparent"
+                      readOnly
                     />
                     <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                   </div>
+                </div>
+              </div>
+
+              {/* Duration Display */}
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Duration</label>
+                <div className="px-3 py-2 border rounded-md bg-muted/30 text-sm">
+                  {(selectedTask.duration * 30).toFixed(0)} days ({selectedTask.duration.toFixed(1)} months)
                 </div>
               </div>
 
@@ -303,22 +423,22 @@ export function ScheduleBuilder() {
               </div>
             </div>
 
-            {/* Gantt Timeline */}
-            <div className="relative">
-              {/* Timeline Header */}
-              <div className="flex border-b bg-muted/50">
-                <div className="w-48 flex-shrink-0"></div>
-                <div className="flex-1 flex">
-                  {months.map((month, i) => (
-                    <div 
-                      key={i} 
-                      className="flex-1 min-w-[80px] px-2 py-2 text-xs font-medium text-center border-l"
-                    >
-                      {month}
-                    </div>
-                  ))}
+              {/* Gantt Timeline */}
+              <div className="relative">
+                {/* Timeline Header */}
+                <div className="flex border-b bg-muted/50">
+                  <div className="w-48 flex-shrink-0"></div>
+                  <div className="flex-1 flex" ref={timelineRef}>
+                    {months.map((month, i) => (
+                      <div 
+                        key={i} 
+                        className="flex-1 min-w-[80px] px-2 py-2 text-xs font-medium text-center border-l"
+                      >
+                        {month}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
               {/* Phases and Tasks */}
               {phases.map((phase, phaseIdx) => (
@@ -359,7 +479,7 @@ export function ScheduleBuilder() {
                           {/* Task Bar */}
                           {task.isMilestone ? (
                             <div 
-                              className="absolute top-1/2 -translate-y-1/2"
+                              className="absolute top-1/2 -translate-y-1/2 cursor-pointer"
                               style={{
                                 left: `${(task.startMonth / 12) * 100}%`,
                               }}
@@ -368,16 +488,39 @@ export function ScheduleBuilder() {
                             </div>
                           ) : (
                             <div 
-                              className={`absolute ${task.color} rounded px-2 py-1 shadow-sm hover:shadow-md transition-shadow`}
+                              className={`absolute ${task.color} rounded px-2 py-1 shadow-sm hover:shadow-lg transition-all group/task ${
+                                dragState?.taskId === task.id ? 'shadow-lg ring-2 ring-primary' : ''
+                              }`}
                               style={{
                                 left: `${(task.startMonth / 12) * 100}%`,
                                 width: `${(task.duration / 12) * 100}%`,
                                 top: '8px',
                                 height: '24px',
+                                cursor: dragState ? 'grabbing' : 'grab',
                               }}
+                              onMouseDown={(e) => handleMouseDown(e, task, 'move')}
                             >
-                              <div className="text-[10px] text-white font-medium truncate">
+                              {/* Resize Handle - Start */}
+                              <div
+                                className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-white/30 opacity-0 group-hover/task:opacity-100 transition-opacity"
+                                onMouseDown={(e) => handleMouseDown(e, task, 'resize-start')}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="h-full w-0.5 bg-white/50 ml-[3px]"></div>
+                              </div>
+                              
+                              {/* Task Content */}
+                              <div className="text-[10px] text-white font-medium truncate pointer-events-none">
                                 {task.title}
+                              </div>
+                              
+                              {/* Resize Handle - End */}
+                              <div
+                                className="absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-white/30 opacity-0 group-hover/task:opacity-100 transition-opacity"
+                                onMouseDown={(e) => handleMouseDown(e, task, 'resize-end')}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="h-full w-0.5 bg-white/50 mr-[3px] ml-auto"></div>
                               </div>
                             </div>
                           )}
