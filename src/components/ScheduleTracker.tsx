@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Settings, Minus, Plus } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, ReferenceLine } from "recharts";
 import { ScheduleBuilder } from "./ScheduleBuilder";
+import { ScheduleAlignment } from "./ScheduleAlignment";
 
 const sCurveData = [
   { month: '2025-08', baseline: 2, actual: 0 },
@@ -52,7 +53,12 @@ export function ScheduleTracker() {
             >
               Schedule Builder
             </Button>
-            <Button variant="outline">Schedule Alignment</Button>
+            <Button 
+              variant={activeView === "alignment" ? "default" : "outline"}
+              onClick={() => setActiveView("alignment")}
+            >
+              Schedule Alignment
+            </Button>
             <Button variant="outline">Schedule Rules</Button>
             <Button variant="outline">Impact Room</Button>
           </div>
@@ -62,6 +68,8 @@ export function ScheduleTracker() {
       {/* Conditional Content */}
       {activeView === "builder" ? (
         <ScheduleBuilder />
+      ) : activeView === "alignment" ? (
+        <ScheduleAlignment />
       ) : (
         <>
           {/* Key Metrics Cards */}
