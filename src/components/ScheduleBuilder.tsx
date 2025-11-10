@@ -65,6 +65,13 @@ const initialTasks: Task[] = [
   { id: "permit-2", title: "Permit Submit", phase: "Permitting", startMonth: 7.5, duration: 0, color: "bg-slate-600", isMilestone: true },
   // Procurement Phase
   { id: "proc-1", title: "Long-Lead Procurement", phase: "Procurement", startMonth: 5.5, duration: 6, color: "bg-slate-400" },
+  // Construction Phase
+  { id: "const-1", title: "Foundation Work", phase: "Construction", startMonth: 6.5, duration: 2, color: "bg-red-400" },
+  { id: "const-2", title: "MEP Rough-In Complete", phase: "Construction", startMonth: 8.5, duration: 2.5, color: "bg-red-400" },
+  { id: "const-3", title: "Finishes", phase: "Construction", startMonth: 10.5, duration: 1.5, color: "bg-red-400" },
+  // Commissioning Phase
+  { id: "comm-1", title: "Systems Testing", phase: "Commissioning", startMonth: 9, duration: 1.5, color: "bg-slate-400" },
+  { id: "comm-2", title: "Final Inspection", phase: "Commissioning", startMonth: 10.5, duration: 0.5, color: "bg-slate-400" },
 ].map(task => ({
   ...task,
   startDate: calculateDate(task.startMonth),
@@ -171,7 +178,11 @@ export function ScheduleBuilder() {
     { name: "Design", milestones: 8, color: "bg-blue-50" },
     { name: "Permitting", milestones: 3, color: "bg-slate-50" },
     { name: "Procurement", milestones: 1, color: "bg-slate-50" },
+    { name: "Construction", milestones: 3, color: "bg-slate-50" },
+    { name: "Commissioning", milestones: 2, color: "bg-slate-50" },
   ];
+
+  const allTasks = tasks;
 
   return (
     <div className="w-full h-screen flex flex-col bg-background">
@@ -571,6 +582,147 @@ export function ScheduleBuilder() {
                     ))}
                 </div>
               ))}
+
+              {/* Combined Schedule View */}
+              <div className="border-t-4 border-primary/20 mt-6 bg-blue-50/30">
+                <div className="flex items-center py-3 border-b bg-blue-50/50">
+                  <div className="w-48 flex-shrink-0 px-4 flex items-center justify-between">
+                    <span className="font-semibold text-sm">Combined Schedule View</span>
+                    <span className="text-xs text-muted-foreground">
+                      {allTasks.length} total milestones
+                    </span>
+                  </div>
+                  <div className="flex-1"></div>
+                </div>
+
+                {/* All tasks overlaid */}
+                <div className="relative min-h-[400px]">
+                  {allTasks.map((task, taskIdx) => (
+                    <div 
+                      key={taskIdx} 
+                      className="flex items-center hover:bg-muted/30 cursor-pointer group relative"
+                      onClick={() => setSelectedTask(task)}
+                      style={{
+                        position: 'absolute',
+                        top: `${taskIdx * 35 + 10}px`,
+                        left: 0,
+                        right: 0,
+                        height: '40px'
+                      }}
+                    >
+                      {/* Task Name */}
+                      <div className="w-48 flex-shrink-0 px-4">
+                        <div className="text-xs truncate">
+                          {task.title}
+                          <span className="text-muted-foreground ml-1">({task.phase})</span>
+                        </div>
+                      </div>
+
+                      {/* Timeline Grid */}
+                      <div className="flex-1 flex relative" style={{ height: '40px' }}>
+                        {/* Grid lines */}
+                        {months.map((_, i) => (
+                          <div 
+                            key={i} 
+                            className="flex-1 min-w-[80px] border-l border-border/30"
+                          ></div>
+                        ))}
+
+                        {/* Task Bar */}
+                        {task.isMilestone ? (
+                          <div 
+                            className="absolute top-1/2 -translate-y-1/2 cursor-pointer z-10"
+                            style={{
+                              left: `${(task.startMonth / 12) * 100}%`,
+                            }}
+                          >
+                            <div className={`w-3 h-3 ${task.color} rotate-45 border border-slate-600`}></div>
+                          </div>
+                        ) : (
+                          <div 
+                            className={`absolute ${task.color} rounded px-2 py-1 shadow-sm hover:shadow-lg transition-all group/task ${
+                              dragState?.taskId === task.id ? 'shadow-lg ring-2 ring-primary' : ''
+                            }`}
+                            style={{
+                              left: `${(task.startMonth / 12) * 100}%`,
+                              width: `${(task.duration / 12) * 100}%`,
+                              top: '8px',
+                              height: '24px',
+                              cursor: dragState ? 'grabbing' : 'grab',
+                            }}
+                            onMouseDown={(e) => handleMouseDown(e, task, 'move')}
+                          >
+                            {/* Resize Handle - Start */}
+                            <div
+                              className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-white/30 opacity-0 group-hover/task:opacity-100 transition-opacity"
+                              onMouseDown={(e) => handleMouseDown(e, task, 'resize-start')}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="h-full w-0.5 bg-white/50 ml-[3px]"></div>
+                            </div>
+                            
+                            {/* Task Content */}
+                            <div className="text-[10px] text-white font-medium truncate pointer-events-none">
+                              {task.title}
+                            </div>
+                            
+                            {/* Resize Handle - End */}
+                            <div
+                              className="absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-white/30 opacity-0 group-hover/task:opacity-100 transition-opacity"
+                              onMouseDown={(e) => handleMouseDown(e, task, 'resize-end')}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="h-full w-0.5 bg-white/50 mr-[3px] ml-auto"></div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Dependency Arrows */}
+                        {task.dependencies && task.dependencies.map((depId, i) => {
+                          const depTask = allTasks.find(t => t.id === depId);
+                          if (!depTask) return null;
+                          
+                          const startX = ((depTask.startMonth + depTask.duration) / 12) * 100;
+                          const endX = (task.startMonth / 12) * 100;
+                          
+                          return (
+                            <svg 
+                              key={i}
+                              className="absolute inset-0 pointer-events-none"
+                              style={{ width: '100%', height: '100%' }}
+                            >
+                              <defs>
+                                <marker
+                                  id={`arrowhead-combined-${task.id}-${i}`}
+                                  markerWidth="10"
+                                  markerHeight="10"
+                                  refX="9"
+                                  refY="3"
+                                  orient="auto"
+                                >
+                                  <polygon 
+                                    points="0 0, 10 3, 0 6" 
+                                    fill="#ef4444"
+                                  />
+                                </marker>
+                              </defs>
+                              <line
+                                x1={`${startX}%`}
+                                y1="20"
+                                x2={`${endX}%`}
+                                y2="20"
+                                stroke="#ef4444"
+                                strokeWidth="2"
+                                markerEnd={`url(#arrowhead-combined-${task.id}-${i})`}
+                              />
+                            </svg>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
