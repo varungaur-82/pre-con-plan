@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Settings, Minus, Plus } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, ReferenceLine } from "recharts";
+import { ScheduleBuilder } from "./ScheduleBuilder";
 
 const sCurveData = [
   { month: '2025-08', baseline: 2, actual: 0 },
@@ -24,6 +26,8 @@ const waterfallData = [
 ];
 
 export function ScheduleTracker() {
+  const [activeView, setActiveView] = useState("snapshot");
+
   return (
     <div className="w-full space-y-6">
       {/* Header Section */}
@@ -36,8 +40,18 @@ export function ScheduleTracker() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline">Schedule Snapshot</Button>
-            <Button variant="outline">Schedule Builder</Button>
+            <Button 
+              variant={activeView === "snapshot" ? "default" : "outline"}
+              onClick={() => setActiveView("snapshot")}
+            >
+              Schedule Snapshot
+            </Button>
+            <Button 
+              variant={activeView === "builder" ? "default" : "outline"}
+              onClick={() => setActiveView("builder")}
+            >
+              Schedule Builder
+            </Button>
             <Button variant="outline">Schedule Alignment</Button>
             <Button variant="outline">Schedule Rules</Button>
             <Button variant="outline">Impact Room</Button>
@@ -45,8 +59,13 @@ export function ScheduleTracker() {
         </div>
       </div>
 
-      {/* Key Metrics Cards */}
-      <div className="grid grid-cols-5 gap-4">
+      {/* Conditional Content */}
+      {activeView === "builder" ? (
+        <ScheduleBuilder />
+      ) : (
+        <>
+          {/* Key Metrics Cards */}
+          <div className="grid grid-cols-5 gap-4">
         {/* Health Score */}
         <Card className="bg-amber-50 border-amber-200">
           <CardContent className="pt-6">
@@ -276,6 +295,8 @@ export function ScheduleTracker() {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
     </div>
   );
 }
