@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ScheduleBuilder } from "./ScheduleBuilder";
 import { ScheduleAlignment } from "./ScheduleAlignment";
 import { ScheduleRules } from "./ScheduleRules";
+import { ImpactRoom } from "./ImpactRoom";
 
 const sCurveData = [
   { month: '2025-08', baseline: 2, actual: 0 },
@@ -66,7 +67,12 @@ export function ScheduleTracker() {
             >
               Schedule Rules
             </Button>
-            <Button variant="outline">Impact Room</Button>
+            <Button 
+              variant={activeView === "impact" ? "default" : "outline"}
+              onClick={() => setActiveView("impact")}
+            >
+              Impact Room
+            </Button>
           </div>
         </div>
       </div>
@@ -78,6 +84,8 @@ export function ScheduleTracker() {
         <ScheduleAlignment />
       ) : activeView === "rules" ? (
         <ScheduleRules />
+      ) : activeView === "impact" ? (
+        <ImpactRoom />
       ) : (
         <>
           {/* Key Metrics Cards */}
