@@ -31,6 +31,38 @@ const App = () => {
     setIsLoading(false);
   }, []);
 
+  // Session timeout after 30 minutes of inactivity
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimeout = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        localStorage.removeItem("app_authenticated");
+        setIsAuthenticated(false);
+      }, TIMEOUT_DURATION);
+    };
+
+    // Track user activity
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    activityEvents.forEach(event => {
+      window.addEventListener(event, resetTimeout);
+    });
+
+    // Initialize timeout
+    resetTimeout();
+
+    return () => {
+      clearTimeout(timeoutId);
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, resetTimeout);
+      });
+    };
+  }, [isAuthenticated]);
+
   if (isLoading) {
     return null;
   }
