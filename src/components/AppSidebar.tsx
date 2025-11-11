@@ -10,7 +10,8 @@ import {
   Settings,
   ClipboardList,
   MapPin,
-  AlertTriangle
+  AlertTriangle,
+  LogOut
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -25,6 +26,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 
 const mainItems = [
@@ -47,7 +49,11 @@ const systemItems = [
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  onLogout: () => void;
+}
+
+export function AppSidebar({ onLogout }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
@@ -159,6 +165,21 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Logout Footer */}
+      <SidebarFooter className="border-t border-construction-grid/50 p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton 
+              onClick={onLogout}
+              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+              <LogOut className="h-4 w-4" />
+              {!collapsed && <span>Logout</span>}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
