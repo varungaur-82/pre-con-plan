@@ -24,6 +24,38 @@ export function ProcurementSnapshot() {
   const [riskAppetite, setRiskAppetite] = useState("balanced");
   const [panelCount, setPanelCount] = useState(2);
 
+  // 5D Scenarios State
+  const [deliveryMethod, setDeliveryMethod] = useState("baseline");
+  const [designAssistEnvelope, setDesignAssistEnvelope] = useState(false);
+  const [designAssistMEP, setDesignAssistMEP] = useState(false);
+  const [gmpTiming, setGmpTiming] = useState("no-change");
+
+  // Package-specific state
+  const [structuralSteelTiming, setStructuralSteelTiming] = useState(0);
+  const [switchgearTiming, setSwitchgearTiming] = useState(0);
+  const [elevatorsTiming, setElevatorsTiming] = useState(0);
+  const [curtainWallTiming, setCurtainWallTiming] = useState(0);
+  const [hvacTiming, setHvacTiming] = useState(0);
+  const [precastTiming, setPrecastTiming] = useState(0);
+
+  // Calculate scenario impact based on inputs
+  const calculateScenarioImpact = (baseValue: number, timing: number, additionalFactors = 0) => {
+    // Timing impact: -12 weeks (pre-order) = +15%, +12 weeks (delay) = -15%
+    const timingImpact = (timing / 12) * -15;
+    
+    // Global levers impact
+    let globalImpact = 0;
+    if (designAssistEnvelope) globalImpact += 3;
+    if (designAssistMEP) globalImpact += 3;
+    if (gmpTiming === "early") globalImpact += 5;
+    if (gmpTiming === "late") globalImpact -= 5;
+    if (deliveryMethod === "db") globalImpact += 5;
+    if (deliveryMethod === "pdb") globalImpact += 3;
+    
+    const totalImpact = timingImpact + globalImpact + additionalFactors;
+    return Math.min(100, Math.max(0, baseValue + totalImpact));
+  };
+
   // Long-Lead Risk Matrix Data
   const riskMatrixData = [
     { x: 2, y: 8, risk: 'high', package: 'Elevators' },
@@ -1707,7 +1739,7 @@ export function ProcurementSnapshot() {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <RadioGroup defaultValue="baseline">
+                    <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod}>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="db" id="db" />
                         <Label htmlFor="db" className="text-sm cursor-pointer">DB</Label>
@@ -1742,14 +1774,22 @@ export function ProcurementSnapshot() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="design-assist-envelope" />
+                      <Checkbox 
+                        id="design-assist-envelope" 
+                        checked={designAssistEnvelope}
+                        onCheckedChange={(checked) => setDesignAssistEnvelope(checked as boolean)}
+                      />
                       <Label htmlFor="design-assist-envelope" className="text-sm cursor-pointer flex items-center gap-1">
                         Design-Assist: Envelope
                         <Info className="h-3 w-3 text-primary" />
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="design-assist-mep" />
+                      <Checkbox 
+                        id="design-assist-mep" 
+                        checked={designAssistMEP}
+                        onCheckedChange={(checked) => setDesignAssistMEP(checked as boolean)}
+                      />
                       <Label htmlFor="design-assist-mep" className="text-sm cursor-pointer flex items-center gap-1">
                         Design-Assist: MEP
                         <Info className="h-3 w-3 text-primary" />
@@ -1763,7 +1803,7 @@ export function ProcurementSnapshot() {
                           <HelpCircle className="h-3 w-3 text-muted-foreground" />
                         </Label>
                       </div>
-                      <Select defaultValue="no-change">
+                      <Select value={gmpTiming} onValueChange={setGmpTiming}>
                         <SelectTrigger className="w-full">
                           <SelectValue />
                         </SelectTrigger>
@@ -1819,14 +1859,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {structuralSteelTiming > 0 ? '+' : ''}{structuralSteelTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={structuralSteelTiming}
+                            onChange={(e) => setStructuralSteelTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -1900,14 +1941,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {switchgearTiming > 0 ? '+' : ''}{switchgearTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={switchgearTiming}
+                            onChange={(e) => setSwitchgearTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -1981,14 +2023,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {elevatorsTiming > 0 ? '+' : ''}{elevatorsTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={elevatorsTiming}
+                            onChange={(e) => setElevatorsTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2062,14 +2105,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {curtainWallTiming > 0 ? '+' : ''}{curtainWallTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={curtainWallTiming}
+                            onChange={(e) => setCurtainWallTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2143,14 +2187,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {hvacTiming > 0 ? '+' : ''}{hvacTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={hvacTiming}
+                            onChange={(e) => setHvacTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2224,14 +2269,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {precastTiming > 0 ? '+' : ''}{precastTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            defaultValue="0" 
+                            value={precastTiming}
+                            onChange={(e) => setPrecastTiming(Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2287,43 +2333,47 @@ export function ProcurementSnapshot() {
                     <div className="space-y-3">
                       {/* Design Milestones */}
                       {[
-                        { name: '50% Design Complete', baseline: 90, scenario: 95, date: '2024-02-15' },
-                        { name: '60% Design Complete', baseline: 85, scenario: 90, date: '2024-04-01' },
-                        { name: '90% Design Complete', baseline: 80, scenario: 88, date: '2024-05-15' },
-                        { name: 'IFC Release', baseline: 75, scenario: 85, date: '2024-06-...' }
-                      ].map((milestone, i) => (
-                        <div key={i} className="space-y-1">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-medium">{milestone.name}</span>
-                            <span className="text-muted-foreground">{milestone.date}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 space-y-1">
-                              <div className="h-3 bg-muted rounded relative overflow-hidden">
-                                <div 
-                                  className="h-full bg-construction-success rounded" 
-                                  style={{ width: `${milestone.baseline}%` }}
-                                ></div>
-                              </div>
-                              <div className="h-3 bg-muted rounded relative overflow-hidden">
-                                <div 
-                                  className="h-full bg-primary rounded" 
-                                  style={{ width: `${milestone.scenario}%` }}
-                                ></div>
+                        { name: '50% Design Complete', baseline: 90, date: '2024-02-15' },
+                        { name: '60% Design Complete', baseline: 85, date: '2024-04-01' },
+                        { name: '90% Design Complete', baseline: 80, date: '2024-05-15' },
+                        { name: 'IFC Release', baseline: 75, date: '2024-06-...' }
+                      ].map((milestone, i) => {
+                        const avgTiming = (structuralSteelTiming + switchgearTiming + elevatorsTiming + curtainWallTiming + hvacTiming + precastTiming) / 6;
+                        return (
+                          <div key={i} className="space-y-1">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="font-medium">{milestone.name}</span>
+                              <span className="text-muted-foreground">{milestone.date}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 space-y-1">
+                                <div className="h-3 bg-muted rounded relative overflow-hidden">
+                                  <div 
+                                    className="h-full bg-construction-success rounded" 
+                                    style={{ width: `${milestone.baseline}%` }}
+                                  ></div>
+                                </div>
+                                <div className="h-3 bg-muted rounded relative overflow-hidden">
+                                  <div 
+                                    className="h-full bg-primary rounded" 
+                                    style={{ width: `${calculateScenarioImpact(milestone.baseline, avgTiming)}%` }}
+                                  ></div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                       
                       <div className="pt-3 border-t">
                         <p className="text-xs font-medium mb-2">Long-Lead Procurement Timeline</p>
                         {[
-                          { name: 'Structural Steel', baseline: 70, scenario: 75 },
-                          { name: 'Switchgear & Elec...', baseline: 68, scenario: 75 },
-                          { name: 'Elevators', baseline: 65, scenario: 70 },
-                          { name: 'Curtain Wall Syst...', baseline: 62, scenario: 70 },
-                          { name: 'HVAC Equipment', baseline: 60, scenario: 68 }
+                          { name: 'Structural Steel', baseline: 70, timing: structuralSteelTiming },
+                          { name: 'Switchgear & Elec...', baseline: 68, timing: switchgearTiming },
+                          { name: 'Elevators', baseline: 65, timing: elevatorsTiming },
+                          { name: 'Curtain Wall Syst...', baseline: 62, timing: curtainWallTiming },
+                          { name: 'HVAC Equipment', baseline: 60, timing: hvacTiming },
+                          { name: 'Precast Concrete', baseline: 58, timing: precastTiming }
                         ].map((item, i) => (
                           <div key={i} className="space-y-1 mb-2">
                             <div className="flex items-center justify-between text-xs">
@@ -2341,7 +2391,7 @@ export function ProcurementSnapshot() {
                                 <div className="h-2 bg-muted rounded relative overflow-hidden">
                                   <div 
                                     className="h-full bg-primary rounded" 
-                                    style={{ width: `${item.scenario}%` }}
+                                    style={{ width: `${calculateScenarioImpact(item.baseline, item.timing)}%` }}
                                   ></div>
                                 </div>
                               </div>
