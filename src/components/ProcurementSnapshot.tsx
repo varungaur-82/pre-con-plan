@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { Settings, Minus, Plus, Info, ExternalLink } from "lucide-react";
+import { Settings, Minus, Plus, Info, ExternalLink, ChevronDown } from "lucide-react";
 
 export function ProcurementSnapshot() {
   const [activeTab, setActiveTab] = useState("snapshot");
@@ -1464,6 +1464,157 @@ export function ProcurementSnapshot() {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Market Events & Project Impact */}
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Market Events & Project Impact</h2>
+              <div className="space-y-3">
+                {/* Event 1 - Port Congestion */}
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold">Port Congestion in Region Y</h3>
+                          <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+                            medium severity
+                          </Badge>
+                          <button className="ml-auto text-muted-foreground hover:text-foreground">
+                            <ChevronDown className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          Increased container wait times at major ports
+                        </p>
+                        <p className="text-xs text-muted-foreground">2024-01-10 • Region Y</p>
+                        
+                        <div className="mt-3 pl-4 border-l-4 border-primary/40">
+                          <p className="text-sm font-medium mb-1">Project Impact:</p>
+                          <p className="text-sm text-muted-foreground">Possible 1-2 week delays for imported materials</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Event 2 - Labor Easing */}
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold">Labor Easing in Region X</h3>
+                          <Badge className="bg-green-100 text-green-700 border-green-200">
+                            low severity
+                          </Badge>
+                          <button className="ml-auto text-muted-foreground hover:text-foreground">
+                            <ChevronDown className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          Increased availability of skilled trades
+                        </p>
+                        <p className="text-xs text-muted-foreground">2024-01-08 • Region X</p>
+                        
+                        <div className="mt-3 pl-4 border-l-4 border-primary/40">
+                          <p className="text-sm font-medium mb-1">Project Impact:</p>
+                          <p className="text-sm text-muted-foreground">Potential cost relief in Q4 2024</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Event 3 - MEP Panel Constraints */}
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold">MEP Panel Constraints</h3>
+                          <Badge className="bg-red-100 text-red-700 border-red-200">
+                            high severity
+                          </Badge>
+                          <button className="ml-auto text-muted-foreground hover:text-foreground">
+                            <ChevronDown className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          Tight supply chain for electrical panels
+                        </p>
+                        <p className="text-xs text-muted-foreground">2024-01-05 • National</p>
+                        
+                        <div className="mt-3 pl-4 border-l-4 border-primary/40">
+                          <p className="text-sm font-medium mb-1">Project Impact:</p>
+                          <p className="text-sm text-muted-foreground">Extended lead times, consider early ordering</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Logistics Exposure & Regional Risks */}
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Logistics Exposure & Regional Risks</h2>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {/* Curtain Wall System */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="font-semibold">Curtain Wall System</h3>
+                      <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                        Region Y
+                      </Badge>
+                    </div>
+                    <div className="space-y-1 mb-3 text-sm text-muted-foreground">
+                      <p>• Port delays</p>
+                      <p>• Customs clearance</p>
+                    </div>
+                    <p className="text-sm font-medium text-destructive mb-4">
+                      Estimated Delay: <span className="font-bold">1 weeks</span>
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Ask AI
+                      </Button>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Add to Contingency
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Switchgear */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="font-semibold">Switchgear</h3>
+                      <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                        OEM Z
+                      </Badge>
+                    </div>
+                    <div className="space-y-1 mb-3 text-sm text-muted-foreground">
+                      <p>• Lead times trending up</p>
+                      <p>• Component shortages</p>
+                    </div>
+                    <p className="text-sm font-medium text-destructive mb-4">
+                      Estimated Delay: <span className="font-bold">2 weeks</span>
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Ask AI
+                      </Button>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Add to Contingency
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </TabsContent>
