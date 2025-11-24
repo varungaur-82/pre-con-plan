@@ -2298,15 +2298,19 @@ export function ProcurementSnapshot() {
                             <span className="text-muted-foreground">{milestone.date}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="flex-1 h-6 bg-muted rounded relative overflow-hidden">
-                              <div 
-                                className="h-full bg-construction-success/40 absolute left-0" 
-                                style={{ width: `${milestone.baseline}%` }}
-                              ></div>
-                              <div 
-                                className="h-full bg-primary absolute left-0" 
-                                style={{ width: `${milestone.scenario}%` }}
-                              ></div>
+                            <div className="flex-1 space-y-1">
+                              <div className="h-3 bg-muted rounded relative overflow-hidden">
+                                <div 
+                                  className="h-full bg-construction-success rounded" 
+                                  style={{ width: `${milestone.baseline}%` }}
+                                ></div>
+                              </div>
+                              <div className="h-3 bg-muted rounded relative overflow-hidden">
+                                <div 
+                                  className="h-full bg-primary rounded" 
+                                  style={{ width: `${milestone.scenario}%` }}
+                                ></div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2327,15 +2331,19 @@ export function ProcurementSnapshot() {
                               <span className="text-muted-foreground">2024-04-15</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <div className="flex-1 h-4 bg-muted rounded relative overflow-hidden">
-                                <div 
-                                  className="h-full bg-construction-success/40 absolute left-0" 
-                                  style={{ width: `${item.baseline}%` }}
-                                ></div>
-                                <div 
-                                  className="h-full bg-primary absolute left-0" 
-                                  style={{ width: `${item.scenario}%` }}
-                                ></div>
+                              <div className="flex-1 space-y-1">
+                                <div className="h-2 bg-muted rounded relative overflow-hidden">
+                                  <div 
+                                    className="h-full bg-construction-success rounded" 
+                                    style={{ width: `${item.baseline}%` }}
+                                  ></div>
+                                </div>
+                                <div className="h-2 bg-muted rounded relative overflow-hidden">
+                                  <div 
+                                    className="h-full bg-primary rounded" 
+                                    style={{ width: `${item.scenario}%` }}
+                                  ></div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -2344,7 +2352,7 @@ export function ProcurementSnapshot() {
 
                       <div className="flex items-center gap-6 pt-2 text-xs">
                         <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 bg-construction-success/40 rounded"></div>
+                          <div className="w-4 h-4 bg-construction-success rounded"></div>
                           <span>Baseline</span>
                         </div>
                         <div className="flex items-center gap-2">
