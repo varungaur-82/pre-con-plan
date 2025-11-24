@@ -10,8 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { Settings, Minus, Plus, Info, ExternalLink, ChevronDown } from "lucide-react";
+import { ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, ComposedChart, Line } from "recharts";
+import { Settings, Minus, Plus, Info, ExternalLink, ChevronDown, HelpCircle, Lightbulb } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export function ProcurementSnapshot() {
   const [activeTab, setActiveTab] = useState("snapshot");
@@ -1621,9 +1625,519 @@ export function ProcurementSnapshot() {
 
         <TabsContent value="scenarios" className="flex-1 m-0 overflow-y-auto">
           <div className="p-6">
-            <div className="text-center py-16">
-              <h2 className="text-2xl font-bold text-muted-foreground mb-4">5D Scenarios</h2>
-              <p className="text-muted-foreground">Content coming soon...</p>
+            {/* Top Metrics */}
+            <div className="grid grid-cols-4 gap-4 mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Procurement Risk Score</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-destructive">72</span>
+                    <span className="text-sm text-muted-foreground">/ 100</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Baseline: 72</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Long-Lead Exposure</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-construction-success">6</span>
+                    <span className="text-sm">packages</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Baseline: 3 high-risk</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Design Readiness</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-construction-success">77%</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Avg. maturity for long-leads</p>
+                  <p className="text-xs text-muted-foreground">Baseline: 77%</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Market Pressure</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-destructive">High</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Steel +8.0%, Electrical +2.9%</p>
+                  <p className="text-xs text-muted-foreground">Baseline: High</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Title and Controls */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">5D & What-If Scenarios</h2>
+                <p className="text-sm text-muted-foreground">Simulate procurement decisions and see cost, schedule, and risk consequences</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Select value="baseline">
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="baseline">Baseline</SelectItem>
+                    <SelectItem value="scenario1">Scenario 1</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" size="sm">Seed from Strategy Stack</Button>
+                <Button variant="default" size="sm">+ New Scenario</Button>
+                <Button variant="outline" size="sm">Show Comparison</Button>
+              </div>
+            </div>
+
+            {/* Main Layout - Sidebar + Content */}
+            <div className="flex gap-6">
+              {/* Left Sidebar */}
+              <div className="w-80 space-y-4">
+                {/* Project Delivery Method */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-sm">Project Delivery Method</CardTitle>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <RadioGroup defaultValue="baseline">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="db" id="db" />
+                        <Label htmlFor="db" className="text-sm cursor-pointer">DB</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="cmar" id="cmar" />
+                        <Label htmlFor="cmar" className="text-sm cursor-pointer">CMAR</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="dbb" id="dbb" />
+                        <Label htmlFor="dbb" className="text-sm cursor-pointer">DBB</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="pdb" id="pdb" />
+                        <Label htmlFor="pdb" className="text-sm cursor-pointer">PDB</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="baseline" id="baseline" />
+                        <Label htmlFor="baseline" className="text-sm cursor-pointer font-medium">Baseline (No Change)</Label>
+                      </div>
+                    </RadioGroup>
+                  </CardContent>
+                </Card>
+
+                {/* Global Levers */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-sm">Global Levers</CardTitle>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="design-assist-envelope" />
+                      <Label htmlFor="design-assist-envelope" className="text-sm cursor-pointer flex items-center gap-1">
+                        Design-Assist: Envelope
+                        <Info className="h-3 w-3 text-primary" />
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="design-assist-mep" />
+                      <Label htmlFor="design-assist-mep" className="text-sm cursor-pointer flex items-center gap-1">
+                        Design-Assist: MEP
+                        <Info className="h-3 w-3 text-primary" />
+                      </Label>
+                    </div>
+                    
+                    <div className="pt-2 border-t">
+                      <div className="flex items-center justify-between mb-2">
+                        <Label className="text-sm flex items-center gap-1">
+                          GMP Timing
+                          <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                        </Label>
+                      </div>
+                      <Select defaultValue="no-change">
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="no-change">No Change</SelectItem>
+                          <SelectItem value="early">Early GMP</SelectItem>
+                          <SelectItem value="late">Late GMP</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Long-Lead Packages */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-sm">Long-Lead Packages</CardTitle>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {/* Structural Steel */}
+                    <Collapsible>
+                      <div className="flex items-center justify-between py-2 border-b">
+                        <div className="flex items-center gap-2">
+                          <Checkbox id="structural-steel" />
+                          <div>
+                            <Label htmlFor="structural-steel" className="text-sm font-medium cursor-pointer">Structural Steel</Label>
+                            <p className="text-xs text-muted-foreground">Structure</p>
+                          </div>
+                        </div>
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </CollapsibleTrigger>
+                      </div>
+                      <CollapsibleContent className="pt-2 pb-2 space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Baseline Order Date:</span>
+                          <span>2024-04-15</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Scenario Order Date:</span>
+                          <span>2024-04-15</span>
+                        </div>
+                        <div className="pt-2">
+                          <Label className="text-xs text-muted-foreground">Order Timing: +0 weeks from baseline</Label>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs">-12w</span>
+                            <input type="range" className="flex-1" min="-12" max="12" defaultValue="0" />
+                            <span className="text-xs">+12w</span>
+                          </div>
+                        </div>
+                        <div className="space-y-1 pt-2 border-t">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-muted-foreground">Pre-order: -12w</span>
+                            <span className="text-muted-foreground">Baseline: 0</span>
+                            <span className="text-muted-foreground">Delay: +12w</span>
+                          </div>
+                          <div className="flex justify-between text-xs">
+                            <span className="text-muted-foreground">Alternate Spec:</span>
+                            <span>Baseline Spec</span>
+                          </div>
+                        </div>
+                        <Select defaultValue="single">
+                          <SelectTrigger className="w-full h-7 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="single">Single Contract</SelectItem>
+                            <SelectItem value="multiple">Multiple Contracts</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    {/* Switchgear & Electrical Panels */}
+                    <Collapsible>
+                      <div className="flex items-center justify-between py-2 border-b">
+                        <div className="flex items-center gap-2">
+                          <Checkbox id="switchgear" />
+                          <div>
+                            <Label htmlFor="switchgear" className="text-sm font-medium cursor-pointer">Switchgear & Electrical Panels</Label>
+                            <p className="text-xs text-muted-foreground">MEP</p>
+                          </div>
+                        </div>
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </CollapsibleTrigger>
+                      </div>
+                      <CollapsibleContent className="pt-2 pb-2 space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Baseline Order Date:</span>
+                          <span>2024-05-01</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Scenario Order Date:</span>
+                          <span>2024-05-01</span>
+                        </div>
+                        <div className="pt-2">
+                          <Label className="text-xs text-muted-foreground">Order Timing: +0 weeks from baseline</Label>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs">-12w</span>
+                            <input type="range" className="flex-1" min="-12" max="12" defaultValue="0" />
+                            <span className="text-xs">+12w</span>
+                          </div>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    {/* Elevators */}
+                    <Collapsible>
+                      <div className="flex items-center justify-between py-2">
+                        <div className="flex items-center gap-2">
+                          <Checkbox id="elevators" />
+                          <div>
+                            <Label htmlFor="elevators" className="text-sm font-medium cursor-pointer">Elevators</Label>
+                            <p className="text-xs text-muted-foreground">MEP</p>
+                          </div>
+                        </div>
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </CollapsibleTrigger>
+                      </div>
+                    </Collapsible>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="flex-1 space-y-6">
+                {/* Schedule Overlay */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Schedule Overlay (Baseline vs Scenario)</CardTitle>
+                    <p className="text-xs text-muted-foreground">Design Milestones</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {/* Design Milestones */}
+                      {[
+                        { name: '50% Design Complete', baseline: 90, scenario: 95, date: '2024-02-15' },
+                        { name: '60% Design Complete', baseline: 85, scenario: 90, date: '2024-04-01' },
+                        { name: '90% Design Complete', baseline: 80, scenario: 88, date: '2024-05-15' },
+                        { name: 'IFC Release', baseline: 75, scenario: 85, date: '2024-06-...' }
+                      ].map((milestone, i) => (
+                        <div key={i} className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium">{milestone.name}</span>
+                            <span className="text-muted-foreground">{milestone.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-6 bg-muted rounded relative overflow-hidden">
+                              <div 
+                                className="h-full bg-construction-success/40 absolute left-0" 
+                                style={{ width: `${milestone.baseline}%` }}
+                              ></div>
+                              <div 
+                                className="h-full bg-primary absolute left-0" 
+                                style={{ width: `${milestone.scenario}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      <div className="pt-3 border-t">
+                        <p className="text-xs font-medium mb-2">Long-Lead Procurement Timeline</p>
+                        {[
+                          { name: 'Structural Steel', baseline: 70, scenario: 75 },
+                          { name: 'Switchgear & Elec...', baseline: 68, scenario: 75 },
+                          { name: 'Elevators', baseline: 65, scenario: 70 },
+                          { name: 'Curtain Wall Syst...', baseline: 62, scenario: 70 },
+                          { name: 'HVAC Equipment', baseline: 60, scenario: 68 }
+                        ].map((item, i) => (
+                          <div key={i} className="space-y-1 mb-2">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-muted-foreground">{item.name}</span>
+                              <span className="text-muted-foreground">2024-04-15</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 h-4 bg-muted rounded relative overflow-hidden">
+                                <div 
+                                  className="h-full bg-construction-success/40 absolute left-0" 
+                                  style={{ width: `${item.baseline}%` }}
+                                ></div>
+                                <div 
+                                  className="h-full bg-primary absolute left-0" 
+                                  style={{ width: `${item.scenario}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-6 pt-2 text-xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 bg-construction-success/40 rounded"></div>
+                          <span>Baseline</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 bg-primary rounded"></div>
+                          <span>Scenario</span>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-muted-foreground pt-2">
+                        Precon Completion: <span className="text-foreground">Baseline: 2024-12-31</span> • <span className="text-primary font-medium">Scenario: 2024-12-31</span>
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Cost Overlay */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Cost Overlay</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={[{ name: 'Baseline', value: 50000 }]}>
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Bar dataKey="value" fill="hsl(var(--primary))" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                      <div className="mt-4 space-y-1 text-xs">
+                        <p className="font-semibold">Cost Breakdown</p>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Structure:</span>
+                          <span>$11250K</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Envelope:</span>
+                          <span>$9000K</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">MEP:</span>
+                          <span>$13500K</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Interiors:</span>
+                          <span>$6750K</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Site:</span>
+                          <span>$4500K</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Scenario</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={[{ name: 'Scenario', value: 50000 }]}>
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Bar dataKey="value" fill="hsl(var(--primary))" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                      <div className="mt-4 space-y-1 text-xs">
+                        <p className="font-semibold">Impact Summary</p>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Cost Change:</span>
+                          <span className="text-destructive">+0.00%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Dollar Impact:</span>
+                          <span>+$0K</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Risk-Adjusted:</span>
+                          <span className="text-construction-success">$46.62M</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* AI Suggested Strategies */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <Lightbulb className="h-5 w-5 text-primary" />
+                      <CardTitle className="text-base">AI Suggested Strategies</CardTitle>
+                      <Info className="h-4 w-4 text-primary ml-auto" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {/* Strategy 1 */}
+                    <div className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm">Early Order Critical Packages</h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Pre-order structural steel and switchgear 4 weeks early to reduce schedule risk
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 text-xs mb-3">
+                        <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">Cost: +0.5%</Badge>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">Schedule: -2w</Badge>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">Risk: -8</Badge>
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">Apply Strategy</Button>
+                    </div>
+
+                    {/* Strategy 2 */}
+                    <div className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm">Design-Assist for Envelope & MEP</h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Enable design-assist for envelope and MEP to accelerate design and reduce procurement timeline
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 text-xs mb-3">
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">Cost: -1%</Badge>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">Schedule: -2w</Badge>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">Risk: -8</Badge>
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">Apply Strategy</Button>
+                    </div>
+
+                    {/* Strategy 3 */}
+                    <div className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm">Switch to CMAR Delivery</h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Change delivery method to CMAR to engage CM early and reduce procurement timeline
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 text-xs mb-3">
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">Cost: +1%</Badge>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">Schedule: -2w</Badge>
+                        <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">Risk: -3</Badge>
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">Apply Strategy</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Design & Procurement Actions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Design & Procurement Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">No design freeze adjustments required</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Bottom Action Buttons */}
+            <div className="flex items-center justify-between mt-8 pt-6 border-t">
+              <Button variant="default">Set as Active Strategy</Button>
+              <Button variant="outline">Save Scenario with Note...</Button>
+              <Button variant="outline">Generate Exec One-Pager</Button>
             </div>
           </div>
         </TabsContent>
