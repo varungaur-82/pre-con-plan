@@ -1697,7 +1697,7 @@ export function ProcurementSnapshot() {
             {/* Main Layout - Sidebar + Content */}
             <div className="flex gap-6">
               {/* Left Sidebar */}
-              <div className="w-80 space-y-4">
+              <div className="w-80 space-y-4 overflow-y-auto max-h-[calc(100vh-250px)] pr-2">
                 {/* Project Delivery Method */}
                 <Card>
                   <CardHeader className="pb-3">
@@ -2276,7 +2276,7 @@ export function ProcurementSnapshot() {
               </div>
 
               {/* Main Content Area */}
-              <div className="flex-1 space-y-6">
+              <div className="flex-1 space-y-6 overflow-y-auto max-h-[calc(100vh-250px)] pr-2">
                 {/* Schedule Overlay */}
                 <Card>
                   <CardHeader>
