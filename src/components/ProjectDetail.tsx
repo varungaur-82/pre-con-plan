@@ -31,6 +31,7 @@ import { EstimateGenerator } from "./EstimateGenerator";
 import { CompareBudgets } from "./CompareBudgets";
 import { BasisOfEstimate } from "./BasisOfEstimate";
 import { FiveDSchedule } from "./FiveDSchedule";
+import { ProcurementSnapshot } from "./ProcurementSnapshot";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -2798,11 +2799,8 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
             </TabsContent>
 
             {/* Procurement Tab */}
-            <TabsContent value="procurement" className="mt-0">
-              <div className="container px-6 py-16 text-center">
-                <h2 className="text-2xl font-bold text-muted-foreground mb-4">Procurement</h2>
-                <p className="text-muted-foreground">Content coming soon...</p>
-              </div>
+            <TabsContent value="procurement" className="mt-0 h-full">
+              <ProcurementSnapshot />
             </TabsContent>
 
             {/* Data Engine Tab */}
