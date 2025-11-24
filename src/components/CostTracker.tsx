@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { ChevronDown, LayoutGrid, Minus, Plus, Download } from "lucide-react";
+import { useScenario } from "@/contexts/ScenarioContext";
 import {
   Select,
   SelectContent,
@@ -55,9 +56,24 @@ const varianceTableData = [
 ];
 
 export function CostTracker() {
+  const { parameters } = useScenario();
   const [paneCount, setPaneCount] = useState(2);
   const [layout, setLayout] = useState("1x2");
   const [selectedView, setSelectedView] = useState("cost-snapshot");
+
+  // Calculate cost impact based on scenario parameters
+  const calculateCostImpact = (baseValue: number) => {
+    let impact = 0;
+    if (parameters.designAssistEnvelope) impact += 2;
+    if (parameters.designAssistMEP) impact += 2;
+    if (parameters.deliveryMethod === "design-build") impact += 3;
+    if (parameters.deliveryMethod === "prog-design-build") impact += 1.5;
+    const avgTiming = (parameters.structuralSteelTiming + parameters.switchgearTiming + 
+                      parameters.elevatorTiming + parameters.curtainWallTiming + 
+                      parameters.hvacTiming + parameters.precastTiming) / 6;
+    const timingImpact = ((avgTiming - 50) / 50) * -2;
+    return baseValue * (1 + (impact + timingImpact) / 100);
+  };
 
   return (
     <div className="w-full">
@@ -102,7 +118,10 @@ export function CostTracker() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Commitments</p>
-            <p className="text-2xl font-bold">$41.9M</p>
+            <p className="text-2xl font-bold">${calculateCostImpact(41.9).toFixed(1)}M</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {calculateCostImpact(41.9) > 41.9 ? '↗' : calculateCostImpact(41.9) < 41.9 ? '↘' : '→'} Scenario impact
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -114,7 +133,10 @@ export function CostTracker() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Anticipated Cost</p>
-            <p className="text-2xl font-bold">$42.6M</p>
+            <p className="text-2xl font-bold">${calculateCostImpact(42.6).toFixed(1)}M</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {calculateCostImpact(42.6) > 42.6 ? '↗' : calculateCostImpact(42.6) < 42.6 ? '↘' : '→'} Scenario impact
+            </p>
           </CardContent>
         </Card>
         <Card>

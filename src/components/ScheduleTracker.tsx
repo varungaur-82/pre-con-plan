@@ -8,6 +8,7 @@ import { ScheduleBuilder } from "./ScheduleBuilder";
 import { ScheduleAlignment } from "./ScheduleAlignment";
 import { ScheduleRules } from "./ScheduleRules";
 import { ImpactRoom } from "./ImpactRoom";
+import { useScenario } from "@/contexts/ScenarioContext";
 
 const sCurveData = [
   { month: '2025-08', baseline: 2, actual: 0 },
@@ -29,7 +30,22 @@ const waterfallData = [
 ];
 
 export function ScheduleTracker() {
+  const { parameters } = useScenario();
   const [activeView, setActiveView] = useState("snapshot");
+
+  // Calculate schedule impact based on scenario parameters
+  const calculateScheduleImpact = (baseDays: number) => {
+    let impact = 0;
+    if (parameters.designAssistEnvelope) impact -= 3;
+    if (parameters.designAssistMEP) impact -= 3;
+    if (parameters.deliveryMethod === "design-build") impact -= 5;
+    if (parameters.deliveryMethod === "prog-design-build") impact -= 2;
+    const avgTiming = (parameters.structuralSteelTiming + parameters.switchgearTiming + 
+                      parameters.elevatorTiming + parameters.curtainWallTiming + 
+                      parameters.hvacTiming + parameters.precastTiming) / 6;
+    const timingImpact = ((avgTiming - 50) / 50) * 10;
+    return Math.round(baseDays + impact + timingImpact);
+  };
 
   return (
     <div className="w-full space-y-6">
@@ -106,8 +122,8 @@ export function ScheduleTracker() {
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-sm font-medium text-muted-foreground mb-2">Target vs Forecast</div>
-              <div className="text-5xl font-bold mb-1">8d</div>
-              <div className="text-xs text-muted-foreground">Forecast: Dec 3</div>
+              <div className="text-5xl font-bold mb-1">{calculateScheduleImpact(8)}d</div>
+              <div className="text-xs text-muted-foreground">Scenario impact: {calculateScheduleImpact(8) - 8}d</div>
             </div>
           </CardContent>
         </Card>

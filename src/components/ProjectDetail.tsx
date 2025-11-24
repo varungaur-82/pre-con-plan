@@ -32,6 +32,7 @@ import { CompareBudgets } from "./CompareBudgets";
 import { BasisOfEstimate } from "./BasisOfEstimate";
 import { FiveDSchedule } from "./FiveDSchedule";
 import { ProcurementSnapshot } from "./ProcurementSnapshot";
+import { ScenarioProvider } from "@/contexts/ScenarioContext";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -318,6 +319,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   };
 
   return (
+    <ScenarioProvider>
     <div className="min-h-screen bg-background relative overflow-hidden">
       <div className="flex h-full">
         {/* Main Content */}
@@ -3085,5 +3087,6 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
     </div>
   </div>
 </div>
+</ScenarioProvider>
   );
 }
