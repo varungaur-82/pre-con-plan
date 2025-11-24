@@ -1320,6 +1320,151 @@ export function ProcurementSnapshot() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Design Blocking Issues */}
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Design Blocking Issues</h2>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-full bg-destructive rounded-full"></div>
+                      <p className="text-sm">
+                        <span className="font-semibold">Switchgear & Electrical:</span>{" "}
+                        <span className="text-muted-foreground">One-line diagram pending</span>
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-full bg-destructive rounded-full"></div>
+                      <p className="text-sm">
+                        <span className="font-semibold">Switchgear & Electrical:</span>{" "}
+                        <span className="text-muted-foreground">Utility coordination incomplete</span>
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-full bg-destructive rounded-full"></div>
+                      <p className="text-sm">
+                        <span className="font-semibold">Curtain Wall:</span>{" "}
+                        <span className="text-muted-foreground">Performance spec incomplete</span>
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-full bg-destructive rounded-full"></div>
+                      <p className="text-sm">
+                        <span className="font-semibold">Curtain Wall:</span>{" "}
+                        <span className="text-muted-foreground">Thermal analysis pending</span>
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Market Conditions & Project Impact */}
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Market Conditions & Project Impact</h2>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Market Indices & Direct Project Impact</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-6">
+                    {/* Steel */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Steel</span>
+                        <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                          Rising
+                        </Badge>
+                      </div>
+                      <div className="text-3xl font-bold">108</div>
+                      <div className="text-sm text-red-600 font-medium">+8.0%</div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Affects: <span className="font-medium">0 packages</span></p>
+                        <p className="text-xs text-muted-foreground">Est. Impact: <span className="font-medium text-red-600">$0K</span></p>
+                      </div>
+                    </div>
+
+                    {/* Electrical */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Electrical</span>
+                        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+                          Volatile
+                        </Badge>
+                      </div>
+                      <div className="text-3xl font-bold">105</div>
+                      <div className="text-sm text-red-600 font-medium">+2.9%</div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Affects: <span className="font-medium">0 packages</span></p>
+                        <p className="text-xs text-muted-foreground">Est. Impact: <span className="font-medium text-red-600">$0K</span></p>
+                      </div>
+                    </div>
+
+                    {/* Mechanical */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Mechanical</span>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                          Stable
+                        </Badge>
+                      </div>
+                      <div className="text-3xl font-bold">103</div>
+                      <div className="text-sm text-red-600 font-medium">+2.0%</div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Affects: <span className="font-medium">0 packages</span></p>
+                        <p className="text-xs text-muted-foreground">Est. Impact: <span className="font-medium text-red-600">$0K</span></p>
+                      </div>
+                    </div>
+
+                    {/* Labor */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Labor</span>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                          Stable
+                        </Badge>
+                      </div>
+                      <div className="text-3xl font-bold">107</div>
+                      <div className="text-sm text-red-600 font-medium">+1.9%</div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Affects: <span className="font-medium">0 packages</span></p>
+                        <p className="text-xs text-muted-foreground">Est. Impact: <span className="font-medium text-red-600">$0K</span></p>
+                      </div>
+                    </div>
+
+                    {/* Freight */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Freight</span>
+                        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+                          Volatile
+                        </Badge>
+                      </div>
+                      <div className="text-3xl font-bold">112</div>
+                      <div className="text-sm text-red-600 font-medium">+1.8%</div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Affects: <span className="font-medium">0 packages</span></p>
+                        <p className="text-xs text-muted-foreground">Est. Impact: <span className="font-medium text-red-600">$0K</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Mitigation Strategies */}
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Mitigation Strategies</h2>
+              <Card>
+                <CardContent className="p-6">
+                  <p className="text-muted-foreground text-sm">
+                    Active mitigation strategies are displayed in the Procurement Strategy Stack above.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </TabsContent>
 
