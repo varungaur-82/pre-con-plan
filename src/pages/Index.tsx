@@ -12,6 +12,7 @@ import { Calendar, BarChart3, FileText, Users, Zap, StickyNote, FolderOpen, File
 import { useTabContext } from "@/contexts/TabContext";
 import { useState } from "react";
 import constructionHero from "@/assets/construction-hero.jpg";
+import { ScenarioProvider } from "@/contexts/ScenarioContext";
 
 const Index = () => {
   const { tabs, activeTabId, openTab, closeTab, setActiveTab } =
@@ -24,6 +25,7 @@ const Index = () => {
   };
 
   return (
+    <ScenarioProvider>
     <div className="min-h-screen bg-background">
       <NewProjectModal
         open={showNewProjectModal}
@@ -359,6 +361,7 @@ const Index = () => {
         <ProjectDetail projectId={activeTabId} />
       )}
     </div>
+    </ScenarioProvider>
   );
 };
 

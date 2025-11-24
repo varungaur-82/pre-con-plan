@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Building2, Clock, AlertTriangle } from "lucide-react";
+import { useScenario } from "@/contexts/ScenarioContext";
 
 interface StatCardProps {
   title: string;
@@ -46,6 +47,25 @@ function StatCard({ title, value, icon, trend, color }: StatCardProps) {
 }
 
 export function DashboardStats() {
+  const { parameters } = useScenario();
+  
+  // Calculate impacts based on scenario parameters
+  const budgetImpact = () => {
+    let impact = 0;
+    if (parameters.designAssistEnvelope) impact += 1.5;
+    if (parameters.designAssistMEP) impact += 1.5;
+    if (parameters.deliveryMethod === "design-build") impact += 2;
+    return impact;
+  };
+
+  const timelineImpact = () => {
+    let impact = 0;
+    if (parameters.designAssistEnvelope) impact -= 0.15;
+    if (parameters.designAssistMEP) impact -= 0.15;
+    if (parameters.deliveryMethod === "design-build") impact -= 0.3;
+    return impact;
+  };
+
   const stats = [
     {
       title: "Active Projects",
@@ -56,16 +76,16 @@ export function DashboardStats() {
     },
     {
       title: "Total Budget",
-      value: "$2.4M",
+      value: `$${(2.4 + budgetImpact() / 10).toFixed(1)}M`,
       icon: <TrendingUp className="h-4 w-4" />,
-      trend: { value: "+12%", direction: "up" as const },
+      trend: { value: budgetImpact() > 0 ? `+${budgetImpact().toFixed(1)}%` : `${budgetImpact().toFixed(1)}%`, direction: budgetImpact() >= 0 ? "up" as const : "down" as const },
       color: "secondary" as const,
     },
     {
       title: "Avg Timeline",
-      value: "8.2 months",
+      value: `${(8.2 + timelineImpact()).toFixed(1)} months`,
       icon: <Clock className="h-4 w-4" />,
-      trend: { value: "-0.3", direction: "down" as const },
+      trend: { value: timelineImpact().toFixed(1), direction: timelineImpact() < 0 ? "down" as const : "up" as const },
       color: "accent" as const,
     },
     {

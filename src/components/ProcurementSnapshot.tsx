@@ -16,41 +16,45 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useScenario } from "@/contexts/ScenarioContext";
 
 export function ProcurementSnapshot() {
+  const { parameters, updateParameter } = useScenario();
   const [activeTab, setActiveTab] = useState("snapshot");
   const [baseline, setBaseline] = useState("baseline");
   const [ddVersion, setDdVersion] = useState("dd");
   const [riskAppetite, setRiskAppetite] = useState("balanced");
   const [panelCount, setPanelCount] = useState(2);
 
-  // 5D Scenarios State
-  const [deliveryMethod, setDeliveryMethod] = useState("baseline");
-  const [designAssistEnvelope, setDesignAssistEnvelope] = useState(false);
-  const [designAssistMEP, setDesignAssistMEP] = useState(false);
-  const [gmpTiming, setGmpTiming] = useState("no-change");
-
-  // Package-specific state
-  const [structuralSteelTiming, setStructuralSteelTiming] = useState(0);
-  const [switchgearTiming, setSwitchgearTiming] = useState(0);
-  const [elevatorsTiming, setElevatorsTiming] = useState(0);
-  const [curtainWallTiming, setCurtainWallTiming] = useState(0);
-  const [hvacTiming, setHvacTiming] = useState(0);
-  const [precastTiming, setPrecastTiming] = useState(0);
+  // Use context parameters
+  const { 
+    deliveryMethod, 
+    designAssistEnvelope, 
+    designAssistMEP, 
+    gmpTiming,
+    structuralSteelTiming,
+    switchgearTiming,
+    roofingTiming,
+    elevatorTiming,
+    chillersTiming,
+    curtainWallTiming,
+    hvacTiming,
+    precastTiming
+  } = parameters;
 
   // Calculate scenario impact based on inputs
   const calculateScenarioImpact = (baseValue: number, timing: number, additionalFactors = 0) => {
-    // Timing impact: -12 weeks (pre-order) = +15%, +12 weeks (delay) = -15%
-    const timingImpact = (timing / 12) * -15;
+    // Timing impact: -50 weeks (pre-order) = +15%, +50 weeks (delay) = -15%
+    const timingImpact = ((timing - 50) / 50) * -15;
     
     // Global levers impact
     let globalImpact = 0;
     if (designAssistEnvelope) globalImpact += 3;
     if (designAssistMEP) globalImpact += 3;
-    if (gmpTiming === "early") globalImpact += 5;
-    if (gmpTiming === "late") globalImpact -= 5;
-    if (deliveryMethod === "db") globalImpact += 5;
-    if (deliveryMethod === "pdb") globalImpact += 3;
+    if (gmpTiming === "30") globalImpact += 5;
+    if (gmpTiming === "70") globalImpact -= 5;
+    if (deliveryMethod === "design-build") globalImpact += 5;
+    if (deliveryMethod === "prog-design-build") globalImpact += 3;
     
     const totalImpact = timingImpact + globalImpact + additionalFactors;
     return Math.min(100, Math.max(0, baseValue + totalImpact));
@@ -1739,7 +1743,7 @@ export function ProcurementSnapshot() {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod}>
+                    <RadioGroup value={deliveryMethod} onValueChange={(value) => updateParameter("deliveryMethod", value)}>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="db" id="db" />
                         <Label htmlFor="db" className="text-sm cursor-pointer">DB</Label>
@@ -1777,7 +1781,7 @@ export function ProcurementSnapshot() {
                       <Checkbox 
                         id="design-assist-envelope" 
                         checked={designAssistEnvelope}
-                        onCheckedChange={(checked) => setDesignAssistEnvelope(checked as boolean)}
+                        onCheckedChange={(checked) => updateParameter("designAssistEnvelope", checked as boolean)}
                       />
                       <Label htmlFor="design-assist-envelope" className="text-sm cursor-pointer flex items-center gap-1">
                         Design-Assist: Envelope
@@ -1788,7 +1792,7 @@ export function ProcurementSnapshot() {
                       <Checkbox 
                         id="design-assist-mep" 
                         checked={designAssistMEP}
-                        onCheckedChange={(checked) => setDesignAssistMEP(checked as boolean)}
+                        onCheckedChange={(checked) => updateParameter("designAssistMEP", checked as boolean)}
                       />
                       <Label htmlFor="design-assist-mep" className="text-sm cursor-pointer flex items-center gap-1">
                         Design-Assist: MEP
@@ -1803,7 +1807,7 @@ export function ProcurementSnapshot() {
                           <HelpCircle className="h-3 w-3 text-muted-foreground" />
                         </Label>
                       </div>
-                      <Select value={gmpTiming} onValueChange={setGmpTiming}>
+                      <Select value={gmpTiming} onValueChange={(value) => updateParameter("gmpTiming", value)}>
                         <SelectTrigger className="w-full">
                           <SelectValue />
                         </SelectTrigger>
@@ -1867,7 +1871,7 @@ export function ProcurementSnapshot() {
                             min="-12" 
                             max="12" 
                             value={structuralSteelTiming}
-                            onChange={(e) => setStructuralSteelTiming(Number(e.target.value))}
+                            onChange={(e) => updateParameter("structuralSteelTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -1949,7 +1953,7 @@ export function ProcurementSnapshot() {
                             min="-12" 
                             max="12" 
                             value={switchgearTiming}
-                            onChange={(e) => setSwitchgearTiming(Number(e.target.value))}
+                            onChange={(e) => updateParameter("switchgearTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2023,15 +2027,15 @@ export function ProcurementSnapshot() {
                       </div>
 
                       <div className="pt-2">
-                        <Label className="text-xs font-medium">Order Timing: {elevatorsTiming > 0 ? '+' : ''}{elevatorsTiming} weeks from baseline</Label>
+                        <Label className="text-xs font-medium">Order Timing: {elevatorTiming > 0 ? '+' : ''}{elevatorTiming} weeks from baseline</Label>
                         <div className="mt-2">
                           <input 
                             type="range" 
                             className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
                             min="-12" 
                             max="12" 
-                            value={elevatorsTiming}
-                            onChange={(e) => setElevatorsTiming(Number(e.target.value))}
+                            value={elevatorTiming}
+                            onChange={(e) => updateParameter("elevatorTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2113,7 +2117,7 @@ export function ProcurementSnapshot() {
                             min="-12" 
                             max="12" 
                             value={curtainWallTiming}
-                            onChange={(e) => setCurtainWallTiming(Number(e.target.value))}
+                            onChange={(e) => updateParameter("curtainWallTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2195,7 +2199,7 @@ export function ProcurementSnapshot() {
                             min="-12" 
                             max="12" 
                             value={hvacTiming}
-                            onChange={(e) => setHvacTiming(Number(e.target.value))}
+                            onChange={(e) => updateParameter("hvacTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2277,7 +2281,7 @@ export function ProcurementSnapshot() {
                             min="-12" 
                             max="12" 
                             value={precastTiming}
-                            onChange={(e) => setPrecastTiming(Number(e.target.value))}
+                            onChange={(e) => updateParameter("precastTiming", Number(e.target.value))}
                           />
                           <div className="flex justify-between text-xs text-muted-foreground mt-1">
                             <span>Pre-order<br/>-12w</span>
@@ -2338,7 +2342,7 @@ export function ProcurementSnapshot() {
                         { name: '90% Design Complete', baseline: 80, date: '2024-05-15' },
                         { name: 'IFC Release', baseline: 75, date: '2024-06-...' }
                       ].map((milestone, i) => {
-                        const avgTiming = (structuralSteelTiming + switchgearTiming + elevatorsTiming + curtainWallTiming + hvacTiming + precastTiming) / 6;
+                        const avgTiming = (structuralSteelTiming + switchgearTiming + elevatorTiming + curtainWallTiming + hvacTiming + precastTiming) / 6;
                         return (
                           <div key={i} className="space-y-1">
                             <div className="flex items-center justify-between text-xs">
@@ -2370,7 +2374,7 @@ export function ProcurementSnapshot() {
                         {[
                           { name: 'Structural Steel', baseline: 70, timing: structuralSteelTiming },
                           { name: 'Switchgear & Elec...', baseline: 68, timing: switchgearTiming },
-                          { name: 'Elevators', baseline: 65, timing: elevatorsTiming },
+                          { name: 'Elevators', baseline: 65, timing: elevatorTiming },
                           { name: 'Curtain Wall Syst...', baseline: 62, timing: curtainWallTiming },
                           { name: 'HVAC Equipment', baseline: 60, timing: hvacTiming },
                           { name: 'Precast Concrete', baseline: 58, timing: precastTiming }
