@@ -1787,96 +1787,166 @@ export function ProcurementSnapshot() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     {/* Structural Steel */}
-                    <Collapsible>
-                      <div className="flex items-center justify-between py-2 border-b">
-                        <div className="flex items-center gap-2">
-                          <Checkbox id="structural-steel" />
-                          <div>
-                            <Label htmlFor="structural-steel" className="text-sm font-medium cursor-pointer">Structural Steel</Label>
-                            <p className="text-xs text-muted-foreground">Structure</p>
+                    <div className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-sm font-semibold">Structural Steel</h3>
+                            <Checkbox id="structural-steel" />
                           </div>
+                          <Select defaultValue="structure">
+                            <SelectTrigger className="w-40 h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="structure">Structure</SelectItem>
+                              <SelectItem value="mep">MEP</SelectItem>
+                              <SelectItem value="facade">Facade</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <CollapsibleTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                            <ChevronDown className="h-4 w-4" />
-                          </Button>
-                        </CollapsibleTrigger>
                       </div>
-                      <CollapsibleContent className="pt-2 pb-2 space-y-2 text-xs">
+
+                      <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Baseline Order Date:</span>
-                          <span>2024-04-15</span>
+                          <span className="font-medium">2024-04-15</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Scenario Order Date:</span>
-                          <span>2024-04-15</span>
+                          <span className="font-medium">2024-04-15</span>
                         </div>
-                        <div className="pt-2">
-                          <Label className="text-xs text-muted-foreground">Order Timing: +0 weeks from baseline</Label>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs">-12w</span>
-                            <input type="range" className="flex-1" min="-12" max="12" defaultValue="0" />
-                            <span className="text-xs">+12w</span>
+                      </div>
+
+                      <div className="pt-2">
+                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <div className="mt-2">
+                          <input 
+                            type="range" 
+                            className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
+                            min="-12" 
+                            max="12" 
+                            defaultValue="0" 
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                            <span>Pre-order<br/>-12w</span>
+                            <span>Baseline<br/>0</span>
+                            <span>Delay<br/>+12w</span>
                           </div>
                         </div>
-                        <div className="space-y-1 pt-2 border-t">
-                          <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Pre-order: -12w</span>
-                            <span className="text-muted-foreground">Baseline: 0</span>
-                            <span className="text-muted-foreground">Delay: +12w</span>
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Alternate Spec:</span>
-                            <span>Baseline Spec</span>
-                          </div>
+                      </div>
+
+                      <div className="pt-2 space-y-2">
+                        <div>
+                          <Label className="text-xs text-muted-foreground mb-1 block">Alternate Spec</Label>
+                          <Select defaultValue="baseline-spec">
+                            <SelectTrigger className="w-full h-9">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="baseline-spec">Baseline Spec</SelectItem>
+                              <SelectItem value="alternate-1">Alternate Spec 1</SelectItem>
+                              <SelectItem value="alternate-2">Alternate Spec 2</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <Select defaultValue="single">
-                          <SelectTrigger className="w-full h-7 text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="single">Single Contract</SelectItem>
-                            <SelectItem value="multiple">Multiple Contracts</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </CollapsibleContent>
-                    </Collapsible>
+
+                        <div>
+                          <Label className="text-xs text-muted-foreground mb-1 block">Packaging Mode</Label>
+                          <Select defaultValue="single">
+                            <SelectTrigger className="w-full h-9">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="single">Single Contract</SelectItem>
+                              <SelectItem value="multiple">Multiple Contracts</SelectItem>
+                              <SelectItem value="phased">Phased Procurement</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
 
                     {/* Switchgear & Electrical Panels */}
-                    <Collapsible>
-                      <div className="flex items-center justify-between py-2 border-b">
-                        <div className="flex items-center gap-2">
-                          <Checkbox id="switchgear" />
-                          <div>
-                            <Label htmlFor="switchgear" className="text-sm font-medium cursor-pointer">Switchgear & Electrical Panels</Label>
-                            <p className="text-xs text-muted-foreground">MEP</p>
+                    <div className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-sm font-semibold">Switchgear & Electrical Panels</h3>
+                            <Checkbox id="switchgear" />
                           </div>
+                          <Select defaultValue="mep">
+                            <SelectTrigger className="w-40 h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="mep">MEP</SelectItem>
+                              <SelectItem value="structure">Structure</SelectItem>
+                              <SelectItem value="facade">Facade</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <CollapsibleTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                            <ChevronDown className="h-4 w-4" />
-                          </Button>
-                        </CollapsibleTrigger>
                       </div>
-                      <CollapsibleContent className="pt-2 pb-2 space-y-2 text-xs">
+
+                      <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Baseline Order Date:</span>
-                          <span>2024-05-01</span>
+                          <span className="font-medium">2024-05-01</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Scenario Order Date:</span>
-                          <span>2024-05-01</span>
+                          <span className="font-medium">2024-05-01</span>
                         </div>
-                        <div className="pt-2">
-                          <Label className="text-xs text-muted-foreground">Order Timing: +0 weeks from baseline</Label>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs">-12w</span>
-                            <input type="range" className="flex-1" min="-12" max="12" defaultValue="0" />
-                            <span className="text-xs">+12w</span>
+                      </div>
+
+                      <div className="pt-2">
+                        <Label className="text-xs font-medium">Order Timing: +0 weeks from baseline</Label>
+                        <div className="mt-2">
+                          <input 
+                            type="range" 
+                            className="w-full h-2 bg-primary rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary" 
+                            min="-12" 
+                            max="12" 
+                            defaultValue="0" 
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                            <span>Pre-order<br/>-12w</span>
+                            <span>Baseline<br/>0</span>
+                            <span>Delay<br/>+12w</span>
                           </div>
                         </div>
-                      </CollapsibleContent>
-                    </Collapsible>
+                      </div>
+
+                      <div className="pt-2 space-y-2">
+                        <div>
+                          <Label className="text-xs text-muted-foreground mb-1 block">Alternate Spec</Label>
+                          <Select defaultValue="baseline-spec">
+                            <SelectTrigger className="w-full h-9">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="baseline-spec">Baseline Spec</SelectItem>
+                              <SelectItem value="alternate-1">Alternate Spec 1</SelectItem>
+                              <SelectItem value="alternate-2">Alternate Spec 2</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label className="text-xs text-muted-foreground mb-1 block">Packaging Mode</Label>
+                          <Select defaultValue="single">
+                            <SelectTrigger className="w-full h-9">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="single">Single Contract</SelectItem>
+                              <SelectItem value="multiple">Multiple Contracts</SelectItem>
+                              <SelectItem value="phased">Phased Procurement</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
 
                     {/* Elevators */}
                     <Collapsible>
