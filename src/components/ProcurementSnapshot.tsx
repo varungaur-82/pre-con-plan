@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { Settings, Minus, Plus } from "lucide-react";
+import { Settings, Minus, Plus, Info, ExternalLink } from "lucide-react";
 
 export function ProcurementSnapshot() {
   const [activeTab, setActiveTab] = useState("snapshot");
@@ -323,6 +323,392 @@ export function ProcurementSnapshot() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Active Procurement Strategies & Design Freeze Timeline */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Active Procurement Strategies */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Active Procurement Strategies</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Strategy 1 */}
+                  <div className="border-l-4 border-construction-success pl-4 pb-4 border-b last:border-b-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <p className="font-medium">Early order: steel, switchgear, elevators</p>
+                      </div>
+                      <Badge className="bg-construction-success/10 text-construction-success hover:bg-construction-success/20">
+                        Approved
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">
+                        Cost: +1.5%
+                      </Badge>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                        Schedule: -3 weeks
+                      </Badge>
+                      <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+                        Risk: -5
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Strategy 2 */}
+                  <div className="border-l-4 border-amber-500 pl-4 pb-4 border-b last:border-b-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <p className="font-medium">Design-Assist: Envelope and MEP during DD</p>
+                      </div>
+                      <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200">
+                        Draft
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">
+                        Cost: +0.5%
+                      </Badge>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                        Schedule: -2 weeks
+                      </Badge>
+                      <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+                        Risk: -3
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Strategy 3 */}
+                  <div className="border-l-4 border-amber-500 pl-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <p className="font-medium">Bundled procurement: HVAC and electrical</p>
+                      </div>
+                      <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200">
+                        Draft
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
+                        Cost: -0.2%
+                      </Badge>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                        Schedule: -1 week
+                      </Badge>
+                      <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+                        Risk: -2
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground italic pt-2">
+                    Strategy aims to recover 2–3 weeks float with ~1–2% cost uplift.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Design Freeze Timeline */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Design Freeze Timeline</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {/* Timeline Item 1 */}
+                    <div className="flex items-start gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-3 h-3 rounded-full bg-construction-success"></div>
+                        <div className="w-0.5 h-full bg-border mt-2"></div>
+                      </div>
+                      <div className="flex-1 pb-6">
+                        <div className="flex items-start justify-between mb-1">
+                          <div className="flex-1">
+                            <p className="font-medium">Structural Steel</p>
+                            <p className="text-xs text-muted-foreground">Fabrication start</p>
+                          </div>
+                          <span className="text-xs text-muted-foreground">2024-03-15</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          <span>Bid: 15/03/2024</span>
+                          <span className="mx-2">•</span>
+                          <span>Award: 29/03/2024</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Timeline Item 2 */}
+                    <div className="flex items-start gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div className="w-0.5 h-full bg-border mt-2"></div>
+                      </div>
+                      <div className="flex-1 pb-6">
+                        <div className="flex items-start justify-between mb-1">
+                          <div className="flex-1">
+                            <p className="font-medium">Curtain Wall</p>
+                            <p className="text-xs text-muted-foreground">Manufacturing start</p>
+                          </div>
+                          <span className="text-xs text-muted-foreground">2024-03-30</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          <span>Bid: 30/03/2024</span>
+                          <span className="mx-2">•</span>
+                          <span>Award: 13/04/2024</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Timeline Item 3 */}
+                    <div className="flex items-start gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-3 h-3 rounded-full bg-destructive"></div>
+                        <div className="w-0.5 h-full bg-border mt-2"></div>
+                      </div>
+                      <div className="flex-1 pb-6">
+                        <div className="flex items-start justify-between mb-1">
+                          <div className="flex-1">
+                            <p className="font-medium">Switchgear</p>
+                            <p className="text-xs text-muted-foreground">Order placement</p>
+                          </div>
+                          <span className="text-xs text-muted-foreground">2024-04-01</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          <span>Bid: 01/04/2024</span>
+                          <span className="mx-2">•</span>
+                          <span>Award: 15/04/2024</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Timeline Item 4 - Today */}
+                    <div className="flex items-start gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-3 h-3 rounded-full bg-primary"></div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between">
+                          <p className="font-medium">Today</p>
+                          <span className="text-xs text-muted-foreground">2025-11-24</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Market Snapshot */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Market Snapshot</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Market Indices */}
+                <div>
+                  <h3 className="text-sm font-semibold mb-4">Market Indices</h3>
+                  <div className="grid grid-cols-6 gap-4">
+                    {/* Steel */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Steel</span>
+                        <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                          Rising
+                        </Badge>
+                      </div>
+                      <div className="text-2xl font-bold">108</div>
+                      <div className="text-xs text-red-600">+8.0%</div>
+                    </div>
+
+                    {/* Electrical */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Electrical</span>
+                        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+                          Volatile
+                        </Badge>
+                      </div>
+                      <div className="text-2xl font-bold">105</div>
+                      <div className="text-xs text-red-600">+2.9%</div>
+                    </div>
+
+                    {/* Mechanical */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Mechanical</span>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                          Stable
+                        </Badge>
+                      </div>
+                      <div className="text-2xl font-bold">103</div>
+                      <div className="text-xs text-red-600">+2.0%</div>
+                    </div>
+
+                    {/* Labor */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Labor</span>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                          Stable
+                        </Badge>
+                      </div>
+                      <div className="text-2xl font-bold">107</div>
+                      <div className="text-xs text-red-600">+1.9%</div>
+                    </div>
+
+                    {/* Freight */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Freight</span>
+                        <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+                          Volatile
+                        </Badge>
+                      </div>
+                      <div className="text-2xl font-bold">112</div>
+                      <div className="text-xs text-red-600">+1.8%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* News Bulletin */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-semibold">News Bulletin</h3>
+                    <Button variant="link" size="sm" className="text-xs text-primary">
+                      <Info className="h-3 w-3 mr-1" />
+                      Sources
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* News Item 1 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">Steel Prices Continue Upward Trend</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Q1 2024 shows 8% increase in structural steel costs
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-15</span>
+                        <span className="text-xs font-medium">ENR</span>
+                      </div>
+                    </div>
+
+                    {/* News Item 2 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">MEP Panel Supply Chain Constraints</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Extended lead times for electrical panels reported by major manufacturers
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-12</span>
+                        <span className="text-xs font-medium">GC Reports</span>
+                      </div>
+                    </div>
+
+                    {/* News Item 3 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">Labor Market Easing in Q2</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Increased availability of skilled trades expected
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-10</span>
+                        <span className="text-xs font-medium">Industry News</span>
+                      </div>
+                    </div>
+
+                    {/* News Item 4 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">Port Congestion in Region Y</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Increased container wait times at major ports
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-10</span>
+                        <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                          medium severity
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* News Item 5 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">Labor Easing in Region X</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Increased availability of skilled trades
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-08</span>
+                        <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                          low severity
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* News Item 6 */}
+                    <div className="border rounded-lg p-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <p className="font-medium text-sm flex-1">MEP Panel Constraints</p>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                          <ExternalLink className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Tight supply chain for electrical panels
+                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-muted-foreground">2024-01-05</span>
+                        <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                          high severity
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
 
