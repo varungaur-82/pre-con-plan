@@ -713,10 +713,300 @@ export function ProcurementSnapshot() {
         </TabsContent>
 
         <TabsContent value="strategy" className="flex-1 m-0 overflow-y-auto">
-          <div className="p-6">
-            <div className="text-center py-16">
-              <h2 className="text-2xl font-bold text-muted-foreground mb-4">Strategy & Market</h2>
-              <p className="text-muted-foreground">Content coming soon...</p>
+          {/* Filter Controls */}
+          <div className="border-b bg-card px-6 py-4">
+            <div className="flex items-center gap-4">
+              <Select value={baseline} onValueChange={setBaseline}>
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Baseline" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="baseline">Baseline</SelectItem>
+                  <SelectItem value="current">Current</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={ddVersion} onValueChange={setDdVersion}>
+                <SelectTrigger className="w-24">
+                  <SelectValue placeholder="DD" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dd">DD</SelectItem>
+                  <SelectItem value="cd">CD</SelectItem>
+                  <SelectItem value="sd">SD</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-sm text-muted-foreground mr-2">Risk Appetite:</span>
+                <Button
+                  variant={riskAppetite === 'averse' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setRiskAppetite('averse')}
+                  className="text-xs"
+                >
+                  Risk Averse
+                </Button>
+                <Button
+                  variant={riskAppetite === 'balanced' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setRiskAppetite('balanced')}
+                  className="text-xs"
+                >
+                  Balanced
+                </Button>
+                <Button
+                  variant={riskAppetite === 'aggressive' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setRiskAppetite('aggressive')}
+                  className="text-xs"
+                >
+                  Aggressive
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="p-6 space-y-6">
+            {/* Header */}
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Strategy & Market</h1>
+              </div>
+              <div className="flex items-center gap-3">
+                <Select defaultValue="all-trades">
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="All Trades" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all-trades">All Trades</SelectItem>
+                    <SelectItem value="structure">Structure</SelectItem>
+                    <SelectItem value="envelope">Envelope</SelectItem>
+                    <SelectItem value="mep">MEP</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select defaultValue="all-risk">
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="All Risk Bands" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all-risk">All Risk Bands</SelectItem>
+                    <SelectItem value="high">High Risk</SelectItem>
+                    <SelectItem value="medium">Medium Risk</SelectItem>
+                    <SelectItem value="low">Low Risk</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Procurement Strategy Stack */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold">Procurement Strategy Stack</h2>
+                <Button variant="outline" size="sm">
+                  + Add Strategy
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Strategy 1 - Approved */}
+                <Card className="bg-green-50/30 dark:bg-green-950/10">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">Early Order: Structural Steel</h3>
+                          <Badge className="bg-construction-success text-white">Approved</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Place steel order 4 weeks ahead of baseline schedule to secure fabrication slot and lock pricing
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Phase:</span>
+                            <span className="ml-1 font-medium">DD</span>
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Trades:</span>
+                            <span className="ml-1 font-medium">Structure</span>
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                            Cost: +1.2%
+                          </Badge>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200 text-xs">
+                            Schedule: -3 weeks
+                          </Badge>
+                          <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200 text-xs">
+                            Risk: -8
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">
+                          Rationale: Steel prices rising 8% QoQ. Early order secures capacity and reduces price escalation risk.
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <Button variant="outline" size="sm" className="text-xs">
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-xs text-destructive">
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Strategy 2 - Draft */}
+                <Card className="bg-amber-50/30 dark:bg-amber-950/10">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">Design-Assist: Envelope & MEP</h3>
+                          <Badge className="bg-amber-500 text-white">Draft</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Engage curtain wall and MEP manufacturers during DD phase for value engineering and early coordination
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Phase:</span>
+                            <span className="ml-1 font-medium">DD</span>
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Trades:</span>
+                            <span className="ml-1 font-medium">Envelope, MEP</span>
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                            Cost: -0.5%
+                          </Badge>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200 text-xs">
+                            Schedule: -2 weeks
+                          </Badge>
+                          <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200 text-xs">
+                            Risk: -5
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">
+                          Rationale: Design-assist reduces change orders and enables early procurement while design matures.
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <Button variant="outline" size="sm" className="text-xs">
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-xs text-destructive">
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Strategy 3 - Proposed */}
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">Bundled Procurement: HVAC & Electrical</h3>
+                          <Badge variant="outline" className="border-primary text-primary">Proposed</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Package HVAC and electrical equipment together to leverage volume discounts and simplify coordination
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Phase:</span>
+                            <span className="ml-1 font-medium">CD</span>
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Trades:</span>
+                            <span className="ml-1 font-medium">MEP</span>
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                            Cost: -0.3%
+                          </Badge>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200 text-xs">
+                            Schedule: 0 weeks
+                          </Badge>
+                          <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200 text-xs">
+                            Risk: -2
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">
+                          Rationale: Single supplier relationship reduces coordination complexity and may provide cost savings.
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <Button variant="outline" size="sm" className="text-xs">
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-xs text-destructive">
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Strategy 4 - Approved */}
+                <Card className="bg-green-50/30 dark:bg-green-950/10">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold">Early Release: Elevators</h3>
+                          <Badge className="bg-construction-success text-white">Approved</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Release elevator package immediately as design is 85% complete and lead time is 24 weeks
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Phase:</span>
+                            <span className="ml-1 font-medium">DD</span>
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            <span className="text-muted-foreground">Trades:</span>
+                            <span className="ml-1 font-medium">MEP</span>
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200 text-xs">
+                            Cost: 0%
+                          </Badge>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200 text-xs">
+                            Schedule: -1 week
+                          </Badge>
+                          <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200 text-xs">
+                            Risk: -3
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">
+                          Rationale: Design is ready and long lead time justifies early release to protect schedule.
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <Button variant="outline" size="sm" className="text-xs">
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-xs text-destructive">
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </TabsContent>
