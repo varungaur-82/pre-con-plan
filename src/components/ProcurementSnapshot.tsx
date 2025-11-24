@@ -1008,6 +1008,318 @@ export function ProcurementSnapshot() {
                 </Card>
               </div>
             </div>
+
+            {/* AI Strategy Suggestions */}
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="text-xl">AI Strategy Suggestions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Suggestion 1 */}
+                <div className="border rounded-lg p-4 bg-card">
+                  <h3 className="font-semibold mb-2">Early Release: Structural Steel</h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Order 4 weeks early to secure fabrication slot
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Cost: +1%, Schedule: -2 weeks
+                  </p>
+                  <div className="flex gap-2">
+                    <Button variant="default" size="sm">Accept</Button>
+                    <Button variant="outline" size="sm">Dismiss</Button>
+                  </div>
+                </div>
+
+                {/* Suggestion 2 */}
+                <div className="border rounded-lg p-4 bg-card">
+                  <h3 className="font-semibold mb-2">Design-Assist: Curtain Wall</h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Engage manufacturer during DD for value engineering
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Cost: -0.5%, Schedule: -1 week
+                  </p>
+                  <div className="flex gap-2">
+                    <Button variant="default" size="sm">Accept</Button>
+                    <Button variant="outline" size="sm">Dismiss</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Long-Lead Packages & Design Dependencies */}
+            <div className="mt-6">
+              <h2 className="text-xl font-bold mb-4">Long-Lead Packages & Design Dependencies</h2>
+              
+              <Card>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="border-b bg-muted/50">
+                        <tr>
+                          <th className="text-left p-3 text-sm font-medium">Package / Trade</th>
+                          <th className="text-left p-3 text-sm font-medium">Lead Time</th>
+                          <th className="text-left p-3 text-sm font-medium">Required On-Site</th>
+                          <th className="text-left p-3 text-sm font-medium">Safe Order Date</th>
+                          <th className="text-left p-3 text-sm font-medium">Slack</th>
+                          <th className="text-left p-3 text-sm font-medium">Design Maturity</th>
+                          <th className="text-left p-3 text-sm font-medium">Spec Status</th>
+                          <th className="text-left p-3 text-sm font-medium">Risk Band</th>
+                          <th className="text-left p-3 text-sm font-medium">AI Next Step</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Structural Steel */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">Structural Steel</p>
+                              <p className="text-xs text-muted-foreground">Structure</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">16 weeks</td>
+                          <td className="p-3 text-sm">01/08/2024</td>
+                          <td className="p-3 text-sm">15/04/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              +2w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-amber-500" style={{ width: '75%' }}></div>
+                                </div>
+                                <span className="text-xs">75%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                              review
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                              High
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Finalize structural drawings and release for fabrication
+                          </td>
+                        </tr>
+
+                        {/* Switchgear & Electrical Panels */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">Switchgear & Electrical Panels</p>
+                              <p className="text-xs text-muted-foreground">MEP</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">20 weeks</td>
+                          <td className="p-3 text-sm">15/09/2024</td>
+                          <td className="p-3 text-sm">01/05/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                              -2w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-amber-500" style={{ width: '60%' }}></div>
+                                </div>
+                                <span className="text-xs">60%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200 text-xs">
+                              draft
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                              High
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Complete one-line diagrams and coordinate with utility
+                          </td>
+                        </tr>
+
+                        {/* Elevators */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">Elevators</p>
+                              <p className="text-xs text-muted-foreground">MEP</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">24 weeks</td>
+                          <td className="p-3 text-sm">01/10/2024</td>
+                          <td className="p-3 text-sm">15/04/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              +4w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-green-500" style={{ width: '85%' }}></div>
+                                </div>
+                                <span className="text-xs">85%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              final
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                              Medium
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Proceed with procurement - design is ready
+                          </td>
+                        </tr>
+
+                        {/* Curtain Wall System */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">Curtain Wall System</p>
+                              <p className="text-xs text-muted-foreground">Envelope</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">18 weeks</td>
+                          <td className="p-3 text-sm">15/08/2024</td>
+                          <td className="p-3 text-sm">30/04/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              +1w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-amber-500" style={{ width: '70%' }}></div>
+                                </div>
+                                <span className="text-xs">70%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                              review
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 text-xs">
+                              High
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Finalize performance specs and thermal analysis
+                          </td>
+                        </tr>
+
+                        {/* HVAC Equipment */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">HVAC Equipment</p>
+                              <p className="text-xs text-muted-foreground">MEP</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">14 weeks</td>
+                          <td className="p-3 text-sm">15/07/2024</td>
+                          <td className="p-3 text-sm">15/04/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              +3w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-green-500" style={{ width: '80%' }}></div>
+                                </div>
+                                <span className="text-xs">80%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                              review
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+                              Medium
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Coordinate equipment sizing with load calculations
+                          </td>
+                        </tr>
+
+                        {/* Precast Concrete Panels */}
+                        <tr className="border-b hover:bg-muted/30">
+                          <td className="p-3">
+                            <div>
+                              <p className="font-medium">Precast Concrete Panels</p>
+                              <p className="text-xs text-muted-foreground">Structure</p>
+                            </div>
+                          </td>
+                          <td className="p-3 text-sm">12 weeks</td>
+                          <td className="p-3 text-sm">01/07/2024</td>
+                          <td className="p-3 text-sm">15/04/2024</td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              +5w
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div className="h-full bg-green-500" style={{ width: '90%' }}></div>
+                                </div>
+                                <span className="text-xs">90%</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              final
+                            </Badge>
+                          </td>
+                          <td className="p-3">
+                            <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
+                              Low
+                            </Badge>
+                          </td>
+                          <td className="p-3 text-xs text-muted-foreground">
+                            Ready for procurement
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </TabsContent>
 
